@@ -2,7 +2,7 @@ package util
 
 import org.gradle.api.artifacts.dsl.DependencyHandler
 
-fun DependencyHandler.platform(list: List<String>) {
+fun DependencyHandler.implementationPlatform(list: List<String>) {
 	list.forEach { dependency ->
 		add("implementation platform", dependency)
 	}

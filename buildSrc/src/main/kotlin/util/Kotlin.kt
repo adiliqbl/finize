@@ -1,15 +1,22 @@
 package util
 
+import AppConfig
 import Versions
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
+import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
 internal fun Project.configureKotlinAndroid(
 	commonExtension: CommonExtension<*, *, *, *>,
 ) {
 	commonExtension.apply {
+		compileSdk = AppConfig.targetSdk
+		defaultConfig.apply {
+			minSdk = AppConfig.minSdk
+		}
+
 		compileOptions {
 			sourceCompatibility = Versions.Build.Java
 			targetCompatibility = Versions.Build.Java
@@ -27,6 +34,10 @@ internal fun Project.configureKotlinAndroid(
 
 			jvmTarget = Versions.Build.Java.toString()
 		}
+	}
+
+	dependencies {
+		add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:${Versions.Build.Desugar}")
 	}
 }
 

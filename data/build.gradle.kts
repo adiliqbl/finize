@@ -6,6 +6,3 @@ plugins {
 android {
 	namespace = "com.adiliqbal.finize.data"
 }
-
-dependencies {
-}

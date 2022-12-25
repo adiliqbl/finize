@@ -23,15 +23,15 @@ rootProject.name = "finize"
 include(":app")
 include(":data")
 
-//val prePushHook = file(".git/hooks/pre-push")
-//val commitMsgHook = file(".git/hooks/commit-msg")
-//val hooksInstalled = commitMsgHook.exists()
-//    && prePushHook.exists()
-//    && prePushHook.readBytes().contentEquals(file("scripts/pre-push").readBytes())
-//
-//if (!hooksInstalled) {
-//    exec {
-//        commandLine("scripts/setup.sh")
-//        workingDir = rootProject.projectDir
-//    }
-//}
+val prePushHook = file(".git/hooks/pre-push")
+val commitMsgHook = file(".git/hooks/commit-msg")
+val hooksInstalled = commitMsgHook.exists()
+    && prePushHook.exists()
+    && prePushHook.readBytes().contentEquals(file("scripts/pre-push").readBytes())
+
+if (!hooksInstalled) {
+    exec {
+        commandLine("scripts/setup.sh")
+        workingDir = rootProject.projectDir
+    }
+}

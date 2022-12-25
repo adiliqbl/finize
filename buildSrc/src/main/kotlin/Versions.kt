@@ -3,6 +3,7 @@ import org.gradle.api.JavaVersion
 object Versions {
 	object Build {
 		val Java = JavaVersion.VERSION_1_8
+		const val Desugar = "1.1.5"
 		const val GoogleService = "4.3.13"
 	}
 

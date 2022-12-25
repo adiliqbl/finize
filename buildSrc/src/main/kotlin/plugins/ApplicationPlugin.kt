@@ -1,5 +1,6 @@
 package plugins
 
+import AppConfig
 import com.android.build.api.dsl.ApplicationExtension
 import config.configureBuildType
 import config.configureFlavors
@@ -18,6 +19,14 @@ class ApplicationPlugin : Plugin<Project> {
 			}
 
 			extensions.configure<ApplicationExtension> {
+				defaultConfig.apply {
+					applicationId = AppConfig.appId
+					targetSdk = AppConfig.targetSdk
+
+					versionCode = AppConfig.versionCode
+					versionName = AppConfig.versionName
+				}
+
 				configureKotlinAndroid(this)
 				configureBuildType(this)
 				configureFlavors(this)

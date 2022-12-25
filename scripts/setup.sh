@@ -36,7 +36,7 @@ curl -sSLo "${GIT_DIR}/hooks/commit-msg" \
 
 echo "Installing git pre-push hook"
 echo
-cp "${GIT_ROOT}/tools/pre-push" "${GIT_DIR}/hooks/pre-push" \
+cp "${GIT_ROOT}/scripts/pre-push" "${GIT_DIR}/hooks/pre-push" \
   && chmod +x "${GIT_DIR}/hooks/pre-push"
 
 cat <<-EOF

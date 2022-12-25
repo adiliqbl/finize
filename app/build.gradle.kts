@@ -8,12 +8,6 @@ android {
 	namespace = "com.adiliqbal.finize"
 
 	defaultConfig {
-		applicationId = AppConfig.appId
-		minSdk = AppConfig.minSdk
-		targetSdk = AppConfig.targetSdk
-		versionCode = AppConfig.versionCode
-		versionName = AppConfig.versionName
-
 		vectorDrawables { useSupportLibrary = true }
 
 		javaCompileOptions {

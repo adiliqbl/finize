@@ -1,7 +1,8 @@
 val KtLintVersion = "0.43.0"
-val SpotlessVersion = "6.11.0"
 
 initscript {
+	val SpotlessVersion = "6.11.0"
+
 	repositories {
 		mavenCentral()
 	}
@@ -18,7 +19,15 @@ rootProject {
 			kotlin {
 				target("**/*.kt")
 				targetExclude("**/build/**/*.kt")
-				ktlint(KtLintVersion).userData(mapOf("android" to "true"))
+				ktfmt()
+				ktlint(KtLintVersion).userData(mapOf(
+					"android" to "true",
+					"max_line_length" to "120",
+					"disabled_rules" to "no-wildcard-imports",
+					"ktlint_disabled_rules" to "no-wildcard-imports",
+					"trim_trailing_whitespace" to "true",
+					"ktlint_ignore_back_ticked_identifier" to "true",
+				))
 			}
 			format("kts") {
 				target("**/*.kts")
