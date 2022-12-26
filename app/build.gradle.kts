@@ -1,7 +1,7 @@
 plugins {
 	id("finize-application")
 	id("finize-application-compose")
-	id("kotlin-kapt")
+	id("finize-hilt")
 }
 
 android {
@@ -25,5 +25,5 @@ android {
 }
 
 dependencies {
-	implementation("androidx.core:core-ktx:${Versions.Kotlin.KtxCore}")
+	implementation(Dependencies.Kotlin.KtxCore)
 }

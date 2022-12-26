@@ -1,11 +1,10 @@
 package plugins
 
-import AppConfig
 import com.android.build.api.dsl.LibraryExtension
+import modules.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
-import util.configureKotlinAndroid
 
 class ModulePlugin : Plugin<Project> {
 
@@ -14,6 +13,7 @@ class ModulePlugin : Plugin<Project> {
 			pluginManager.apply {
 				apply("com.android.library")
 				apply("org.jetbrains.kotlin.android")
+				apply("kotlin-kapt")
 			}
 
 			extensions.getByType<LibraryExtension>().apply {

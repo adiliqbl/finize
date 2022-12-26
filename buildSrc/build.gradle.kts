@@ -25,17 +25,21 @@ gradlePlugin {
 			id = "finize-application"
 			implementationClass = "plugins.ApplicationPlugin"
 		}
-		register("application-compose") {
-			id = "finize-application-compose"
-			implementationClass = "plugins.ComposeApplicationPlugin"
-		}
 		register("module") {
 			id = "finize-module"
 			implementationClass = "plugins.ModulePlugin"
 		}
+		register("application-compose") {
+			id = "finize-application-compose"
+			implementationClass = "plugins.ComposeApplicationPlugin"
+		}
 		register("compose") {
 			id = "finize-compose"
 			implementationClass = "plugins.ComposeModulePlugin"
+		}
+		register("hilt") {
+			id = "finize-hilt"
+			implementationClass = "plugins.HiltPlugin"
 		}
 	}
 }

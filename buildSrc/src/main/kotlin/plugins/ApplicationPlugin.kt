@@ -7,7 +7,7 @@ import config.configureFlavors
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
-import util.configureKotlinAndroid
+import modules.configureKotlinAndroid
 
 class ApplicationPlugin : Plugin<Project> {
 
@@ -16,6 +16,7 @@ class ApplicationPlugin : Plugin<Project> {
 			pluginManager.apply {
 				apply("com.android.application")
 				apply("org.jetbrains.kotlin.android")
+				apply("kotlin-kapt")
 			}
 
 			extensions.configure<ApplicationExtension> {

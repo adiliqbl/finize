@@ -67,7 +67,6 @@ object Versions {
 		const val AndroidJUnit = "1.1.3"
 		const val AndroidCore = "1.4.0"
 		const val CoroutineTest = "1.6.3"
-		const val Espresso = "3.4.0"
 		const val Mockito = "4.5.1"
 		const val MockitoKotlin = "4.0.0"
 	}

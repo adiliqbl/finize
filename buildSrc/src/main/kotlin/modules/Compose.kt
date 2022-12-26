@@ -1,11 +1,10 @@
-package util
+package modules
 
 import Versions
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.dependencies
 
-internal fun Project.configureAndroidCompose(
+internal fun Project.configureCompose(
 	commonExtension: CommonExtension<*, *, *, *>,
 ) {
 	commonExtension.apply {
@@ -16,9 +15,5 @@ internal fun Project.configureAndroidCompose(
 		composeOptions {
 			kotlinCompilerExtensionVersion = Versions.Compose.Compiler
 		}
-	}
-
-	dependencies {
-
 	}
 }

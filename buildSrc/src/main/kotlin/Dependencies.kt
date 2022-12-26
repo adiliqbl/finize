@@ -1,3 +1,5 @@
+import org.gradle.api.artifacts.dsl.DependencyHandler
+
 object Dependencies {
 
 	object Build {
@@ -24,58 +26,115 @@ object Dependencies {
 	}
 
 	object Hilt {
-		const val Hilt = "com.google.dagger:hilt-android:${Versions.Hilt.Hilt}"
+		private const val Hilt = "com.google.dagger:hilt-android:${Versions.Hilt.Hilt}"
 		const val GradlePlugin =
 			"com.google.dagger:hilt-android-gradle-plugin:${Versions.Hilt.Hilt}"
-		const val Compiler = "com.google.dagger:hilt-compiler:${Versions.Hilt.Hilt}"
-		const val Navigation = "androidx.hilt:hilt-navigation-compose:${Versions.Hilt.Navigation}"
-		const val WorkManager = "androidx.hilt:hilt-work:${Versions.Hilt.WorkManager}"
-		const val WorkManagerCompiler = "androidx.hilt:hilt-compiler:${Versions.Hilt.WorkManager}"
+		private const val Compiler = "com.google.dagger:hilt-compiler:${Versions.Hilt.Hilt}"
+		internal const val Navigation =
+			"androidx.hilt:hilt-navigation-compose:${Versions.Hilt.Navigation}"
+		private const val WorkManager = "androidx.hilt:hilt-work:${Versions.Hilt.WorkManager}"
+		private const val WorkManagerCompiler =
+			"androidx.hilt:hilt-compiler:${Versions.Hilt.WorkManager}"
+
+		fun DependencyHandler.implementHilt() {
+			add("implementation", Hilt)
+			add("kapt", Compiler)
+		}
+
+		fun DependencyHandler.implementWorkManager(type: String = "implementation") {
+			add(type, WorkManager)
+			add(type, WorkManagerCompiler)
+		}
 	}
 
 	object Compose {
-		const val Compose = "androidx.compose.ui:ui:${Versions.Compose.Compose}"
-		const val Foundation = "androidx.compose.foundation:foundation:${Versions.Compose.Compose}"
-		const val ViewModel =
+		private const val Compose = "androidx.compose.ui:ui:${Versions.Compose.Compose}"
+		private const val Foundation =
+			"androidx.compose.foundation:foundation:${Versions.Compose.Compose}"
+		private const val ViewModel =
 			"androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.UI.Lifecycle}"
-		const val Lifecycle =
+		private const val Lifecycle =
 			"androidx.lifecycle:lifecycle-runtime-compose:${Versions.UI.Lifecycle}"
-		const val Activity = "androidx.activity:activity-compose:${Versions.Compose.Activity}"
-		const val Compiler = "1.3.1"
+		private const val Activity =
+			"androidx.activity:activity-compose:${Versions.Compose.Activity}"
+		private const val Compiler = "1.3.1"
 		const val Paging = "androidx.paging:paging-compose:${Versions.Compose.Paging}"
-		const val Preview = "androidx.compose.ui:ui-tooling-preview${Versions.Compose.Compose}"
-		const val PreviewTool = "androidx.compose.ui:ui-tooling:${Versions.Compose.Compose}"
-		const val TestManifest =
+		private const val Preview =
+			"androidx.compose.ui:ui-tooling-preview${Versions.Compose.Compose}"
+		private const val PreviewTool = "androidx.compose.ui:ui-tooling:${Versions.Compose.Compose}"
+		private const val TestManifest =
 			"androidx.compose.ui:ui-test-manifest:${Versions.Compose.Compose}"
-		const val TestJUnit = "androidx.compose.ui:ui-test-junit4:${Versions.Compose.Compose}"
+		private const val TestJUnit =
+			"androidx.compose.ui:ui-test-junit4:${Versions.Compose.Compose}"
+
+		fun DependencyHandler.implementCompose(type: String = "implementation") {
+			add(type, Compose)
+			add(type, Foundation)
+			add(type, Preview)
+			add(type, PreviewTool)
+			add(type, Compiler)
+			add(type, ViewModel)
+			add(type, Lifecycle)
+			add(type, Activity)
+		}
+
+		fun DependencyHandler.implementComposeTest() {
+			add("implementation", TestManifest)
+			add("implementation", TestJUnit)
+		}
 	}
 
 	object Navigation {
-		const val Navigation =
+		private const val Navigation =
 			"androidx.navigation:navigation-compose:${Versions.Navigation.Navigation}"
-		const val Animation =
+		private const val Animation =
 			"com.google.accompanist:accompanist-navigation-animation:${Versions.Navigation.Animation}"
+
+		fun DependencyHandler.implementNavigation(type: String = "implementation") {
+			add(type, Navigation)
+			add(type, Hilt.Navigation)
+			add(type, Animation)
+		}
 	}
 
 	object UI {
-		const val Material3 = "androidx.compose.material3:material3:${Versions.UI.Material3}"
-		const val Icons =
+		private const val Material3 =
+			"androidx.compose.material3:material3:${Versions.UI.Material3}"
+		private const val Icons =
 			"androidx.compose.material:material-icons-extended:${Versions.Compose.Compose}"
 		const val Splashscreen = "androidx.core:core-splashscreen:${Versions.UI.Splashscreen}"
 		const val Lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.UI.Lifecycle}"
 		const val Coil = "io.coil-kt:coil-compose:${Versions.UI.Coil}"
+
+		fun DependencyHandler.implementMaterialDesign(type: String = "implementation") {
+			add(type, Material3)
+			add(type, Icons)
+		}
 	}
 
 	object Room {
-		const val Room = "androidx.room:room-ktx:${Versions.Data.Room}"
-		const val Runtime = "androidx.room:room-runtime:${Versions.Data.Room}"
-		const val Compiler = "androidx.room:room-compiler:${Versions.Data.Room}"
-		const val Paging = "androidx.room:room-paging:${Versions.Data.Room}"
-		const val Testing = "androidx.room:room-testing:${Versions.Data.Room}"
+		private const val Room = "androidx.room:room-ktx:${Versions.Data.Room}"
+		private const val Runtime = "androidx.room:room-runtime:${Versions.Data.Room}"
+		private const val Compiler = "androidx.room:room-compiler:${Versions.Data.Room}"
+		private const val Paging = "androidx.room:room-paging:${Versions.Data.Room}"
+		private const val Testing = "androidx.room:room-testing:${Versions.Data.Room}"
+
+		fun DependencyHandler.implementRoom(type: String = "implementation") {
+			add(type, Room)
+			add(type, Runtime)
+			add(type, Compiler)
+			add(type, Paging)
+			add(type, Testing)
+		}
 	}
 
 	object Data {
-		const val Datastore = "androidx.datastore:datastore-preferences:${Versions.Data.Datastore}"
+		private const val Datastore =
+			"androidx.datastore:datastore-preferences:${Versions.Data.Datastore}"
+
+		fun DependencyHandler.implementDatastore(type: String = "implementation") {
+			add(type, Datastore)
+		}
 	}
 
 	object WorkManager {
@@ -95,14 +154,36 @@ object Dependencies {
 	}
 
 	object Test {
-		const val JUnit = "junit:junit:${Versions.Test.JUnit}"
-		const val AndroidJUnit = "androidx.test.ext:junit:${Versions.Test.AndroidJUnit}"
-		const val AndroidCore = "androidx.test:core:${Versions.Test.AndroidCore}"
-		const val AndroidCoreKtx = "androidx.test:core-ktx:${Versions.Test.AndroidCore}"
-		const val CoroutineTest =
+		private const val JUnit = "junit:junit:${Versions.Test.JUnit}"
+		private const val AndroidJUnit = "androidx.test.ext:junit:${Versions.Test.AndroidJUnit}"
+		private const val AndroidCore = "androidx.test:core:${Versions.Test.AndroidCore}"
+		private const val AndroidCoreKtx = "androidx.test:core-ktx:${Versions.Test.AndroidCore}"
+		private const val CoroutineTest =
 			"org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.Test.CoroutineTest}"
-		const val Espresso = "androidx.test.espresso:espresso-core:${Versions.Test.Espresso}"
-		const val Mockito = "org.mockito:mockito-core:${Versions.Test.Mockito}"
-		const val MockitoKotlin = "org.mockito.kotlin:mockito-kotlin:${Versions.Test.MockitoKotlin}"
+		private const val Mockito = "org.mockito:mockito-core:${Versions.Test.Mockito}"
+		private const val MockitoKotlin =
+			"org.mockito.kotlin:mockito-kotlin:${Versions.Test.MockitoKotlin}"
+
+		fun DependencyHandler.implementTest() {
+			implementUnitTest()
+			implementAndroidTest()
+			implementMockito()
+		}
+
+		private fun DependencyHandler.implementUnitTest() {
+			add("implementation", JUnit)
+			add("implementation", AndroidJUnit)
+			add("implementation", CoroutineTest)
+		}
+
+		private fun DependencyHandler.implementAndroidTest() {
+			add("implementation", AndroidCore)
+			add("implementation", AndroidCoreKtx)
+		}
+
+		private fun DependencyHandler.implementMockito() {
+			add("implementation", Mockito)
+			add("implementation", MockitoKotlin)
+		}
 	}
 }

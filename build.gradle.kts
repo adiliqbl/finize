@@ -1,6 +1,7 @@
 buildscript {
 	dependencies {
 		classpath(Dependencies.Build.GoogleService)
+		classpath(Dependencies.Hilt.GradlePlugin)
 	}
 
 	repositories {
