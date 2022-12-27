@@ -1,4 +1,4 @@
-import Libraries.Test.implementTest
+import Libraries.Test.implementTesting
 
 plugins {
 	id("finize.module")
@@ -12,5 +12,5 @@ dependencies {
 	implementation(Libraries.Kotlin.Core)
 	implementation(Libraries.Kotlin.Coroutines)
 
-	implementTest()
+	implementTesting()
 }

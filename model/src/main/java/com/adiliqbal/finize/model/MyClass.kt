@@ -1,4 +1,3 @@
 package com.adiliqbal.finize.model
 
-class MyClass {
-}
+class MyClass

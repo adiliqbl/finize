@@ -14,8 +14,6 @@ object Libraries {
 		const val Coroutines =
 			"org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Kotlin.Coroutines}"
 		const val DateTime = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlin.DateTime}"
-		const val GradlePlugin =
-			"org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Kotlin.Kotlin}"
 		const val JsonGradlePlugin =
 			"org.jetbrains.kotlin:kotlin-serialization:${Versions.Kotlin.Kotlin}"
 		const val Json = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlin.Json}"
@@ -132,7 +130,7 @@ object Libraries {
 
 		fun DependencyHandler.implementWorkManager(type: String = "implementation") {
 			add(type, WorkManager)
-			add(type, Testing)
+			add("androidTest${type.capitalized()}", Testing)
 			add(type, Hilt.WorkManager)
 			add(type, Hilt.WorkManagerCompiler)
 		}
@@ -160,26 +158,14 @@ object Libraries {
 		private const val MockitoKotlin =
 			"org.mockito.kotlin:mockito-kotlin:${Versions.Test.MockitoKotlin}"
 
-		fun DependencyHandler.implementTest() {
-			implementUnitTest()
-			implementAndroidTest()
-		}
-
-		private fun DependencyHandler.implementUnitTest() {
-			implementMockito()
+		fun DependencyHandler.implementTesting() {
+			add("testImplementation", Mockito)
+			add("testImplementation", MockitoKotlin)
 			add("testImplementation", JUnit)
 			add("testImplementation", AndroidJUnit)
 			add("testImplementation", CoroutineTest)
-		}
-
-		private fun DependencyHandler.implementAndroidTest() {
 			add("testImplementation", AndroidCore)
 			add("testImplementation", AndroidCoreKtx)
-		}
-
-		private fun DependencyHandler.implementMockito() {
-			add("testImplementation", Mockito)
-			add("testImplementation", MockitoKotlin)
 		}
 	}
 }

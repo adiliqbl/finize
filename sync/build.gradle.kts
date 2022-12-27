@@ -1,3 +1,4 @@
+import Libraries.Test.implementTesting
 import Libraries.WorkManager.implementWorkManager
 
 plugins {
@@ -14,4 +15,6 @@ dependencies {
 
 	implementation(Libraries.Kotlin.Core)
 	implementation(Libraries.Kotlin.Coroutines)
+
+	implementTesting()
 }

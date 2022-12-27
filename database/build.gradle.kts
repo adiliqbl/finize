@@ -1,8 +1,9 @@
-import Libraries.Test.implementTest
+import Libraries.Test.implementTesting
 
 plugins {
 	id("finize.module")
 	id("finize.hilt")
+	id("kotlinx-serialization")
 }
 
 android {
@@ -18,6 +19,10 @@ android {
 			}
 		}
 	}
+
+	sourceSets {
+		getByName("androidTest").assets.srcDirs("$projectDir/schemas")
+	}
 }
 
 dependencies {
@@ -31,6 +36,8 @@ dependencies {
 	implementation(Libraries.Room.Paging)
 	kapt(Libraries.Room.Compiler)
 
-	implementTest()
-	implementation(Libraries.Room.Testing)
+	implementation(Libraries.Kotlin.Json)
+
+	implementTesting()
+	androidTestImplementation(Libraries.Room.Testing)
 }
