@@ -1,6 +1,7 @@
 package modules
 
 import AppConfig
+import Libraries
 import Versions
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
@@ -38,6 +39,9 @@ internal fun Project.configureKotlinAndroid(
 
 	dependencies {
 		add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:${Versions.Build.Desugar}")
+
+		add("implementation", Libraries.Util.Timber)
+		add("implementation", Libraries.Util.Inject)
 	}
 }
 

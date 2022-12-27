@@ -1,7 +1,12 @@
 buildscript {
 	dependencies {
-		classpath(Dependencies.Build.GoogleService)
-		classpath(Dependencies.Hilt.GradlePlugin)
+		classpath(Libraries.Kotlin.GradlePlugin)
+		classpath(Libraries.Build.GoogleService)
+		classpath(Libraries.Build.Secrets)
+		classpath(Libraries.Hilt.GradlePlugin)
+		classpath(Libraries.Kotlin.JsonGradlePlugin)
+		classpath(Libraries.Firebase.CrashlyticsGradlePlugin)
+		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20")
 	}
 
 	repositories {

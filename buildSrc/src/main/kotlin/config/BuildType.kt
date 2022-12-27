@@ -15,18 +15,21 @@ fun Project.configureBuildType(
 ) {
 	commonExtension.apply {
 		buildTypes {
-			BuildType.values().forEach {
-				getByName(it.name).run {
-					this.isMinifyEnabled = it.minify
+			BuildType.values().forEach { build ->
+				getByName(build.name).run {
+					this.isMinifyEnabled = build.minify
 					if (this@apply is ApplicationExtension && this is ApplicationProductFlavor) {
-						if (it.applicationIdSuffix != null) {
-							this.applicationIdSuffix = it.applicationIdSuffix
+						if (build.applicationIdSuffix != null) {
+							this.applicationIdSuffix = build.applicationIdSuffix
 						}
 					}
-					this.proguardFiles(
-						getDefaultProguardFile("proguard-android-optimize.txt"),
-						"proguard-rules.pro"
-					)
+
+					if (build == BuildType.release) {
+						this.proguardFiles(
+							getDefaultProguardFile("proguard-android-optimize.txt"),
+							"proguard-rules.pro"
+						)
+					}
 				}
 			}
 		}

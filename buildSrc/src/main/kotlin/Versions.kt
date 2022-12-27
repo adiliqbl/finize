@@ -5,11 +5,12 @@ object Versions {
 		val Java = JavaVersion.VERSION_1_8
 		const val Desugar = "1.1.5"
 		const val GoogleService = "4.3.13"
+		const val Secrets = "2.0.1"
 	}
 
 	object Kotlin {
-		internal const val Kotlin = "1.7.10"
-		const val KtxCore = "1.9.0"
+		internal const val Kotlin = "1.7.20"
+		const val Core = "1.9.0"
 		const val Coroutines = "1.6.2"
 		const val DateTime = "0.4.0"
 		const val Json = "1.3.3"
@@ -28,9 +29,9 @@ object Versions {
 	}
 
 	object Compose {
-		const val Compose = "1.3.0-beta03"
+		const val BOM = "2022.12.00"
+		const val Compiler = "1.3.2"
 		const val Activity = "1.6.1"
-		const val Compiler = "1.3.1"
 		const val Paging = "1.0.0-alpha17"
 	}
 
@@ -40,7 +41,7 @@ object Versions {
 	}
 
 	object UI {
-		const val Material3 = "1.0.0-beta02"
+		const val Material3 = "1.0.1"
 		const val Splashscreen = "1.0.0"
 		const val Lifecycle = "2.6.0-alpha01"
 		const val Coil = "2.2.2"

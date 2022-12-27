@@ -1,16 +1,21 @@
 import org.gradle.api.artifacts.dsl.DependencyHandler
+import org.gradle.configurationcache.extensions.capitalized
 
-object Dependencies {
+object Libraries {
 
 	object Build {
 		const val GoogleService = "com.google.gms:google-services:${Versions.Build.GoogleService}"
+		const val Secrets =
+			"com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:${Versions.Build.Secrets}"
 	}
 
 	object Kotlin {
-		const val KtxCore = "androidx.core:core-ktx:${Versions.Kotlin.KtxCore}"
+		const val Core = "androidx.core:core-ktx:${Versions.Kotlin.Core}"
 		const val Coroutines =
 			"org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Kotlin.Coroutines}"
 		const val DateTime = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlin.DateTime}"
+		const val GradlePlugin =
+			"org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Kotlin.Kotlin}"
 		const val JsonGradlePlugin =
 			"org.jetbrains.kotlin:kotlin-serialization:${Versions.Kotlin.Kotlin}"
 		const val Json = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlin.Json}"
@@ -19,10 +24,15 @@ object Dependencies {
 	}
 
 	object Firebase {
-		const val BOM = "com.google.firebase:firebase-bom:${Versions.Firebase.BOM}"
+		private const val BOM = "com.google.firebase:firebase-bom:${Versions.Firebase.BOM}"
+		const val Messaging = "com.google.firebase:firebase-messaging"
 		const val Crashlytics = "com.google.firebase:firebase-crashlytics-ktx"
 		const val CrashlyticsGradlePlugin =
 			"com.google.firebase:firebase-crashlytics-gradle:${Versions.Firebase.Crashlytics}"
+
+		fun DependencyHandler.implementFirebase(type: String = "implementation") {
+			add(type, platform(BOM))
+		}
 	}
 
 	object Hilt {
@@ -32,55 +42,45 @@ object Dependencies {
 		private const val Compiler = "com.google.dagger:hilt-compiler:${Versions.Hilt.Hilt}"
 		internal const val Navigation =
 			"androidx.hilt:hilt-navigation-compose:${Versions.Hilt.Navigation}"
-		private const val WorkManager = "androidx.hilt:hilt-work:${Versions.Hilt.WorkManager}"
-		private const val WorkManagerCompiler =
+		internal const val WorkManager = "androidx.hilt:hilt-work:${Versions.Hilt.WorkManager}"
+		internal const val WorkManagerCompiler =
 			"androidx.hilt:hilt-compiler:${Versions.Hilt.WorkManager}"
 
 		fun DependencyHandler.implementHilt() {
 			add("implementation", Hilt)
 			add("kapt", Compiler)
 		}
-
-		fun DependencyHandler.implementWorkManager(type: String = "implementation") {
-			add(type, WorkManager)
-			add(type, WorkManagerCompiler)
-		}
 	}
 
 	object Compose {
-		private const val Compose = "androidx.compose.ui:ui:${Versions.Compose.Compose}"
-		private const val Foundation =
-			"androidx.compose.foundation:foundation:${Versions.Compose.Compose}"
+		private const val BOM = "androidx.compose:compose-bom:${Versions.Compose.BOM}"
+		private const val Compose = "androidx.compose.ui:ui"
+		private const val Foundation = "androidx.compose.foundation:foundation"
+		private const val Preview = "androidx.compose.ui:ui-tooling"
+		private const val PreviewTool = "androidx.compose.ui:ui-tooling-preview"
 		private const val ViewModel =
 			"androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.UI.Lifecycle}"
 		private const val Lifecycle =
 			"androidx.lifecycle:lifecycle-runtime-compose:${Versions.UI.Lifecycle}"
 		private const val Activity =
 			"androidx.activity:activity-compose:${Versions.Compose.Activity}"
-		private const val Compiler = "1.3.1"
-		const val Paging = "androidx.paging:paging-compose:${Versions.Compose.Paging}"
-		private const val Preview =
-			"androidx.compose.ui:ui-tooling-preview${Versions.Compose.Compose}"
-		private const val PreviewTool = "androidx.compose.ui:ui-tooling:${Versions.Compose.Compose}"
-		private const val TestManifest =
-			"androidx.compose.ui:ui-test-manifest:${Versions.Compose.Compose}"
-		private const val TestJUnit =
-			"androidx.compose.ui:ui-test-junit4:${Versions.Compose.Compose}"
+		private const val TestManifest = "androidx.compose.ui:ui-test-manifest"
+		private const val TestJUnit = "androidx.compose.ui:ui-test-junit4"
 
 		fun DependencyHandler.implementCompose(type: String = "implementation") {
+			add(type, platform(BOM))
 			add(type, Compose)
 			add(type, Foundation)
+			add("debug${type.capitalized()}", PreviewTool)
 			add(type, Preview)
-			add(type, PreviewTool)
-			add(type, Compiler)
+			add(type, Activity)
 			add(type, ViewModel)
 			add(type, Lifecycle)
-			add(type, Activity)
 		}
 
 		fun DependencyHandler.implementComposeTest() {
-			add("implementation", TestManifest)
-			add("implementation", TestJUnit)
+			add("debugImplementation", TestManifest)
+			add("androidTestImplementation", TestJUnit)
 		}
 	}
 
@@ -100,10 +100,10 @@ object Dependencies {
 	object UI {
 		private const val Material3 =
 			"androidx.compose.material3:material3:${Versions.UI.Material3}"
-		private const val Icons =
-			"androidx.compose.material:material-icons-extended:${Versions.Compose.Compose}"
+		private const val Icons = "androidx.compose.material:material-icons-extended"
 		const val Splashscreen = "androidx.core:core-splashscreen:${Versions.UI.Splashscreen}"
 		const val Lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.UI.Lifecycle}"
+		const val Paging = "androidx.paging:paging-compose:${Versions.Compose.Paging}"
 		const val Coil = "io.coil-kt:coil-compose:${Versions.UI.Coil}"
 
 		fun DependencyHandler.implementMaterialDesign(type: String = "implementation") {
@@ -113,33 +113,29 @@ object Dependencies {
 	}
 
 	object Room {
-		private const val Room = "androidx.room:room-ktx:${Versions.Data.Room}"
-		private const val Runtime = "androidx.room:room-runtime:${Versions.Data.Room}"
-		private const val Compiler = "androidx.room:room-compiler:${Versions.Data.Room}"
-		private const val Paging = "androidx.room:room-paging:${Versions.Data.Room}"
-		private const val Testing = "androidx.room:room-testing:${Versions.Data.Room}"
-
-		fun DependencyHandler.implementRoom(type: String = "implementation") {
-			add(type, Room)
-			add(type, Runtime)
-			add(type, Compiler)
-			add(type, Paging)
-			add(type, Testing)
-		}
+		const val Room = "androidx.room:room-ktx:${Versions.Data.Room}"
+		const val Runtime = "androidx.room:room-runtime:${Versions.Data.Room}"
+		const val Compiler = "androidx.room:room-compiler:${Versions.Data.Room}"
+		const val Paging = "androidx.room:room-paging:${Versions.Data.Room}"
+		const val Testing = "androidx.room:room-testing:${Versions.Data.Room}"
 	}
 
 	object Data {
-		private const val Datastore =
+		const val Datastore =
 			"androidx.datastore:datastore-preferences:${Versions.Data.Datastore}"
-
-		fun DependencyHandler.implementDatastore(type: String = "implementation") {
-			add(type, Datastore)
-		}
 	}
 
 	object WorkManager {
-		const val WorkManager = "androidx.work:work-runtime-ktx:${Versions.Data.WorkManager}"
-		const val Testing = "androidx.work:work-testing:${Versions.Data.WorkManager}"
+		private const val WorkManager =
+			"androidx.work:work-runtime-ktx:${Versions.Data.WorkManager}"
+		private const val Testing = "androidx.work:work-testing:${Versions.Data.WorkManager}"
+
+		fun DependencyHandler.implementWorkManager(type: String = "implementation") {
+			add(type, WorkManager)
+			add(type, Testing)
+			add(type, Hilt.WorkManager)
+			add(type, Hilt.WorkManagerCompiler)
+		}
 	}
 
 	object Network {
@@ -167,23 +163,23 @@ object Dependencies {
 		fun DependencyHandler.implementTest() {
 			implementUnitTest()
 			implementAndroidTest()
-			implementMockito()
 		}
 
 		private fun DependencyHandler.implementUnitTest() {
-			add("implementation", JUnit)
-			add("implementation", AndroidJUnit)
-			add("implementation", CoroutineTest)
+			implementMockito()
+			add("testImplementation", JUnit)
+			add("testImplementation", AndroidJUnit)
+			add("testImplementation", CoroutineTest)
 		}
 
 		private fun DependencyHandler.implementAndroidTest() {
-			add("implementation", AndroidCore)
-			add("implementation", AndroidCoreKtx)
+			add("testImplementation", AndroidCore)
+			add("testImplementation", AndroidCoreKtx)
 		}
 
 		private fun DependencyHandler.implementMockito() {
-			add("implementation", Mockito)
-			add("implementation", MockitoKotlin)
+			add("testImplementation", Mockito)
+			add("testImplementation", MockitoKotlin)
 		}
 	}
 }

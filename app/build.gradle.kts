@@ -1,21 +1,11 @@
 plugins {
-	id("finize-application")
-	id("finize-application-compose")
-	id("finize-hilt")
+	id("finize.application")
+	id("finize.application-compose")
+	id("finize.hilt")
 }
 
 android {
 	namespace = "com.adiliqbal.finize"
-
-	defaultConfig {
-		vectorDrawables { useSupportLibrary = true }
-
-		javaCompileOptions {
-			annotationProcessorOptions {
-				arguments(mapOf("room.schemaLocation" to "$projectDir/schemas"))
-			}
-		}
-	}
 
 	packagingOptions {
 		resources {
@@ -25,5 +15,14 @@ android {
 }
 
 dependencies {
-	implementation(Dependencies.Kotlin.KtxCore)
+	implementation(project(":data"))
+	implementation(project(":database"))
+	implementation(project(":datastore"))
+	implementation(project(":model"))
+	implementation(project(":navigation"))
+	implementation(project(":network"))
+	implementation(project(":sync"))
+	implementation(project(":ui"))
+
+	implementation(Libraries.Kotlin.Core)
 }
