@@ -16,3 +16,6 @@ local.properties
 
 /build
 /buildSrc/build
+
+secrets.properties
+secrets.*.properties
