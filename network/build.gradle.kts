@@ -22,6 +22,8 @@ secrets {
 }
 
 dependencies {
+	implementation(project(":model"))
+
 	implementation(Libraries.Kotlin.Core)
 	implementation(Libraries.Kotlin.Coroutines)
 
@@ -29,6 +31,7 @@ dependencies {
 	implementation(Libraries.Firebase.Messaging)
 	implementation(Libraries.Network.Retrofit)
 	implementation(Libraries.Network.OkHttpInterceptor)
+	implementation(Libraries.Kotlin.DateTime)
 	implementation(Libraries.Kotlin.Json)
 	implementation(Libraries.Kotlin.JsonConvertor)
 
