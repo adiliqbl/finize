@@ -1,5 +1,6 @@
 package com.adiliqbal.finize.network.extensions
 
+import com.adiliqbal.finize.model.extensions.ID
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
@@ -25,10 +26,24 @@ internal fun String.toNotionTextFilter(
 	})
 }
 
-internal fun String.toNotionRelationFilter(property: String) = buildJsonObject {
+internal fun ID.toNotionRelationFilter(property: String) = buildJsonObject {
 	put("property", JsonPrimitive(property))
 	put("relation", buildJsonObject {
 		put("contains", JsonPrimitive(this@toNotionRelationFilter))
+	})
+}
+
+internal fun String.toNotionTagFilter(property: String) = buildJsonObject {
+	put("property", JsonPrimitive(property))
+	put("select", buildJsonObject {
+		put("equals", JsonPrimitive(this@toNotionTagFilter))
+	})
+}
+
+internal fun ID.toNotionTagsFilter(property: String) = buildJsonObject {
+	put("property", JsonPrimitive(property))
+	put("multi_select", buildJsonObject {
+		put("contains", JsonPrimitive(this@toNotionTagsFilter))
 	})
 }
 

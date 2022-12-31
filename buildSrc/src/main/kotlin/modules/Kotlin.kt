@@ -40,8 +40,9 @@ internal fun Project.configureKotlinAndroid(
 	dependencies {
 		add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:${Versions.Build.Desugar}")
 
-		add("implementation", Libraries.Util.Timber)
 		add("implementation", Libraries.Util.Inject)
+		add("implementation", Libraries.Kotlin.DateTime)
+		add("implementation", Libraries.Util.Timber)
 	}
 }
 

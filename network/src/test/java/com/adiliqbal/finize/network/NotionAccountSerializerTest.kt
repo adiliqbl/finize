@@ -2,6 +2,7 @@ package com.adiliqbal.finize.network
 
 import com.adiliqbal.finize.network.model.ApiAccount
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
+import com.adiliqbal.finize.network.util.AppJson.toJson
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
@@ -86,5 +87,16 @@ class NotionAccountSerializerTest {
 		assertEquals(10.0, account?.currentBalance)
 		assertEquals(0.0, account?.startingBalance)
 		assertEquals("2023-04-12T09:01:00Z", account?.createdAt?.toString())
+	}
+
+	@Test
+	fun serialize() {
+		val account = ApiAccount(
+			id = "id",
+			name = "name",
+			currentBalance = 10.0,
+			startingBalance = 50.0
+		)
+		account.toJson()
 	}
 }

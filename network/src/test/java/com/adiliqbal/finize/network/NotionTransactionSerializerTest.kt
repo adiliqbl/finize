@@ -1,10 +1,11 @@
 package com.adiliqbal.finize.network
 
+import com.adiliqbal.finize.network.model.ApiTag
 import com.adiliqbal.finize.network.model.ApiTransaction
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
+import com.adiliqbal.finize.network.util.AppJson.toJson
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNull
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import org.junit.Test
 
@@ -147,5 +148,19 @@ class NotionTransactionSerializerTest {
 		assertEquals("budget_id", transaction?.budgets?.get(0))
 		assertEquals("Note text", transaction?.note)
 		assertEquals(LocalDate.parse("2021-11-14"), transaction?.date)
+	}
+
+	@Test
+	fun serialize() {
+		val transaction = ApiTransaction(
+			id = "id",
+			name = "name",
+			toAccount = "toAccount",
+			fromAccount = "fromAccount",
+			budgets = listOf("id"),
+			type = ApiTag(id = "id", "type"),
+			tags = listOf(ApiTag(id = "id1", name = "one"), ApiTag(id = "id2", name = "two"))
+		)
+		transaction.toJson()
 	}
 }
