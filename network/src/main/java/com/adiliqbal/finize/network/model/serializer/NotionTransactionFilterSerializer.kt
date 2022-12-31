@@ -20,6 +20,8 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.addJsonObject
 import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
 
@@ -74,6 +76,15 @@ internal object NotionTransactionFilterSerializer : KSerializer<TransactionsFilt
 
 		val body = buildJsonObject {
 			if (filters.isNotEmpty()) {
+				put("sorts", buildJsonArray {
+					addJsonObject {
+						put("property", JsonPrimitive(DATE))
+						put("direction", JsonPrimitive("descending"))
+					}
+				})
+				put("page_size", JsonPrimitive(pageSize))
+				cursor?.let { put("start_cursor", JsonPrimitive(it)) }
+
 				if (filters.size == 1) put("filter", filters[0])
 				else put("filter", buildJsonObject {
 					put("and", filters)

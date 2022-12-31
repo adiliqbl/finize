@@ -6,4 +6,6 @@ import com.adiliqbal.finize.network.model.response.PaginatedList
 interface BudgetService {
 
 	suspend fun getBudgets(): PaginatedList<ApiBudget>
+
+	suspend fun updateBudget(budget: ApiBudget)
 }

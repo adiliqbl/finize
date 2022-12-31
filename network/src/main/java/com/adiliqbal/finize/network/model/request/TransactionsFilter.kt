@@ -14,5 +14,8 @@ data class TransactionsFilter(
 	val budget: ID? = null,
 	val date: LocalDate? = null,
 	val dateFrom: LocalDate? = null,
-	val dateTo: LocalDate? = null
+	val dateTo: LocalDate? = null,
+
+	val cursor: String? = null,
+	val pageSize: Int = 30
 )

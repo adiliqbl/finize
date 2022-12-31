@@ -6,4 +6,6 @@ import com.adiliqbal.finize.network.model.response.PaginatedList
 interface AccountService {
 
 	suspend fun getAccounts(): PaginatedList<ApiAccount>
+
+	suspend fun updateAccount(account: ApiAccount)
 }

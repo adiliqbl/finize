@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.adiliqbal.finize.model.extensions.ID
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.encodeToString
@@ -18,16 +19,16 @@ class NotionPreferences @Inject constructor(private val dataStore: DataStore<Pre
 		val TRANSACTIONS_DB = stringPreferencesKey("TRANSACTIONS_DB")
 	}
 
-	suspend fun accountsDB() =
+	suspend fun accountsDB(): ID =
 		dataStore.data.map { preferences -> preferences[ACCOUNTS_DB] }.first()!!
 
-	suspend fun budgetsDB() =
+	suspend fun budgetsDB(): ID =
 		dataStore.data.map { preferences -> preferences[BUDGETS_DB] }.first()!!
 
-	suspend fun transactionsDB() =
+	suspend fun transactionsDB(): ID =
 		dataStore.data.map { preferences -> preferences[TRANSACTIONS_DB] }.first()!!
 
-	suspend fun setup(accountsDB: String, transactionsDB: String, budgetsDB: String) {
+	suspend fun setup(accountsDB: ID, transactionsDB: ID, budgetsDB: ID) {
 		dataStore.edit { preferences ->
 			preferences[ACCOUNTS_DB] = Json.encodeToString(accountsDB)
 			preferences[BUDGETS_DB] = Json.encodeToString(budgetsDB)
