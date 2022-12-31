@@ -1,9 +1,9 @@
 package com.adiliqbal.finize.network.model.serializer
 
 import com.adiliqbal.finize.network.extensions.getString
-import com.adiliqbal.finize.network.extensions.parseDateTime
-import com.adiliqbal.finize.network.extensions.parseDouble
-import com.adiliqbal.finize.network.extensions.parseString
+import com.adiliqbal.finize.network.extensions.parseNotionDateTime
+import com.adiliqbal.finize.network.extensions.parseNotionDouble
+import com.adiliqbal.finize.network.extensions.parseNotionString
 import com.adiliqbal.finize.network.model.ApiBudget
 import com.adiliqbal.finize.network.util.AppJson.toJson
 import kotlinx.serialization.KSerializer
@@ -29,10 +29,10 @@ internal object NotionBudgetSerializer : KSerializer<ApiBudget> {
 		val properties = json["properties"]!!.jsonObject
 		return ApiBudget(
 			id = json.getString("id")!!,
-			name = properties.parseString("Name") ?: "",
-			spent = properties.parseDouble("Spent"),
-			maximum = properties.parseDouble("Maximum"),
-			createdAt = json.parseDateTime("created_time")
+			name = properties.parseNotionString("Name") ?: "",
+			spent = properties.parseNotionDouble("Spent"),
+			maximum = properties.parseNotionDouble("Maximum"),
+			createdAt = json.parseNotionDateTime("created_time")
 		)
 	}
 }

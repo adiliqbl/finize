@@ -1,11 +1,11 @@
 package com.adiliqbal.finize.network.model.serializer
 
 import com.adiliqbal.finize.network.extensions.getString
-import com.adiliqbal.finize.network.extensions.parseDate
-import com.adiliqbal.finize.network.extensions.parseRelation
-import com.adiliqbal.finize.network.extensions.parseString
-import com.adiliqbal.finize.network.extensions.parseTag
-import com.adiliqbal.finize.network.extensions.parseTags
+import com.adiliqbal.finize.network.extensions.parseNotionDate
+import com.adiliqbal.finize.network.extensions.parseNotionRelation
+import com.adiliqbal.finize.network.extensions.parseNotionString
+import com.adiliqbal.finize.network.extensions.parseNotionTag
+import com.adiliqbal.finize.network.extensions.parseNotionTags
 import com.adiliqbal.finize.network.model.ApiTransaction
 import com.adiliqbal.finize.network.util.AppJson.toJson
 import kotlinx.serialization.KSerializer
@@ -31,16 +31,16 @@ internal object NotionTransactionSerializer : KSerializer<ApiTransaction> {
 		val properties = json["properties"]!!.jsonObject
 		return ApiTransaction(
 			id = json.getString("id")!!,
-			name = properties.parseString("Name") ?: "",
-			type = properties.parseTag("Type"),
-			toAccount = properties.parseRelation("To Account")
+			name = properties.parseNotionString("Name") ?: "",
+			type = properties.parseNotionTag("Type"),
+			toAccount = properties.parseNotionRelation("To Account")
 				?.takeIf { it.isNotEmpty() }?.get(0),
-			fromAccount = properties.parseRelation("From Account")
+			fromAccount = properties.parseNotionRelation("From Account")
 				?.takeIf { it.isNotEmpty() }?.get(0),
-			budgets = properties.parseRelation("Budget"),
-			tags = properties.parseTags("Tags"),
-			note = properties.parseString("Note"),
-			date = properties.parseDate("Date")
+			budgets = properties.parseNotionRelation("Budget"),
+			tags = properties.parseNotionTags("Tags"),
+			note = properties.parseNotionString("Note"),
+			date = properties.parseNotionDate("Date")
 		)
 	}
 }

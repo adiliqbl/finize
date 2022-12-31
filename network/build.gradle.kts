@@ -10,10 +10,6 @@ plugins {
 
 android {
 	namespace = "com.adiliqbal.finize.network"
-
-	buildFeatures {
-		buildConfig = true
-	}
 }
 
 secrets {
@@ -23,6 +19,7 @@ secrets {
 
 dependencies {
 	implementation(project(":model"))
+	implementation(project(":datastore"))
 
 	implementation(Libraries.Kotlin.Core)
 	implementation(Libraries.Kotlin.Coroutines)

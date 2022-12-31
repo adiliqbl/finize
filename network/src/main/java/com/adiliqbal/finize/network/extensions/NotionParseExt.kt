@@ -12,7 +12,7 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
 @Suppress("UNCHECKED_CAST")
-internal fun JsonObject.parseString(key: String): String? {
+internal fun JsonObject.parseNotionString(key: String): String? {
 	return try {
 		val value = get(key)
 		if (value.isPrimitiveType) return value?.jsonPrimitive?.contentOrNull
@@ -24,16 +24,16 @@ internal fun JsonObject.parseString(key: String): String? {
 		else if (obj.containsKey("string")) return obj["string"]!!.jsonPrimitive.content
 		else if (obj.containsKey("type")) {
 			when (type) {
-				"text" -> return obj["text"]!!.jsonObject.parseString("content")
-				"file" -> return parseFileUrl("file")
-				"formula" -> return obj["formula"]!!.jsonObject.parseString("string")
-				"rollup" -> return obj["rollup"]!!.jsonObject.parseString("string")
+				"text" -> return obj["text"]!!.jsonObject.parseNotionString("content")
+				"file" -> return parseNotionFileUrl("file")
+				"formula" -> return obj["formula"]!!.jsonObject.parseNotionString("string")
+				"rollup" -> return obj["rollup"]!!.jsonObject.parseNotionString("string")
 				"title", "rich_text" -> {
 					val props = if (type == "title") obj["title"]!!.jsonArray
 					else obj["rich_text"]!!.jsonArray
 
 					for (prop in props) {
-						val text = prop.jsonObject.parseString("text")
+						val text = prop.jsonObject.parseNotionString("text")
 						if (text != null) return text
 					}
 				}
@@ -46,7 +46,7 @@ internal fun JsonObject.parseString(key: String): String? {
 }
 
 @Suppress("UNCHECKED_CAST")
-internal fun JsonObject.parseDouble(key: String): Double {
+internal fun JsonObject.parseNotionDouble(key: String): Double {
 	return try {
 		val value = get(key)
 		if (value.isPrimitiveType) return (value!!.jsonPrimitive.contentOrNull!!).toDouble()
@@ -54,8 +54,8 @@ internal fun JsonObject.parseDouble(key: String): Double {
 		val obj = value as JsonObject
 		if (obj.containsKey("number")) return obj["number"]!!.jsonPrimitive.content.toDouble()
 		else if (obj.containsKey("type")) {
-			if (obj.getString("type") == "rollup") return obj["rollup"]!!.jsonObject.parseDouble("number")
-			else if (obj.getString("type") == "formula") return obj["formula"]!!.jsonObject.parseDouble(
+			if (obj.getString("type") == "rollup") return obj["rollup"]!!.jsonObject.parseNotionDouble("number")
+			else if (obj.getString("type") == "formula") return obj["formula"]!!.jsonObject.parseNotionDouble(
 				"number"
 			)
 		}
@@ -66,7 +66,7 @@ internal fun JsonObject.parseDouble(key: String): Double {
 }
 
 @Suppress("UNCHECKED_CAST")
-internal fun JsonObject.parseDate(key: String): LocalDate? {
+internal fun JsonObject.parseNotionDate(key: String): LocalDate? {
 	return try {
 		val value = get(key)
 		if (value.isPrimitiveType) return LocalDate.parse(value!!.jsonPrimitive.contentOrNull!!)
@@ -74,9 +74,9 @@ internal fun JsonObject.parseDate(key: String): LocalDate? {
 		val obj = value as JsonObject
 		if (obj.containsKey("start")) return LocalDate.parse(obj["start"]!!.jsonPrimitive.content)
 		else if (obj.containsKey("type")) {
-			if (obj.getString("type") == "date") return obj["date"]!!.jsonObject.parseDate("start")
+			if (obj.getString("type") == "date") return obj["date"]!!.jsonObject.parseNotionDate("start")
 			else if (obj.getString("type") == "formula") return obj["formula"]!!.jsonObject
-				.parseDate("start")
+				.parseNotionDate("start")
 		}
 		null
 	} catch (_: Exception) {
@@ -85,7 +85,7 @@ internal fun JsonObject.parseDate(key: String): LocalDate? {
 }
 
 @Suppress("UNCHECKED_CAST")
-internal fun JsonObject.parseDateTime(key: String): Instant? {
+internal fun JsonObject.parseNotionDateTime(key: String): Instant? {
 	return try {
 		val value = get(key)
 		if (value.isPrimitiveType) return Instant.parse(value!!.jsonPrimitive.contentOrNull!!)
@@ -94,11 +94,11 @@ internal fun JsonObject.parseDateTime(key: String): Instant? {
 		if (obj.containsKey("created_time")) return Instant.parse(obj["created_time"]!!.jsonPrimitive.content)
 		else if (obj.containsKey("type")) {
 			if (obj.getString("type") == "created_time") return obj["created_time"]!!.jsonObject
-				.parseDateTime("created_time")
+				.parseNotionDateTime("created_time")
 			else if (obj.getString("type") == "date_time") return obj["date_time"]!!.jsonObject
-				.parseDateTime("date_time")
+				.parseNotionDateTime("date_time")
 			else if (obj.getString("type") == "formula") return obj["formula"]!!.jsonObject
-				.parseDateTime("created_time")
+				.parseNotionDateTime("created_time")
 		}
 		null
 	} catch (_: Exception) {
@@ -107,7 +107,7 @@ internal fun JsonObject.parseDateTime(key: String): Instant? {
 }
 
 @Suppress("UNCHECKED_CAST")
-internal fun JsonObject.parseRelation(key: String): List<ID>? {
+internal fun JsonObject.parseNotionRelation(key: String): List<ID>? {
 	return try {
 		val obj = get(key) as JsonObject
 		if (obj.getString("type") == "relation") {
@@ -119,7 +119,7 @@ internal fun JsonObject.parseRelation(key: String): List<ID>? {
 }
 
 @Suppress("UNCHECKED_CAST")
-internal fun JsonObject.parseTags(key: String): List<ApiTag>? {
+internal fun JsonObject.parseNotionTags(key: String): List<ApiTag>? {
 	return try {
 		val value = get(key)
 		if (value is JsonArray) {
@@ -139,7 +139,7 @@ internal fun JsonObject.parseTags(key: String): List<ApiTag>? {
 }
 
 @Suppress("UNCHECKED_CAST")
-internal fun JsonObject.parseTag(key: String): ApiTag? {
+internal fun JsonObject.parseNotionTag(key: String): ApiTag? {
 	return try {
 		val obj = get(key)?.jsonObject as JsonObject
 		if (obj.getString("type") == "select") return obj["select"]!!.jsonObject.toTag()
@@ -150,7 +150,7 @@ internal fun JsonObject.parseTag(key: String): ApiTag? {
 }
 
 @Suppress("UNCHECKED_CAST")
-private fun JsonObject.parseFileUrl(key: String): String? {
+private fun JsonObject.parseNotionFileUrl(key: String): String? {
 	return try {
 		val value = get(key)
 		if (value.isPrimitiveType) return value?.jsonPrimitive?.contentOrNull
@@ -158,7 +158,7 @@ private fun JsonObject.parseFileUrl(key: String): String? {
 		val obj = value as JsonObject
 		if (obj.containsKey("url")) return obj.getString("url")
 		else if (obj.containsKey("type")) {
-			if (obj.getString("type") == "file") return obj["file"]!!.jsonObject.parseFileUrl("URL")
+			if (obj.getString("type") == "file") return obj["file"]!!.jsonObject.parseNotionFileUrl("URL")
 		}
 		null
 	} catch (_: Exception) {

@@ -1,9 +1,9 @@
 package com.adiliqbal.finize.network.model.serializer
 
 import com.adiliqbal.finize.network.extensions.getString
-import com.adiliqbal.finize.network.extensions.parseDateTime
-import com.adiliqbal.finize.network.extensions.parseDouble
-import com.adiliqbal.finize.network.extensions.parseString
+import com.adiliqbal.finize.network.extensions.parseNotionDateTime
+import com.adiliqbal.finize.network.extensions.parseNotionDouble
+import com.adiliqbal.finize.network.extensions.parseNotionString
 import com.adiliqbal.finize.network.model.ApiAccount
 import com.adiliqbal.finize.network.util.AppJson.toJson
 import kotlinx.serialization.KSerializer
@@ -29,10 +29,10 @@ internal object NotionAccountSerializer : KSerializer<ApiAccount> {
 		val properties = json["properties"]!!.jsonObject
 		return ApiAccount(
 			id = json.getString("id")!!,
-			name = properties.parseString("Name") ?: "",
-			currentBalance = properties.parseDouble("Current Balance"),
-			startingBalance = properties.parseDouble("Starting Balance"),
-			createdAt = json.parseDateTime("created_time")
+			name = properties.parseNotionString("Name") ?: "",
+			currentBalance = properties.parseNotionDouble("Current Balance"),
+			startingBalance = properties.parseNotionDouble("Starting Balance"),
+			createdAt = json.parseNotionDateTime("created_time")
 		)
 	}
 }
