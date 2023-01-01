@@ -7,18 +7,21 @@ import com.adiliqbal.finize.network.extensions.parseNotionString
 import com.adiliqbal.finize.network.extensions.toNotionNumber
 import com.adiliqbal.finize.network.extensions.toNotionTitle
 import com.adiliqbal.finize.network.model.ApiAccount
-import com.adiliqbal.finize.network.util.AppJson.toJson
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.PolymorphicKind
 import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.buildSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.JsonEncoder
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonObject
 
+@OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
 internal object NotionAccountSerializer : KSerializer<ApiAccount> {
 
 	private const val ID = "id"
@@ -28,7 +31,7 @@ internal object NotionAccountSerializer : KSerializer<ApiAccount> {
 	private const val CREATED_TIME = "created_time"
 
 	override val descriptor: SerialDescriptor =
-		PrimitiveSerialDescriptor("NotionAccount", PrimitiveKind.STRING)
+		buildSerialDescriptor("NotionAccount", PolymorphicKind.SEALED)
 
 	override fun serialize(encoder: Encoder, value: ApiAccount) {
 		val body = buildJsonObject {
@@ -37,7 +40,7 @@ internal object NotionAccountSerializer : KSerializer<ApiAccount> {
 			put(STARTING_BALANCE, value.startingBalance.toNotionNumber())
 		}
 
-		encoder.encodeString(body.toJson())
+		(encoder as JsonEncoder).encodeJsonElement(body)
 	}
 
 	override fun deserialize(decoder: Decoder): ApiAccount {

@@ -1,8 +1,6 @@
-package com.adiliqbal.finize.network
+package com.adiliqbal.finize.network.serializer
 
 import com.adiliqbal.finize.network.model.ApiBudget
-import com.adiliqbal.finize.network.model.ApiTag
-import com.adiliqbal.finize.network.model.ApiTransaction
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
 import com.adiliqbal.finize.network.util.AppJson.toJson
 import junit.framework.TestCase.assertEquals

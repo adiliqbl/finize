@@ -8,7 +8,7 @@ import okhttp3.Response
 import okio.IOException
 import javax.inject.Inject
 
-class AuthInterceptor @Inject constructor(private val preferences: AppPreferences) : Interceptor {
+internal class AuthInterceptor @Inject constructor(private val preferences: AppPreferences) : Interceptor {
 
 	private var token: String? = null
 

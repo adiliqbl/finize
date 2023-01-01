@@ -1,7 +1,6 @@
 package com.adiliqbal.finize.network.service
 
 import com.adiliqbal.finize.datastore.NotionPreferences
-import com.adiliqbal.finize.model.extensions.ID
 import com.adiliqbal.finize.network.model.ApiAccount
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
 import com.adiliqbal.finize.network.util.AppJson.toJson
@@ -14,8 +13,6 @@ internal class AccountServiceImpl @Inject constructor(
 ) : AccountService {
 
 	override suspend fun getAccounts() = notionService.getAccounts(preferences.accountsDB())
-
-	override suspend fun getAccount(id: ID) = notionService.getPage(id).decodeJson<ApiAccount>()!!
 
 	override suspend fun updateAccount(account: ApiAccount) =
 		notionService.updatePage(account.id, account.toJson().decodeJson<JsonObject>()!!)

@@ -14,20 +14,21 @@ import com.adiliqbal.finize.network.extensions.toNotionTag
 import com.adiliqbal.finize.network.extensions.toNotionTags
 import com.adiliqbal.finize.network.extensions.toNotionTitle
 import com.adiliqbal.finize.network.model.ApiTransaction
-import com.adiliqbal.finize.network.util.AppJson.toJson
-import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDate
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.PolymorphicKind
 import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.buildSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.JsonEncoder
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonObject
 
+@OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
 internal object NotionTransactionSerializer : KSerializer<ApiTransaction> {
 
 	internal const val ID = "id"
@@ -41,7 +42,7 @@ internal object NotionTransactionSerializer : KSerializer<ApiTransaction> {
 	internal const val DATE = "Date"
 
 	override val descriptor: SerialDescriptor =
-		PrimitiveSerialDescriptor("NotionTransaction", PrimitiveKind.STRING)
+		buildSerialDescriptor("NotionTransaction", PolymorphicKind.SEALED)
 
 	override fun serialize(encoder: Encoder, value: ApiTransaction) {
 		val body = buildJsonObject {
@@ -55,7 +56,7 @@ internal object NotionTransactionSerializer : KSerializer<ApiTransaction> {
 			value.note?.let { put(NOTE, it.toNotionRichString()) }
 		}
 
-		encoder.encodeString(body.toJson())
+		(encoder as JsonEncoder).encodeJsonElement(body)
 	}
 
 	override fun deserialize(decoder: Decoder): ApiTransaction {

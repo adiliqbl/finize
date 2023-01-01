@@ -1,4 +1,4 @@
-package com.adiliqbal.finize.network
+package com.adiliqbal.finize.network.serializer
 
 import com.adiliqbal.finize.network.model.ApiTag
 import com.adiliqbal.finize.network.model.ApiTransaction

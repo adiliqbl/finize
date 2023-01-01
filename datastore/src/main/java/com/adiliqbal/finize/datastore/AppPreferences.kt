@@ -5,6 +5,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.adiliqbal.finize.datastore.model.AuthCredentials
+import com.adiliqbal.finize.model.extensions.ID
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.decodeFromString
@@ -15,15 +17,22 @@ import javax.inject.Inject
 class AppPreferences @Inject constructor(private val dataStore: DataStore<Preferences>) {
 
 	private companion object {
+		val USER_ID = stringPreferencesKey("USER_ID")
 		val AUTH_CREDENTIALS = stringPreferencesKey("AUTH_CREDENTIALS")
+	}
+
+	suspend fun userId() = dataStore.data.map { it[USER_ID] }.first()!!
+
+	suspend fun setUserId(id: ID) {
+		dataStore.edit { preferences ->
+			preferences[USER_ID] = Json.encodeToString(id)
+		}
 	}
 
 	suspend fun token() = authCredentials()?.accessToken
 
 	private suspend fun authCredentials(): AuthCredentials? {
-		val json: String =
-			dataStore.data.map { preferences -> preferences[AUTH_CREDENTIALS] }.firstOrNull()
-				?: return null
+		val json = dataStore.data.map { it[AUTH_CREDENTIALS] }.firstOrNull() ?: return null
 		return Json.decodeFromString<AuthCredentials>(json)
 	}
 

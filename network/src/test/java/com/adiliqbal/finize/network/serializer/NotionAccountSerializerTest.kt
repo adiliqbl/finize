@@ -1,4 +1,4 @@
-package com.adiliqbal.finize.network
+package com.adiliqbal.finize.network.serializer
 
 import com.adiliqbal.finize.network.model.ApiAccount
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
