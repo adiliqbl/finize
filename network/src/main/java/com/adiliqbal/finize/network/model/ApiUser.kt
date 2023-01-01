@@ -7,6 +7,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ApiUser(
 	val id: ID,
-	val name: String? = null,
+	val name: String = "",
 	@SerialName("avatar_url") val image: String? = null,
 )

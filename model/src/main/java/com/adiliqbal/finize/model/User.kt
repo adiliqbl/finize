@@ -1,0 +1,9 @@
+package com.adiliqbal.finize.model
+
+import com.adiliqbal.finize.model.extensions.ID
+
+data class User(
+	val id: ID,
+	val name: String,
+	val image: String? = null,
+)
