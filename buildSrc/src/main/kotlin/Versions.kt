@@ -65,8 +65,9 @@ object Versions {
 
 	object Test {
 		const val JUnit = "4.13.2"
-		const val AndroidJUnit = "1.1.3"
-		const val AndroidCore = "1.4.0"
+		const val AndroidRunner = "1.1.0"
+		const val AndroidJUnit = "1.1.4"
+		const val AndroidCore = "1.5.0"
 		const val CoroutineTest = "1.6.3"
 		const val Mockito = "4.5.1"
 		const val MockitoKotlin = "4.0.0"

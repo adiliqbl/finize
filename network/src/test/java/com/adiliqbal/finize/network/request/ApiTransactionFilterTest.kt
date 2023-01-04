@@ -1,11 +1,12 @@
 package com.adiliqbal.finize.network.request
 
-import com.adiliqbal.finize.network.model.request.TransactionsFilter
+import com.adiliqbal.finize.model.filter.TransactionsFilter
+import com.adiliqbal.finize.network.model.request.toJson
 import junit.framework.TestCase.assertNotNull
 import kotlinx.datetime.LocalDate
 import org.junit.Test
 
-class TransactionFilterTest {
+class ApiTransactionFilterTest {
 
 	@Test
 	fun toJson() {

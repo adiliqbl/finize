@@ -149,7 +149,10 @@ object Libraries {
 
 	object Test {
 		private const val JUnit = "junit:junit:${Versions.Test.JUnit}"
+		private const val AndroidRunner = "androidx.test:runner:${Versions.Test.AndroidRunner}"
 		private const val AndroidJUnit = "androidx.test.ext:junit:${Versions.Test.AndroidJUnit}"
+		private const val AndroidJUnitKtx =
+			"androidx.test.ext:junit-ktx:${Versions.Test.AndroidJUnit}"
 		private const val AndroidCore = "androidx.test:core:${Versions.Test.AndroidCore}"
 		private const val AndroidCoreKtx = "androidx.test:core-ktx:${Versions.Test.AndroidCore}"
 		private const val CoroutineTest =
@@ -159,13 +162,19 @@ object Libraries {
 			"org.mockito.kotlin:mockito-kotlin:${Versions.Test.MockitoKotlin}"
 
 		fun DependencyHandler.implementTesting() {
+			add("testImplementation", JUnit)
+			add("testImplementation", CoroutineTest)
 			add("testImplementation", Mockito)
 			add("testImplementation", MockitoKotlin)
-			add("testImplementation", JUnit)
-			add("testImplementation", AndroidJUnit)
-			add("testImplementation", CoroutineTest)
-			add("testImplementation", AndroidCore)
-			add("testImplementation", AndroidCoreKtx)
+		}
+
+		fun DependencyHandler.implementAndroidTesting() {
+			add("androidTestImplementation", CoroutineTest)
+			add("androidTestImplementation", AndroidRunner)
+			add("androidTestImplementation", AndroidJUnit)
+			add("androidTestImplementation", AndroidJUnitKtx)
+			add("androidTestImplementation", AndroidCore)
+			add("androidTestImplementation", AndroidCoreKtx)
 		}
 	}
 }

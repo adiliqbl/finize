@@ -8,11 +8,11 @@ import com.adiliqbal.finize.database.util.AppJson.toJson
 class ListConverters {
 
 	@TypeConverter
-	fun stringToExperienceList(value: String?): List<TagEntity>? =
+	fun stringToTagList(value: String?): List<TagEntity>? =
 		value?.decodeJson<List<TagEntity>>()
 
 	@TypeConverter
-	fun experienceListToString(value: List<TagEntity>?) = value?.toJson()
+	fun tagListToString(value: List<TagEntity>?) = value?.toJson()
 
 	@TypeConverter
 	fun stringToStringList(value: String?): List<String>? = value?.decodeJson<List<String>>()

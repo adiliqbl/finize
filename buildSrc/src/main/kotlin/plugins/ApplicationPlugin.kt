@@ -26,6 +26,8 @@ class ApplicationPlugin : Plugin<Project> {
 
 					versionCode = AppConfig.versionCode
 					versionName = AppConfig.versionName
+
+					testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 				}
 
 				configureKotlinAndroid(this)

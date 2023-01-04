@@ -4,7 +4,7 @@ import com.adiliqbal.finize.datastore.NotionPreferences
 import com.adiliqbal.finize.model.extensions.ID
 import com.adiliqbal.finize.network.model.ApiTransaction
 import com.adiliqbal.finize.network.model.request.CreateNotionPageRequest
-import com.adiliqbal.finize.network.model.request.TransactionsFilter
+import com.adiliqbal.finize.network.model.request.ApiTransactionsFilter
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
 import com.adiliqbal.finize.network.util.AppJson.toJson
 import kotlinx.serialization.json.JsonObject
@@ -15,7 +15,7 @@ internal class TransactionServiceImpl @Inject constructor(
 	private val notionService: NotionService
 ) : TransactionService {
 
-	override suspend fun getTransactions(filter: TransactionsFilter?) =
+	override suspend fun getTransactions(filter: ApiTransactionsFilter?) =
 		notionService.getTransactions(preferences.transactionsDB(), filter)
 
 	override suspend fun createTransaction(transaction: ApiTransaction): ApiTransaction {

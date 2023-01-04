@@ -17,9 +17,11 @@ class ModulePlugin : Plugin<Project> {
 			}
 
 			extensions.getByType<LibraryExtension>().apply {
-				configureKotlinAndroid(this)
+				with(defaultConfig) {
+					testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+				}
 
-				defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+				configureKotlinAndroid(this)
 			}
 		}
 	}

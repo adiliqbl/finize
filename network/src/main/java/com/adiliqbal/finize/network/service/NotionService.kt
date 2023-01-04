@@ -5,7 +5,7 @@ import com.adiliqbal.finize.network.model.ApiAccount
 import com.adiliqbal.finize.network.model.ApiBudget
 import com.adiliqbal.finize.network.model.ApiTransaction
 import com.adiliqbal.finize.network.model.request.CreateNotionPageRequest
-import com.adiliqbal.finize.network.model.request.TransactionsFilter
+import com.adiliqbal.finize.network.model.request.ApiTransactionsFilter
 import com.adiliqbal.finize.network.model.response.PaginatedList
 import kotlinx.serialization.json.JsonObject
 import retrofit2.http.Body
@@ -26,7 +26,7 @@ internal interface NotionService {
 	@POST(value = "databases/{db}/query")
 	suspend fun getTransactions(
 		@Path("db") db: String,
-		@Body body: TransactionsFilter? = null
+		@Body body: ApiTransactionsFilter? = null
 	): PaginatedList<ApiTransaction>
 
 	@POST(value = "pages")

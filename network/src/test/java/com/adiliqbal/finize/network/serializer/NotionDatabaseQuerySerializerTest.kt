@@ -1,5 +1,6 @@
 package com.adiliqbal.finize.network.serializer
 
+import com.adiliqbal.finize.model.filter.TransactionsFilter
 import com.adiliqbal.finize.network.extensions.getInt
 import com.adiliqbal.finize.network.extensions.getString
 import com.adiliqbal.finize.network.model.enums.SortOrder
@@ -10,7 +11,7 @@ import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery.Companion.
 import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery.Companion.SORT
 import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery.Companion.SORT_FIELD
 import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery.Companion.SORT_ORDER
-import com.adiliqbal.finize.network.model.request.TransactionsFilter
+import com.adiliqbal.finize.network.model.request.toJson
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
 import com.adiliqbal.finize.network.util.AppJson.toJson
 import junit.framework.Assert.*
@@ -26,7 +27,7 @@ class NotionDatabaseQuerySerializerTest {
 		var query = NotionDatabaseQuery(
 			sortField = "date",
 			sortOrder = SortOrder.DESCENDING,
-			filter = TransactionsFilter(toAccount = "to", fromAccount = "from"),
+			filter = TransactionsFilter(toAccount = "to", fromAccount = "from").toJson(),
 			pageSize = 20
 		).toJson().decodeJson<JsonObject>()
 
@@ -42,7 +43,7 @@ class NotionDatabaseQuerySerializerTest {
 
 		query = NotionDatabaseQuery(
 			sortField = "date",
-			filter = TransactionsFilter(toAccount = "to", fromAccount = "from"),
+			filter = TransactionsFilter(toAccount = "to", fromAccount = "from").toJson(),
 			cursor = "cursor",
 			pageSize = 20
 		).toJson().decodeJson<JsonObject>()

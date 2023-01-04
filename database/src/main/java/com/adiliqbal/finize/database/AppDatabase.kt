@@ -7,6 +7,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.adiliqbal.finize.database.converters.DateConverters
 import com.adiliqbal.finize.database.converters.ListConverters
+import com.adiliqbal.finize.database.converters.ObjectConverters
+import com.adiliqbal.finize.database.dao.AccountDao
+import com.adiliqbal.finize.database.dao.BudgetDao
+import com.adiliqbal.finize.database.dao.TransactionDao
+import com.adiliqbal.finize.database.dao.UserDao
 import com.adiliqbal.finize.database.model.AccountEntity
 import com.adiliqbal.finize.database.model.BudgetEntity
 import com.adiliqbal.finize.database.model.TransactionEntity
@@ -23,7 +28,7 @@ import com.adiliqbal.finize.database.model.UserEntity
 	version = 1,
 	autoMigrations = []
 )
-@TypeConverters(DateConverters::class, ListConverters::class)
+@TypeConverters(DateConverters::class, ListConverters::class, ObjectConverters::class)
 internal abstract class AppDatabase : RoomDatabase() {
 
 	companion object {
@@ -50,7 +55,7 @@ internal abstract class AppDatabase : RoomDatabase() {
 
 	abstract fun accountDao(): AccountDao
 
-	abstract fun budgetDao(): BudgetDaoImpl
+	abstract fun budgetDao(): BudgetDao
 
-	abstract fun transactionDao(): TransactionDaoImpl
+	abstract fun transactionDao(): TransactionDao
 }

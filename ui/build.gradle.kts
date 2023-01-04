@@ -11,7 +11,7 @@ android {
 }
 
 dependencies {
-	implementation(project(":navigation"))
+	api(project(":navigation"))
 
 	implementCompose("api")
 	implementMaterialDesign("api")
