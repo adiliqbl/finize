@@ -2,9 +2,9 @@ package com.adiliqbal.finize.model.fake
 
 import com.adiliqbal.finize.model.Account
 import com.adiliqbal.finize.model.Budget
-import com.adiliqbal.finize.model.Tag
 import com.adiliqbal.finize.model.Transaction
 import com.adiliqbal.finize.model.User
+import com.adiliqbal.finize.model.enums.TransactionType
 import com.adiliqbal.finize.model.extensions.ID
 import kotlinx.datetime.LocalDate
 
@@ -23,7 +23,7 @@ object FakeModel {
 		accountFrom: ID? = "accountFromId",
 		accountTo: ID? = null,
 		budget: ID = "budgetId",
-		type: Tag = Tag(id = "tagId", name = "tag")
+		type: TransactionType = TransactionType.UNKNOWN
 	) = Transaction(
 		id = id,
 		name = "transaction",

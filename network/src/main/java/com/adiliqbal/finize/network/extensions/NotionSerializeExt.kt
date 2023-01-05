@@ -1,7 +1,6 @@
 package com.adiliqbal.finize.network.extensions
 
 import com.adiliqbal.finize.model.extensions.ID
-import com.adiliqbal.finize.network.model.ApiTag
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.addJsonObject

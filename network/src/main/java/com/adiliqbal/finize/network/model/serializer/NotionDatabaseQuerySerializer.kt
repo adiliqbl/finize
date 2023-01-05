@@ -37,7 +37,7 @@ internal object NotionDatabaseQuerySerializer : KSerializer<NotionDatabaseQuery>
 					}
 				})
 			}
-			filter?.toJson()?.let { put(FILTER, it) }
+			filter?.let { put(FILTER, it) }
 			put(PAGE_SIZE, JsonPrimitive(pageSize))
 			cursor?.let { put(CURSOR, JsonPrimitive(it)) }
 		}

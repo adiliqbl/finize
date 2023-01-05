@@ -1,7 +1,8 @@
 package com.adiliqbal.finize.network.extensions
 
+import com.adiliqbal.finize.model.enums.TransactionType
+import com.adiliqbal.finize.model.enums.toTransactionType
 import com.adiliqbal.finize.model.extensions.ID
-import com.adiliqbal.finize.network.model.ApiTag
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.JsonArray
@@ -54,7 +55,9 @@ internal fun JsonObject.parseNotionDouble(key: String): Double {
 		val obj = value as JsonObject
 		if (obj.containsKey("number")) return obj["number"]!!.jsonPrimitive.content.toDouble()
 		else if (obj.containsKey("type")) {
-			if (obj.getString("type") == "rollup") return obj["rollup"]!!.jsonObject.parseNotionDouble("number")
+			if (obj.getString("type") == "rollup") return obj["rollup"]!!.jsonObject.parseNotionDouble(
+				"number"
+			)
 			else if (obj.getString("type") == "formula") return obj["formula"]!!.jsonObject.parseNotionDouble(
 				"number"
 			)
@@ -119,7 +122,7 @@ internal fun JsonObject.parseNotionRelation(key: String): List<ID>? {
 }
 
 @Suppress("UNCHECKED_CAST")
-internal fun JsonObject.parseNotionTags(key: String): List<ApiTag>? {
+internal fun JsonObject.parseNotionTags(key: String): List<String>? {
 	return try {
 		val value = get(key)
 		if (value is JsonArray) {
@@ -139,13 +142,16 @@ internal fun JsonObject.parseNotionTags(key: String): List<ApiTag>? {
 }
 
 @Suppress("UNCHECKED_CAST")
-internal fun JsonObject.parseNotionTag(key: String): ApiTag? {
+internal fun JsonObject.parseNotionTransactionTag(key: String): TransactionType {
 	return try {
 		val obj = get(key)?.jsonObject as JsonObject
-		if (obj.getString("type") == "select") return obj["select"]!!.jsonObject.toTag()
-		else return toTag()
+		if (obj.getString("type") == "select") {
+			return obj["select"]!!.jsonObject.toTag().toTransactionType()
+		} else {
+			return toTag().toTransactionType()
+		}
 	} catch (_: Exception) {
-		null
+		TransactionType.UNKNOWN
 	}
 }
 
@@ -158,7 +164,9 @@ private fun JsonObject.parseNotionFileUrl(key: String): String? {
 		val obj = value as JsonObject
 		if (obj.containsKey("url")) return obj.getString("url")
 		else if (obj.containsKey("type")) {
-			if (obj.getString("type") == "file") return obj["file"]!!.jsonObject.parseNotionFileUrl("URL")
+			if (obj.getString("type") == "file") return obj["file"]!!.jsonObject.parseNotionFileUrl(
+				"URL"
+			)
 		}
 		null
 	} catch (_: Exception) {
@@ -166,8 +174,4 @@ private fun JsonObject.parseNotionFileUrl(key: String): String? {
 	}
 }
 
-private fun JsonObject.toTag() = ApiTag(
-	id = getString("id") as ID,
-	name = getString("name") ?: "",
-	color = getString("color"),
-)
+private fun JsonObject.toTag() = getString("name")

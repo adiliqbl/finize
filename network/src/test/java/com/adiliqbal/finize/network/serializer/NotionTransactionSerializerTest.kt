@@ -1,6 +1,5 @@
 package com.adiliqbal.finize.network.serializer
 
-import com.adiliqbal.finize.network.model.ApiTag
 import com.adiliqbal.finize.network.model.ApiTransaction
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
 import com.adiliqbal.finize.network.util.AppJson.toJson
@@ -137,15 +136,12 @@ class NotionTransactionSerializerTest {
 		assertEquals("transaction_id", transaction?.id)
 		assertEquals("Food", transaction?.name)
 
-		assertEquals("expense_id", transaction?.type?.id)
-		assertEquals("Expense", transaction?.type?.name)
-		assertEquals("red", transaction?.type?.color)
+		assertEquals("Expense", transaction?.type?.value)
 		assertEquals(1, transaction?.tags?.size)
 
 		assertEquals("from_account_id", transaction?.fromAccount)
 		assertNull(transaction?.toAccount)
-		assertEquals(1, transaction?.budgets?.size)
-		assertEquals("budget_id", transaction?.budgets?.get(0))
+		assertEquals("budget_id", transaction?.budget)
 		assertEquals("Note text", transaction?.note)
 		assertEquals(LocalDate.parse("2021-11-14"), transaction?.date)
 	}
@@ -157,9 +153,8 @@ class NotionTransactionSerializerTest {
 			name = "name",
 			toAccount = "toAccount",
 			fromAccount = "fromAccount",
-			budgets = listOf("id"),
-			type = ApiTag(id = "id", "type"),
-			tags = listOf(ApiTag(id = "id1", name = "one"), ApiTag(id = "id2", name = "two"))
+			budget = "budgetId",
+			tags = listOf("one", "two")
 		)
 		transaction.toJson()
 	}

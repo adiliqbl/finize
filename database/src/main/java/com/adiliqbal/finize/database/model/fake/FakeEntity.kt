@@ -2,7 +2,6 @@ package com.adiliqbal.finize.database.model.fake
 
 import com.adiliqbal.finize.database.model.AccountEntity
 import com.adiliqbal.finize.database.model.BudgetEntity
-import com.adiliqbal.finize.database.model.TagEntity
 import com.adiliqbal.finize.database.model.TransactionEntity
 import com.adiliqbal.finize.database.model.UserEntity
 import com.adiliqbal.finize.model.extensions.ID
