@@ -6,7 +6,7 @@ import com.google.firebase.firestore.DocumentReference
 
 internal interface FirestoreService {
 	companion object {
-		fun usersDB() = "users"
+		fun usersDB(userId: String) = "users/${userId}"
 		fun accountsDB(userId: String) = "user-accounts/${userId}/accounts"
 		fun budgetsDB(userId: String) = "user-budgets/${userId}/budgets"
 		fun transactionsDB(userId: String) = "user-transactions/${userId}/transactions"

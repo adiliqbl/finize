@@ -21,6 +21,11 @@ object Libraries {
 			"com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:${Versions.Kotlin.JsonConvertor}"
 	}
 
+	object Google {
+		const val PlayServices =
+			"com.google.android.gms:play-service:${Versions.Google.PlayServices}"
+	}
+
 	object Firebase {
 		private const val BOM = "com.google.firebase:firebase-bom:${Versions.Firebase.BOM}"
 		const val Crashlytics = "com.google.firebase:firebase-crashlytics-ktx"

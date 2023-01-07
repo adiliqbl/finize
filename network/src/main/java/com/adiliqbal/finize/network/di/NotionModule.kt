@@ -3,9 +3,9 @@ package com.adiliqbal.finize.network.di
 import com.adiliqbal.finize.network.Retrofit
 import com.adiliqbal.finize.network.service.notion.NotionAccountService
 import com.adiliqbal.finize.network.service.notion.NotionBudgetService
-import com.adiliqbal.finize.network.source.NotionService
 import com.adiliqbal.finize.network.service.notion.NotionTransactionService
 import com.adiliqbal.finize.network.service.notion.NotionUserService
+import com.adiliqbal.finize.network.source.NotionService
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -34,13 +34,13 @@ internal interface NotionModule {
 
 	@Binds
 	@Singleton
-	fun provideAccountService(service: NotionAccountService): NotionAccountService
+	fun bindAccountService(service: NotionAccountService): NotionAccountService
 
 	@Binds
 	@Singleton
-	fun provideBudgetService(service: NotionBudgetService): NotionBudgetService
+	fun bindBudgetService(service: NotionBudgetService): NotionBudgetService
 
 	@Binds
 	@Singleton
-	fun provideTransactionService(service: NotionTransactionService): NotionTransactionService
+	fun bindTransactionService(service: NotionTransactionService): NotionTransactionService
 }

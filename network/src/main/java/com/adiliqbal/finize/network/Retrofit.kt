@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 internal class Retrofit @Inject constructor(client: OkHttpClient, json: Converter.Factory) {
 
-	private companion object {
-		private const val NOTION_API = "https://api.notion.com/v1/"
+	internal companion object {
+		const val NOTION_API = "https://api.notion.com/v1"
 	}
 
 	val notion: Retrofit =

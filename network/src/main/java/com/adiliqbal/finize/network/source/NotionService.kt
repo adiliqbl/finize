@@ -17,24 +17,24 @@ import retrofit2.http.Path
 
 internal interface NotionService {
 
-	@POST(value = "databases/{db}/query")
+	@POST(value = "/databases/{db}/query")
 	suspend fun getAccounts(@Path("db") db: String): PaginatedList<NotionApiAccount>
 
-	@POST(value = "databases/{db}/query")
+	@POST(value = "/databases/{db}/query")
 	suspend fun getBudgets(@Path("db") db: String): PaginatedList<NotionApiBudget>
 
-	@POST(value = "databases/{db}/query")
+	@POST(value = "/databases/{db}/query")
 	suspend fun getTransactions(
 		@Path("db") db: String,
 		@Body body: NotionDatabaseQuery? = null
 	): PaginatedList<NotionApiTransaction>
 
-	@POST(value = "pages")
+	@POST(value = "/pages")
 	suspend fun createPage(@Body body: CreateNotionPageRequest): String
 
-	@PATCH(value = "pages/{id}")
+	@PATCH(value = "/pages/{id}")
 	suspend fun updatePage(@Path("id") id: ID, @Field("properties") body: JsonObject)
 
-	@DELETE(value = "pages/{id}")
+	@DELETE(value = "/pages/{id}")
 	suspend fun deletePage(@Path("id") id: ID)
 }

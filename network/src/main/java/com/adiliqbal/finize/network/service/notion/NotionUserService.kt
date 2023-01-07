@@ -7,6 +7,6 @@ import retrofit2.http.Path
 
 internal interface NotionUserService : UserService {
 
-	@GET(value = "users/{id}")
+	@GET(value = "/users/{id}")
 	override suspend fun getUser(@Path("id") id: String): NotionApiUser?
 }

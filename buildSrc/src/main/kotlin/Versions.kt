@@ -9,12 +9,16 @@ object Versions {
 	}
 
 	object Kotlin {
-		const val Kotlin = "1.8.0"
+		const val Kotlin = "1.7.20"
 		const val Core = "1.9.0"
 		const val Coroutines = "1.6.2"
 		const val DateTime = "0.4.0"
 		const val Json = "1.4.1"
 		const val JsonConvertor = "0.8.0"
+	}
+
+	object Google {
+		const val PlayServices = "20.4.0"
 	}
 
 	object Firebase {

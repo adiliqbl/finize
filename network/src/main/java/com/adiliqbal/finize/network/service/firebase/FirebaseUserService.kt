@@ -15,15 +15,14 @@ internal class FirebaseUserService @Inject constructor(
 ) : UserService {
 
 	private companion object {
-		fun userDoc(userId: String) = "${usersDB()}/$userId"
+		fun userDoc(userId: String) = usersDB(userId)
 	}
 
 	override suspend fun getUser(id: String): ApiUser? {
 		return auth.currentUser?.let {
-			var user = firestore.document(userDoc(id)).get().result
+			val user = firestore.document(userDoc(id)).get().result
 				.toObject(ApiUser::class.java)!!
-			if (user.image == null) user = user.copy(image = it.photoUrl?.path)
-			user
+			user.copy(image = it.photoUrl?.path)
 		}
 	}
 }

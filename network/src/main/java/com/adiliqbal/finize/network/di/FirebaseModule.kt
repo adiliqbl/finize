@@ -1,5 +1,10 @@
 package com.adiliqbal.finize.network.di
 
+import com.adiliqbal.finize.network.service.firebase.FirebaseAccountService
+import com.adiliqbal.finize.network.service.firebase.FirebaseAuthService
+import com.adiliqbal.finize.network.service.firebase.FirebaseAuthServiceImpl
+import com.adiliqbal.finize.network.service.firebase.FirebaseBudgetService
+import com.adiliqbal.finize.network.service.firebase.FirebaseTransactionService
 import com.adiliqbal.finize.network.source.FirestoreService
 import com.adiliqbal.finize.network.source.FirestoreServiceImpl
 import com.google.firebase.auth.ktx.auth
@@ -16,10 +21,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 internal interface FirebaseModule {
 
-	@Binds
-	@Singleton
-	fun provideFirestoreService(service: FirestoreServiceImpl): FirestoreService
-
 	@Module
 	@InstallIn(SingletonComponent::class)
 	object ProviderModule {
@@ -30,4 +31,28 @@ internal interface FirebaseModule {
 		@Provides
 		fun provideAuth() = Firebase.auth
 	}
+
+	@Binds
+	@Singleton
+	fun bindFirestoreService(service: FirestoreServiceImpl): FirestoreService
+
+	@Binds
+	@Singleton
+	fun bindAuthService(service: FirebaseAuthServiceImpl): FirebaseAuthService
+
+	@Binds
+	@Singleton
+	fun bindUserService(service: FirebaseAccountService): FirebaseAccountService
+
+	@Binds
+	@Singleton
+	fun bindAccountService(service: FirebaseAccountService): FirebaseAccountService
+
+	@Binds
+	@Singleton
+	fun bindBudgetService(service: FirebaseBudgetService): FirebaseBudgetService
+
+	@Binds
+	@Singleton
+	fun bindTransactionService(service: FirebaseTransactionService): FirebaseTransactionService
 }

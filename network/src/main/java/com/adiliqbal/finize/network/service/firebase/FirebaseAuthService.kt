@@ -1,10 +1,10 @@
 package com.adiliqbal.finize.network.service.firebase
 
-import com.google.firebase.auth.FirebaseAuth
-import javax.inject.Inject
-import javax.inject.Singleton
+import com.adiliqbal.finize.network.model.ApiUser
 
-@Singleton
-internal class FirebaseAuthService @Inject constructor(
-	private val auth: FirebaseAuth
-)
+interface FirebaseAuthService {
+
+	suspend fun register(user: ApiUser)
+
+	suspend fun logout()
+}
