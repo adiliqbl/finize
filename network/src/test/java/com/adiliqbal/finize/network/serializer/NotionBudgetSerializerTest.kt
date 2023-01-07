@@ -1,6 +1,7 @@
 package com.adiliqbal.finize.network.serializer
 
 import com.adiliqbal.finize.network.model.ApiBudget
+import com.adiliqbal.finize.network.model.NotionApiBudget
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
 import com.adiliqbal.finize.network.util.AppJson.toJson
 import junit.framework.TestCase.assertEquals
@@ -76,7 +77,7 @@ class NotionBudgetSerializerTest {
 		}
 		""".trimIndent()
 
-		val budget = json.decodeJson<ApiBudget>()
+		val budget = json.decodeJson<NotionApiBudget>()
 		assertEquals("budget_id", budget?.id)
 		assertEquals("Food", budget?.name)
 		assertEquals(10.0, budget?.spent)
@@ -85,11 +86,13 @@ class NotionBudgetSerializerTest {
 
 	@Test
 	fun serialize() {
-		val budget = ApiBudget(
-			id = "id",
-			name = "name",
-			spent = 10.0,
-			maximum = 50.0
+		val budget = NotionApiBudget(
+			ApiBudget(
+				id = "id",
+				name = "name",
+				spent = 10.0,
+				maximum = 50.0
+			)
 		)
 		budget.toJson()
 	}

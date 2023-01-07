@@ -55,16 +55,16 @@ internal fun List<ID>.toNotionRelation() = buildJsonObject {
 	})
 }
 
-internal fun ApiTag.toNotionTag() = buildJsonObject {
+internal fun String.toNotionTag() = buildJsonObject {
 	put("select", buildJsonArray {
-		addJsonObject { put("id", JsonPrimitive(id)) }
+		addJsonObject { put("name", JsonPrimitive(this@toNotionTag)) }
 	})
 }
 
-internal fun List<ApiTag>.toNotionTags() = buildJsonObject {
+internal fun List<String>.toNotionTags() = buildJsonObject {
 	put("multi_select", buildJsonArray {
 		this@toNotionTags.forEach {
-			addJsonObject { put("id", JsonPrimitive(it.id)) }
+			addJsonObject { put("name", JsonPrimitive(it)) }
 		}
 	})
 }

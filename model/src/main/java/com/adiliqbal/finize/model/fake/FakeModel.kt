@@ -29,7 +29,7 @@ object FakeModel {
 		name = "transaction",
 		toAccount = accountFrom,
 		fromAccount = accountTo,
-		budgets = listOf(budget),
+		budget = budget,
 		type = type,
 		date = LocalDate.parse("2022-08-08")
 	)

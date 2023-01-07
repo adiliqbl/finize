@@ -1,5 +1,6 @@
 package com.adiliqbal.finize.network.model.serializer
 
+import com.adiliqbal.finize.common.util.DateUtil
 import com.adiliqbal.finize.network.extensions.getString
 import com.adiliqbal.finize.network.extensions.parseNotionDateTime
 import com.adiliqbal.finize.network.extensions.parseNotionDouble
@@ -7,13 +8,11 @@ import com.adiliqbal.finize.network.extensions.parseNotionString
 import com.adiliqbal.finize.network.extensions.toNotionNumber
 import com.adiliqbal.finize.network.extensions.toNotionTitle
 import com.adiliqbal.finize.network.model.ApiBudget
-import com.adiliqbal.finize.network.util.AppJson.toJson
+import com.adiliqbal.finize.network.model.NotionApiBudget
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PolymorphicKind
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
@@ -25,7 +24,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonObject
 
 @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
-internal object NotionBudgetSerializer : KSerializer<ApiBudget> {
+internal object NotionBudgetSerializer : KSerializer<NotionApiBudget> {
 
 	private const val ID = "id"
 	private const val NAME = "Name"
@@ -36,7 +35,7 @@ internal object NotionBudgetSerializer : KSerializer<ApiBudget> {
 	override val descriptor: SerialDescriptor =
 		buildSerialDescriptor("NotionBudget", PolymorphicKind.SEALED)
 
-	override fun serialize(encoder: Encoder, value: ApiBudget) {
+	override fun serialize(encoder: Encoder, value: NotionApiBudget) {
 		val body = buildJsonObject {
 			put(NAME, value.name.toNotionTitle())
 			put(SPENT, value.spent.toNotionNumber())
@@ -46,15 +45,17 @@ internal object NotionBudgetSerializer : KSerializer<ApiBudget> {
 		(encoder as JsonEncoder).encodeJsonElement(body)
 	}
 
-	override fun deserialize(decoder: Decoder): ApiBudget {
+	override fun deserialize(decoder: Decoder): NotionApiBudget {
 		val json = (decoder as JsonDecoder).decodeJsonElement() as JsonObject
 		val properties = json["properties"]!!.jsonObject
-		return ApiBudget(
-			id = json.getString(ID)!!,
-			name = properties.parseNotionString(NAME) ?: "",
-			spent = properties.parseNotionDouble(SPENT),
-			maximum = properties.parseNotionDouble(MAXIMUM),
-			createdAt = json.parseNotionDateTime(CREATED_TIME)
+		return NotionApiBudget(
+			ApiBudget(
+				id = json.getString(ID)!!,
+				name = properties.parseNotionString(NAME) ?: "",
+				spent = properties.parseNotionDouble(SPENT),
+				maximum = properties.parseNotionDouble(MAXIMUM),
+				createdAt = json.parseNotionDateTime(CREATED_TIME) ?: DateUtil.currentTime()
+			)
 		)
 	}
 }

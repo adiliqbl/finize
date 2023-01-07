@@ -1,11 +1,8 @@
 package com.adiliqbal.finize.network.service
 
-import com.adiliqbal.finize.network.model.ApiUser
-import retrofit2.http.GET
-import retrofit2.http.Path
+import com.adiliqbal.finize.network.model.BaseApiUser
 
 interface UserService {
 
-	@GET(value = "users/{id}")
-	suspend fun getUser(@Path("id") id: String): ApiUser
+	suspend fun getUser(id: String): BaseApiUser?
 }

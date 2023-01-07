@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "8c394dc74736cb48b8decf7003a90713",
+    "identityHash": "6f02b8ccbe54cc33660562aeed562c57",
     "entities": [
       {
         "tableName": "users",
@@ -126,7 +126,7 @@
       },
       {
         "tableName": "transactions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `type` TEXT, `toAccount` TEXT, `fromAccount` TEXT, `budgets` TEXT, `tags` TEXT, `note` TEXT, `date` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`toAccount`) REFERENCES `accounts`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`fromAccount`) REFERENCES `accounts`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `type` TEXT NOT NULL, `toAccount` TEXT, `fromAccount` TEXT, `budget` TEXT, `tags` TEXT, `note` TEXT, `date` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`toAccount`) REFERENCES `accounts`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`fromAccount`) REFERENCES `accounts`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`budget`) REFERENCES `budgets`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "id",
@@ -144,7 +144,7 @@
             "fieldPath": "type",
             "columnName": "type",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "toAccount",
@@ -159,8 +159,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "budgets",
-            "columnName": "budgets",
+            "fieldPath": "budget",
+            "columnName": "budget",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -189,7 +189,35 @@
           ],
           "autoGenerate": false
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_transactions_toAccount",
+            "unique": false,
+            "columnNames": [
+              "toAccount"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_transactions_toAccount` ON `${TABLE_NAME}` (`toAccount`)"
+          },
+          {
+            "name": "index_transactions_fromAccount",
+            "unique": false,
+            "columnNames": [
+              "fromAccount"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_transactions_fromAccount` ON `${TABLE_NAME}` (`fromAccount`)"
+          },
+          {
+            "name": "index_transactions_budget",
+            "unique": false,
+            "columnNames": [
+              "budget"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_transactions_budget` ON `${TABLE_NAME}` (`budget`)"
+          }
+        ],
         "foreignKeys": [
           {
             "table": "accounts",
@@ -212,6 +240,17 @@
             "referencedColumns": [
               "id"
             ]
+          },
+          {
+            "table": "budgets",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "budget"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
           }
         ]
       }
@@ -219,7 +258,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8c394dc74736cb48b8decf7003a90713')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6f02b8ccbe54cc33660562aeed562c57')"
     ]
   }
 }

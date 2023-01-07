@@ -1,7 +1,5 @@
 package com.adiliqbal.finize.network.extensions
 
-import com.adiliqbal.finize.model.enums.TransactionType
-import com.adiliqbal.finize.model.enums.toTransactionType
 import com.adiliqbal.finize.model.extensions.ID
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -142,16 +140,16 @@ internal fun JsonObject.parseNotionTags(key: String): List<String>? {
 }
 
 @Suppress("UNCHECKED_CAST")
-internal fun JsonObject.parseNotionTransactionTag(key: String): TransactionType {
+internal fun JsonObject.parseNotionTag(key: String): String? {
 	return try {
 		val obj = get(key)?.jsonObject as JsonObject
 		if (obj.getString("type") == "select") {
-			return obj["select"]!!.jsonObject.toTag().toTransactionType()
+			return obj["select"]!!.jsonObject.toTag()
 		} else {
-			return toTag().toTransactionType()
+			return toTag()
 		}
 	} catch (_: Exception) {
-		TransactionType.UNKNOWN
+		null
 	}
 }
 

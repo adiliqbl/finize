@@ -1,5 +1,6 @@
 package com.adiliqbal.finize.network.model.serializer
 
+import com.adiliqbal.finize.common.util.DateUtil
 import com.adiliqbal.finize.network.extensions.getString
 import com.adiliqbal.finize.network.extensions.parseNotionDateTime
 import com.adiliqbal.finize.network.extensions.parseNotionDouble
@@ -7,6 +8,7 @@ import com.adiliqbal.finize.network.extensions.parseNotionString
 import com.adiliqbal.finize.network.extensions.toNotionNumber
 import com.adiliqbal.finize.network.extensions.toNotionTitle
 import com.adiliqbal.finize.network.model.ApiAccount
+import com.adiliqbal.finize.network.model.NotionApiAccount
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
@@ -22,7 +24,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonObject
 
 @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
-internal object NotionAccountSerializer : KSerializer<ApiAccount> {
+internal object NotionAccountSerializer : KSerializer<NotionApiAccount> {
 
 	private const val ID = "id"
 	private const val NAME = "Name"
@@ -33,7 +35,7 @@ internal object NotionAccountSerializer : KSerializer<ApiAccount> {
 	override val descriptor: SerialDescriptor =
 		buildSerialDescriptor("NotionAccount", PolymorphicKind.SEALED)
 
-	override fun serialize(encoder: Encoder, value: ApiAccount) {
+	override fun serialize(encoder: Encoder, value: NotionApiAccount) {
 		val body = buildJsonObject {
 			put(NAME, value.name.toNotionTitle())
 			put(CURRENT_BALANCE, value.currentBalance.toNotionNumber())
@@ -43,15 +45,17 @@ internal object NotionAccountSerializer : KSerializer<ApiAccount> {
 		(encoder as JsonEncoder).encodeJsonElement(body)
 	}
 
-	override fun deserialize(decoder: Decoder): ApiAccount {
+	override fun deserialize(decoder: Decoder): NotionApiAccount {
 		val json = (decoder as JsonDecoder).decodeJsonElement() as JsonObject
 		val properties = json["properties"]!!.jsonObject
-		return ApiAccount(
-			id = json.getString(ID)!!,
-			name = properties.parseNotionString(NAME) ?: "",
-			currentBalance = properties.parseNotionDouble(CURRENT_BALANCE),
-			startingBalance = properties.parseNotionDouble(STARTING_BALANCE),
-			createdAt = json.parseNotionDateTime(CREATED_TIME)
+		return NotionApiAccount(
+			ApiAccount(
+				id = json.getString(ID)!!,
+				name = properties.parseNotionString(NAME) ?: "",
+				currentBalance = properties.parseNotionDouble(CURRENT_BALANCE),
+				startingBalance = properties.parseNotionDouble(STARTING_BALANCE),
+				createdAt = json.parseNotionDateTime(CREATED_TIME) ?: DateUtil.currentTime()
+			)
 		)
 	}
 }

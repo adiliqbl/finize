@@ -23,10 +23,12 @@ object Libraries {
 
 	object Firebase {
 		private const val BOM = "com.google.firebase:firebase-bom:${Versions.Firebase.BOM}"
-		const val Messaging = "com.google.firebase:firebase-messaging"
 		const val Crashlytics = "com.google.firebase:firebase-crashlytics-ktx"
 		const val CrashlyticsGradlePlugin =
 			"com.google.firebase:firebase-crashlytics-gradle:${Versions.Firebase.Crashlytics}"
+		const val Analytics = "com.google.firebase:firebase-analytics-ktx"
+		const val Auth = "com.google.firebase:firebase-auth-ktx"
+		const val Firestore = "com.google.firebase:firebase-firestore-ktx"
 
 		fun DependencyHandler.implementFirebase(type: String = "implementation") {
 			add(type, platform(BOM))

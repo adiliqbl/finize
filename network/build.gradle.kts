@@ -26,7 +26,9 @@ dependencies {
 	implementation(Libraries.Kotlin.Coroutines)
 
 	implementFirebase()
-	implementation(Libraries.Firebase.Messaging)
+	implementation(Libraries.Firebase.Firestore)
+	implementation(Libraries.Firebase.Auth)
+
 	implementation(Libraries.Network.Retrofit)
 	implementation(Libraries.Network.OkHttpInterceptor)
 	implementation(Libraries.Kotlin.Json)

@@ -12,4 +12,6 @@ enum class TransactionType(val value: String) {
 }
 
 fun String?.toTransactionType() =
-	this?.let { TransactionType.valueOf(it) } ?: TransactionType.UNKNOWN
+	this?.let {
+		TransactionType.values().find { it.value == this } ?: TransactionType.valueOf(this)
+	} ?: TransactionType.UNKNOWN

@@ -1,9 +1,9 @@
 package com.adiliqbal.finize.database.di
 
 import android.content.Context
+import com.adiliqbal.finize.database.AppDatabase
 import com.adiliqbal.finize.database.DatabaseCleaner
 import com.adiliqbal.finize.database.DatabaseCleanerImpl
-import com.adiliqbal.finize.database.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

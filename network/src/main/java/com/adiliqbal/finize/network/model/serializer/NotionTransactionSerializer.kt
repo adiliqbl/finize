@@ -2,12 +2,13 @@ package com.adiliqbal.finize.network.model.serializer
 
 import com.adiliqbal.finize.common.util.DateUtil
 import com.adiliqbal.finize.model.enums.TransactionType
+import com.adiliqbal.finize.model.enums.toTransactionType
 import com.adiliqbal.finize.network.extensions.getString
 import com.adiliqbal.finize.network.extensions.parseNotionDate
 import com.adiliqbal.finize.network.extensions.parseNotionRelation
 import com.adiliqbal.finize.network.extensions.parseNotionString
+import com.adiliqbal.finize.network.extensions.parseNotionTag
 import com.adiliqbal.finize.network.extensions.parseNotionTags
-import com.adiliqbal.finize.network.extensions.parseNotionTransactionTag
 import com.adiliqbal.finize.network.extensions.toNotionDate
 import com.adiliqbal.finize.network.extensions.toNotionRelation
 import com.adiliqbal.finize.network.extensions.toNotionRichString
@@ -15,6 +16,7 @@ import com.adiliqbal.finize.network.extensions.toNotionTag
 import com.adiliqbal.finize.network.extensions.toNotionTags
 import com.adiliqbal.finize.network.extensions.toNotionTitle
 import com.adiliqbal.finize.network.model.ApiTransaction
+import com.adiliqbal.finize.network.model.NotionApiTransaction
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
@@ -30,7 +32,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonObject
 
 @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
-internal object NotionTransactionSerializer : KSerializer<ApiTransaction> {
+internal object NotionTransactionSerializer : KSerializer<NotionApiTransaction> {
 
 	internal const val ID = "id"
 	internal const val NAME = "Name"
@@ -45,11 +47,12 @@ internal object NotionTransactionSerializer : KSerializer<ApiTransaction> {
 	override val descriptor: SerialDescriptor =
 		buildSerialDescriptor("NotionTransaction", PolymorphicKind.SEALED)
 
-	override fun serialize(encoder: Encoder, value: ApiTransaction) {
+	override fun serialize(encoder: Encoder, value: NotionApiTransaction) {
 		val body = buildJsonObject {
 			put(NAME, value.name.toNotionTitle())
 			put(DATE, value.date.toNotionDate())
-			value.type.takeIf { it != TransactionType.UNKNOWN }.let { put(TYPE, it.toNotionTag()) }
+			value.type.takeIf { it != TransactionType.UNKNOWN }
+				?.let { put(TYPE, it.value.toNotionTag()) }
 			value.fromAccount?.let { put(FROM_ACCOUNT, it.toNotionRelation()) }
 			value.toAccount?.let { put(FROM_ACCOUNT, it.toNotionRelation()) }
 			value.budget?.let { put(BUDGET, it.toNotionRelation()) }
@@ -60,22 +63,24 @@ internal object NotionTransactionSerializer : KSerializer<ApiTransaction> {
 		(encoder as JsonEncoder).encodeJsonElement(body)
 	}
 
-	override fun deserialize(decoder: Decoder): ApiTransaction {
+	override fun deserialize(decoder: Decoder): NotionApiTransaction {
 		val json = (decoder as JsonDecoder).decodeJsonElement() as JsonObject
 		val properties = json["properties"]!!.jsonObject
-		return ApiTransaction(
-			id = json.getString(ID)!!,
-			name = properties.parseNotionString(NAME) ?: "",
-			type = properties.parseNotionTransactionTag(TYPE),
-			toAccount = properties.parseNotionRelation(TO_ACCOUNT)
-				?.takeIf { it.isNotEmpty() }?.get(0),
-			fromAccount = properties.parseNotionRelation(FROM_ACCOUNT)
-				?.takeIf { it.isNotEmpty() }?.get(0),
-			budget = properties.parseNotionRelation(BUDGET)
-				?.takeIf { it.isNotEmpty() }?.get(0),
-			tags = properties.parseNotionTags(TAGS),
-			note = properties.parseNotionString(NOTE),
-			date = properties.parseNotionDate(DATE) ?: DateUtil.currentDay()
+		return NotionApiTransaction(
+			ApiTransaction(
+				id = json.getString(ID)!!,
+				name = properties.parseNotionString(NAME) ?: "",
+				type = properties.parseNotionTag(TYPE).toTransactionType(),
+				toAccount = properties.parseNotionRelation(TO_ACCOUNT)
+					?.takeIf { it.isNotEmpty() }?.get(0),
+				fromAccount = properties.parseNotionRelation(FROM_ACCOUNT)
+					?.takeIf { it.isNotEmpty() }?.get(0),
+				budget = properties.parseNotionRelation(BUDGET)
+					?.takeIf { it.isNotEmpty() }?.get(0),
+				tags = properties.parseNotionTags(TAGS),
+				note = properties.parseNotionString(NOTE),
+				date = properties.parseNotionDate(DATE) ?: DateUtil.currentDay()
+			)
 		)
 	}
 }

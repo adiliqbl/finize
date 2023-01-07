@@ -10,7 +10,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class NotionPreferences @Inject constructor(private val dataStore: DataStore<Preferences>) {
 
 	private companion object {
@@ -28,7 +30,7 @@ class NotionPreferences @Inject constructor(private val dataStore: DataStore<Pre
 	suspend fun transactionsDB(): ID =
 		dataStore.data.map { preferences -> preferences[TRANSACTIONS_DB] }.first()!!
 
-	suspend fun setup(accountsDB: ID, transactionsDB: ID, budgetsDB: ID) {
+	suspend fun set(accountsDB: ID, transactionsDB: ID, budgetsDB: ID) {
 		dataStore.edit { preferences ->
 			preferences[ACCOUNTS_DB] = Json.encodeToString(accountsDB)
 			preferences[BUDGETS_DB] = Json.encodeToString(budgetsDB)

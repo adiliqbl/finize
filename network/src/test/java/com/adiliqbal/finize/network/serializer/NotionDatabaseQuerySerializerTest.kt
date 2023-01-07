@@ -1,17 +1,18 @@
 package com.adiliqbal.finize.network.serializer
 
+import com.adiliqbal.finize.model.enums.SortOrder
 import com.adiliqbal.finize.model.filter.TransactionsFilter
 import com.adiliqbal.finize.network.extensions.getInt
 import com.adiliqbal.finize.network.extensions.getString
-import com.adiliqbal.finize.network.model.enums.SortOrder
+import com.adiliqbal.finize.network.extensions.toNotionFilter
 import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery
-import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery.Companion.CURSOR
-import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery.Companion.FILTER
-import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery.Companion.PAGE_SIZE
-import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery.Companion.SORT
-import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery.Companion.SORT_FIELD
-import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery.Companion.SORT_ORDER
-import com.adiliqbal.finize.network.model.request.toJson
+import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.CURSOR
+import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.FILTER
+import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.PAGE_SIZE
+import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.SORT
+import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.SORT_FIELD
+import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.SORT_ORDER
+import com.adiliqbal.finize.network.model.request.PaginationQuery
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
 import com.adiliqbal.finize.network.util.AppJson.toJson
 import junit.framework.Assert.*
@@ -25,10 +26,15 @@ class NotionDatabaseQuerySerializerTest {
 	@Test
 	fun serialize() {
 		var query = NotionDatabaseQuery(
-			sortField = "date",
-			sortOrder = SortOrder.DESCENDING,
-			filter = TransactionsFilter(toAccount = "to", fromAccount = "from").toJson(),
-			pageSize = 20
+			PaginationQuery(
+				sortField = "date",
+				sortOrder = SortOrder.DESCENDING,
+				filter = TransactionsFilter(
+					toAccount = "to",
+					fromAccount = "from"
+				).toNotionFilter(),
+				pageSize = 20
+			)
 		).toJson().decodeJson<JsonObject>()
 
 		assertTrue(query?.containsKey(SORT) == true)
@@ -42,10 +48,15 @@ class NotionDatabaseQuerySerializerTest {
 		assertEquals(20, query?.getInt(PAGE_SIZE))
 
 		query = NotionDatabaseQuery(
-			sortField = "date",
-			filter = TransactionsFilter(toAccount = "to", fromAccount = "from").toJson(),
-			cursor = "cursor",
-			pageSize = 20
+			PaginationQuery(
+				sortField = "date",
+				filter = TransactionsFilter(
+					toAccount = "to",
+					fromAccount = "from"
+				).toNotionFilter(),
+				cursor = "cursor",
+				pageSize = 20
+			)
 		).toJson().decodeJson<JsonObject>()
 
 		assertTrue(query?.containsKey(SORT) == true)

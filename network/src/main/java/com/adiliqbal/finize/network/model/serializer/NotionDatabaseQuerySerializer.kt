@@ -1,12 +1,13 @@
 package com.adiliqbal.finize.network.model.serializer
 
 import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery
-import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery.Companion.CURSOR
-import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery.Companion.FILTER
-import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery.Companion.PAGE_SIZE
-import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery.Companion.SORT
-import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery.Companion.SORT_FIELD
-import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery.Companion.SORT_ORDER
+import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.CURSOR
+import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.FILTER
+import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.PAGE_SIZE
+import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.SORT
+import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.SORT_FIELD
+import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.SORT_ORDER
+import com.adiliqbal.finize.network.model.request.PaginationQuery
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
@@ -45,5 +46,5 @@ internal object NotionDatabaseQuerySerializer : KSerializer<NotionDatabaseQuery>
 		(encoder as JsonEncoder).encodeJsonElement(body)
 	}
 
-	override fun deserialize(decoder: Decoder) = NotionDatabaseQuery()
+	override fun deserialize(decoder: Decoder) = NotionDatabaseQuery(PaginationQuery())
 }

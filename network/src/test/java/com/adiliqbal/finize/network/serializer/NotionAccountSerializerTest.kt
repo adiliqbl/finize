@@ -1,6 +1,7 @@
 package com.adiliqbal.finize.network.serializer
 
 import com.adiliqbal.finize.network.model.ApiAccount
+import com.adiliqbal.finize.network.model.NotionApiAccount
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
 import com.adiliqbal.finize.network.util.AppJson.toJson
 import junit.framework.TestCase.assertEquals
@@ -81,7 +82,7 @@ class NotionAccountSerializerTest {
 		}
 		""".trimIndent()
 
-		val account = json.decodeJson<ApiAccount>()
+		val account = json.decodeJson<NotionApiAccount>()
 		assertEquals("account_id", account?.id)
 		assertEquals("Account", account?.name)
 		assertEquals(10.0, account?.currentBalance)
@@ -91,11 +92,13 @@ class NotionAccountSerializerTest {
 
 	@Test
 	fun serialize() {
-		val account = ApiAccount(
-			id = "id",
-			name = "name",
-			currentBalance = 10.0,
-			startingBalance = 50.0
+		val account = NotionApiAccount(
+			ApiAccount(
+				id = "id",
+				name = "name",
+				currentBalance = 10.0,
+				startingBalance = 50.0
+			)
 		)
 		account.toJson()
 	}

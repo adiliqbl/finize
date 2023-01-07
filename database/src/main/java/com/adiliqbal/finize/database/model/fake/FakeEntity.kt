@@ -4,6 +4,7 @@ import com.adiliqbal.finize.database.model.AccountEntity
 import com.adiliqbal.finize.database.model.BudgetEntity
 import com.adiliqbal.finize.database.model.TransactionEntity
 import com.adiliqbal.finize.database.model.UserEntity
+import com.adiliqbal.finize.model.enums.TransactionType
 import com.adiliqbal.finize.model.extensions.ID
 import kotlinx.datetime.LocalDate
 
@@ -23,14 +24,14 @@ object FakeEntity {
 		accountFrom: ID? = null,
 		accountTo: ID? = null,
 		budget: ID? = "budgetId",
-		type: TagEntity = TagEntity(id = "tagId", name = "tag"),
+		type: TransactionType = TransactionType.UNKNOWN,
 		date: LocalDate = LocalDate(2022, 8, 8)
 	) = TransactionEntity(
 		id = id,
 		name = name,
 		toAccount = accountTo,
 		fromAccount = accountFrom,
-		budgets = budget?.let { listOf(budget) },
+		budget = budget,
 		type = type,
 		date = date.toEpochDays()
 	)

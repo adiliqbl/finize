@@ -1,11 +1,11 @@
-package com.adiliqbal.finize.network.service
+package com.adiliqbal.finize.network.source
 
 import com.adiliqbal.finize.model.extensions.ID
-import com.adiliqbal.finize.network.model.ApiAccount
-import com.adiliqbal.finize.network.model.ApiBudget
-import com.adiliqbal.finize.network.model.ApiTransaction
+import com.adiliqbal.finize.network.model.NotionApiAccount
+import com.adiliqbal.finize.network.model.NotionApiBudget
+import com.adiliqbal.finize.network.model.NotionApiTransaction
 import com.adiliqbal.finize.network.model.request.CreateNotionPageRequest
-import com.adiliqbal.finize.network.model.request.ApiTransactionsFilter
+import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery
 import com.adiliqbal.finize.network.model.response.PaginatedList
 import kotlinx.serialization.json.JsonObject
 import retrofit2.http.Body
@@ -18,16 +18,16 @@ import retrofit2.http.Path
 internal interface NotionService {
 
 	@POST(value = "databases/{db}/query")
-	suspend fun getAccounts(@Path("db") db: String): PaginatedList<ApiAccount>
+	suspend fun getAccounts(@Path("db") db: String): PaginatedList<NotionApiAccount>
 
 	@POST(value = "databases/{db}/query")
-	suspend fun getBudgets(@Path("db") db: String): PaginatedList<ApiBudget>
+	suspend fun getBudgets(@Path("db") db: String): PaginatedList<NotionApiBudget>
 
 	@POST(value = "databases/{db}/query")
 	suspend fun getTransactions(
 		@Path("db") db: String,
-		@Body body: ApiTransactionsFilter? = null
-	): PaginatedList<ApiTransaction>
+		@Body body: NotionDatabaseQuery? = null
+	): PaginatedList<NotionApiTransaction>
 
 	@POST(value = "pages")
 	suspend fun createPage(@Body body: CreateNotionPageRequest): String

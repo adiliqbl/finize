@@ -1,6 +1,7 @@
 package com.adiliqbal.finize.network.serializer
 
 import com.adiliqbal.finize.network.model.ApiTransaction
+import com.adiliqbal.finize.network.model.NotionApiTransaction
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
 import com.adiliqbal.finize.network.util.AppJson.toJson
 import junit.framework.TestCase.assertEquals
@@ -132,7 +133,7 @@ class NotionTransactionSerializerTest {
 		}
 		""".trimIndent()
 
-		val transaction = json.decodeJson<ApiTransaction>()
+		val transaction = json.decodeJson<NotionApiTransaction>()
 		assertEquals("transaction_id", transaction?.id)
 		assertEquals("Food", transaction?.name)
 
@@ -148,13 +149,15 @@ class NotionTransactionSerializerTest {
 
 	@Test
 	fun serialize() {
-		val transaction = ApiTransaction(
-			id = "id",
-			name = "name",
-			toAccount = "toAccount",
-			fromAccount = "fromAccount",
-			budget = "budgetId",
-			tags = listOf("one", "two")
+		val transaction = NotionApiTransaction(
+			ApiTransaction(
+				id = "id",
+				name = "name",
+				toAccount = "toAccount",
+				fromAccount = "fromAccount",
+				budget = "budgetId",
+				tags = listOf("one", "two")
+			)
 		)
 		transaction.toJson()
 	}

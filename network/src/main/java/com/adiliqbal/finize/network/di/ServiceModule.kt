@@ -1,26 +1,26 @@
 package com.adiliqbal.finize.network.di
 
-import com.adiliqbal.finize.network.service.AccountService
-import com.adiliqbal.finize.network.service.AccountServiceImpl
-import com.adiliqbal.finize.network.service.BudgetService
-import com.adiliqbal.finize.network.service.BudgetServiceImpl
-import com.adiliqbal.finize.network.service.TransactionService
-import com.adiliqbal.finize.network.service.TransactionServiceImpl
-import dagger.Binds
+import com.adiliqbal.finize.datastore.AppPreferences
+import com.adiliqbal.finize.model.enums.AuthType
+import com.adiliqbal.finize.network.service.UserService
+import com.adiliqbal.finize.network.service.notion.NotionUserService
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal interface ServiceModule {
+internal object ServiceModule {
 
-	@Binds
-	fun provideAccountService(service: AccountServiceImpl): AccountService
-
-	@Binds
-	fun provideBudgetService(service: BudgetServiceImpl): BudgetService
-
-	@Binds
-	fun provideTransactionService(service: TransactionServiceImpl): TransactionService
+	@Provides
+	@Singleton
+	suspend fun provideUserService(
+		preferences: AppPreferences,
+		notionUserService: NotionUserService
+	): UserService {
+		return if (preferences.authType() == AuthType.NOTION) notionUserService
+		else notionUserService
+	}
 }

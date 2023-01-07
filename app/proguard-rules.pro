@@ -22,6 +22,13 @@
     kotlinx.serialization.KSerializer serializer(...);
 }
 
+-keepattributes Annotation, InnerClasses
+-dontnote kotlinx.serialization.SerializationKt
+-keep,includedescriptorclasses class com.adiliqbal.finize.network.model.serializer.$$serializer { ; }
+-keepclasseswithmembers class com.adiliqbal.finize.network.model.serializer.* {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+
 # @Serializable and @Polymorphic are used at runtime for polymorphic serialization.
 -keepattributes RuntimeVisibleAnnotations,AnnotationDefault
 
