@@ -61,6 +61,10 @@ abstract class TransactionDao : BaseDao<TransactionEntity>() {
 				filters.add("name LIKE '%'||'$name'||'%'")
 			}
 
+			if (!tags.isNullOrEmpty()) {
+				tags!!.forEach { tag -> filters.add("tags LIKE '%'||'$tag'||'%'") }
+			}
+
 			if (filters.isEmpty()) getAll()
 			else query(
 				SimpleSQLiteQuery(

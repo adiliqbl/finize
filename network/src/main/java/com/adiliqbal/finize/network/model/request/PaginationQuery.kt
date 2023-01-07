@@ -1,5 +1,6 @@
 package com.adiliqbal.finize.network.model.request
 
+import androidx.annotation.IntRange
 import com.adiliqbal.finize.model.enums.SortOrder
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
@@ -18,6 +19,6 @@ data class PaginationQuery(
 	override val sortField: String? = null,
 	override val filter: JsonElement? = null,
 	override val cursor: String? = null,
-	val page: Int? = null,
-	override val pageSize: Int = 20
+	@IntRange(from = 1) val page: Int = 1,
+	@IntRange(from = 1) override val pageSize: Int = 20
 ) : BasePaginationQuery

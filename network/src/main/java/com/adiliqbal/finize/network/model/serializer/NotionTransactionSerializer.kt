@@ -40,7 +40,7 @@ internal object NotionTransactionSerializer : KSerializer<NotionApiTransaction> 
 	internal const val TO_ACCOUNT = "To Account"
 	internal const val FROM_ACCOUNT = "From Account"
 	internal const val BUDGET = "Budget"
-	private const val TAGS = "Tags"
+	internal const val TAGS = "Tags"
 	private const val NOTE = "Note"
 	internal const val DATE = "Date"
 

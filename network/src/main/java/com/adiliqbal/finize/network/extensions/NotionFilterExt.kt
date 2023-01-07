@@ -89,6 +89,10 @@ internal fun TransactionsFilter.toNotionFilter(): JsonElement? {
 				)
 			)
 		}
+
+		if (!tags.isNullOrEmpty()) {
+			add(tags!!.toNotionTagsFilter(NotionTransactionSerializer.TAGS))
+		}
 	}
 
 	return if (filters.isEmpty()) null

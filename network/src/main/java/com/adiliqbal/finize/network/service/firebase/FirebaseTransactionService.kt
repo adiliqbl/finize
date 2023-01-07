@@ -3,6 +3,9 @@ package com.adiliqbal.finize.network.service.firebase
 import com.adiliqbal.finize.datastore.AppPreferences
 import com.adiliqbal.finize.model.extensions.ID
 import com.adiliqbal.finize.model.filter.TransactionsFilter
+import com.adiliqbal.finize.network.extensions.filter
+import com.adiliqbal.finize.network.extensions.generateKeywords
+import com.adiliqbal.finize.network.extensions.paginate
 import com.adiliqbal.finize.network.model.ApiTransaction
 import com.adiliqbal.finize.network.model.BaseApiTransaction
 import com.adiliqbal.finize.network.model.request.PaginationQuery
@@ -12,6 +15,7 @@ import com.adiliqbal.finize.network.source.FirestoreService
 import com.adiliqbal.finize.network.source.FirestoreService.Companion.transactionsDB
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
 import com.adiliqbal.finize.network.util.AppJson.toJson
+import com.google.firebase.firestore.ktx.toObjects
 import kotlinx.serialization.json.JsonObject
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,19 +34,29 @@ internal class FirebaseTransactionService @Inject constructor(
 		paging: PaginationQuery,
 		filter: TransactionsFilter?
 	): PaginatedList<BaseApiTransaction> {
-		TODO("Implement")
+		return firestore.collection(transactionsDB(preferences.userId()))
+			.paginate(paging)
+			.filter(filter)
+			.get().result.let {
+				val result = it.toObjects<ApiTransaction>()
+				PaginatedList(result, hasMore = result.size >= paging.pageSize)
+			}
 	}
 
 	override suspend fun createTransaction(transaction: ApiTransaction): ApiTransaction {
 		return firestore.create(
 			transactionsDB(preferences.userId()),
-			transaction.toJson().decodeJson<JsonObject>()!!
+			transaction.toJson().decodeJson<JsonObject>()!!.apply {
+				plus(ApiTransaction.KEYWORDS to generateKeywords(transaction.name))
+			}
 		).let { transaction.copy(id = it) }
 	}
 
 	override suspend fun updateTransaction(transaction: ApiTransaction) = firestore.update(
 		path = transactionDoc(preferences.userId(), transaction.id),
-		doc = transaction.toJson().decodeJson<JsonObject>()!!
+		doc = transaction.toJson().decodeJson<JsonObject>()!!.apply {
+			plus(ApiTransaction.KEYWORDS to generateKeywords(transaction.name))
+		}
 	)
 
 	override suspend fun deleteTransaction(id: ID) =
