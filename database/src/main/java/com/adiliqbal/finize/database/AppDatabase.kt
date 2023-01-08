@@ -15,12 +15,12 @@ import com.adiliqbal.finize.database.dao.UserDao
 import com.adiliqbal.finize.database.model.AccountEntity
 import com.adiliqbal.finize.database.model.BudgetEntity
 import com.adiliqbal.finize.database.model.TransactionEntity
-import com.adiliqbal.finize.database.model.UserEntity
+import com.adiliqbal.finize.database.model.UserWithSettingsEntity
 
 @Database(
 	entities =
 	[
-		UserEntity::class,
+		UserWithSettingsEntity::class,
 		AccountEntity::class,
 		BudgetEntity::class,
 		TransactionEntity::class

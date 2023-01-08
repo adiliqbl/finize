@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "6f02b8ccbe54cc33660562aeed562c57",
+    "identityHash": "aea5f6898d879f2d1fb0bf44485957ff",
     "entities": [
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `image` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `image` TEXT, `settings_currency` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -25,6 +25,12 @@
             "columnName": "image",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "settings.currency",
+            "columnName": "settings_currency",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -258,7 +264,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6f02b8ccbe54cc33660562aeed562c57')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'aea5f6898d879f2d1fb0bf44485957ff')"
     ]
   }
 }

@@ -2,6 +2,7 @@ package com.adiliqbal.finize.model.fake
 
 import com.adiliqbal.finize.model.Account
 import com.adiliqbal.finize.model.Budget
+import com.adiliqbal.finize.model.Settings
 import com.adiliqbal.finize.model.Transaction
 import com.adiliqbal.finize.model.User
 import com.adiliqbal.finize.model.enums.TransactionType
@@ -10,7 +11,7 @@ import kotlinx.datetime.LocalDate
 
 object FakeModel {
 
-	fun user(id: ID = "userId") = User(id = id, name = "name")
+	fun user(id: ID = "userId") = User(id = id, name = "name", settings = Settings())
 
 	fun account(id: ID = "accountId") =
 		Account(id = id, name = "account", startingBalance = 10.0, currentBalance = 50.0)

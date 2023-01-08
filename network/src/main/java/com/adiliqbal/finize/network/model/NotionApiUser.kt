@@ -10,4 +10,5 @@ internal class NotionApiUser(
 	override val name: String,
 	override val email: String? = null,
 	@SerialName("avatar_url") override val image: String? = null,
+	override val settings: ApiSettings? = null
 ) : BaseApiUser

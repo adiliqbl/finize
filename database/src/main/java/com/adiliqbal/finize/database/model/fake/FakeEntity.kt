@@ -2,15 +2,17 @@ package com.adiliqbal.finize.database.model.fake
 
 import com.adiliqbal.finize.database.model.AccountEntity
 import com.adiliqbal.finize.database.model.BudgetEntity
+import com.adiliqbal.finize.database.model.SettingsEntity
 import com.adiliqbal.finize.database.model.TransactionEntity
-import com.adiliqbal.finize.database.model.UserEntity
+import com.adiliqbal.finize.database.model.UserWithSettingsEntity
 import com.adiliqbal.finize.model.enums.TransactionType
 import com.adiliqbal.finize.model.extensions.ID
 import kotlinx.datetime.LocalDate
 
 object FakeEntity {
 
-	fun user(id: ID = "userId", name: String = "name") = UserEntity(id = id, name = name)
+	fun user(id: ID = "userId", name: String = "name") =
+		UserWithSettingsEntity(id = id, name = name, settings = SettingsEntity("currency"))
 
 	fun account(id: ID = "accountId") =
 		AccountEntity(id = id, name = "account", startingBalance = 10.0, currentBalance = 50.0)

@@ -6,4 +6,5 @@ data class User(
 	val id: ID,
 	val name: String,
 	val image: String? = null,
+	val settings: Settings
 )

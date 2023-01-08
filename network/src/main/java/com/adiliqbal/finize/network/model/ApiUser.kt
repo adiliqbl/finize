@@ -8,6 +8,7 @@ interface BaseApiUser {
 	val name: String
 	val email: String?
 	val image: String?
+	val settings: ApiSettings?
 }
 
 @Serializable
@@ -16,4 +17,5 @@ data class ApiUser(
 	override val name: String,
 	override val email: String? = null,
 	override val image: String? = null,
+	override val settings: ApiSettings? = null
 ) : BaseApiUser

@@ -2,6 +2,7 @@ package com.adiliqbal.finize.database
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.adiliqbal.finize.database.base.BaseDatabaseTest
+import com.adiliqbal.finize.database.model.UserEntity
 import com.adiliqbal.finize.database.model.fake.FakeEntity
 import junit.framework.Assert.*
 import kotlinx.coroutines.flow.first
@@ -22,6 +23,23 @@ internal class UserDaoTest : BaseDatabaseTest() {
 
 		val data = db.userDao().get(user.id).first()
 		assertEquals(user.id, data?.id)
+		assertEquals(user.settings.currency, data?.settings?.currency)
+	}
+
+	@Test
+	fun updateUser() = runTest {
+		db.userDao().upsert(user)
+
+		var data = db.userDao().get(user.id).first()
+		assertEquals(user.name, data?.name)
+		assertEquals(user.settings.currency, data?.settings?.currency)
+
+		db.userDao().update(UserEntity(user.id, "New Name", "image"))
+
+		data = db.userDao().get(user.id).first()
+		assertEquals("New Name", data?.name)
+		assertEquals("image", data?.image)
+		assertEquals(user.settings.currency, data?.settings?.currency)
 	}
 
 	@Test
