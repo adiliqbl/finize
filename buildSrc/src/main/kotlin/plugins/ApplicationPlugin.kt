@@ -4,10 +4,10 @@ import AppConfig
 import com.android.build.api.dsl.ApplicationExtension
 import config.configureBuildType
 import config.configureFlavors
+import modules.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
-import modules.configureKotlinAndroid
 
 class ApplicationPlugin : Plugin<Project> {
 
@@ -27,7 +27,7 @@ class ApplicationPlugin : Plugin<Project> {
 					versionCode = AppConfig.versionCode
 					versionName = AppConfig.versionName
 
-					testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+					testInstrumentationRunner = "com.adiliqbal.finize.testing.FinizeTestRunner"
 				}
 
 				configureKotlinAndroid(this)

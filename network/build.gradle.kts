@@ -1,5 +1,4 @@
 import Libraries.Firebase.implementFirebase
-import Libraries.Test.implementTesting
 
 plugins {
 	id("finize.module")
@@ -34,5 +33,5 @@ dependencies {
 	implementation(Libraries.Kotlin.Json)
 	implementation(Libraries.Kotlin.JsonConvertor)
 
-	implementTesting()
+	testImplementation(project(":common:testing"))
 }

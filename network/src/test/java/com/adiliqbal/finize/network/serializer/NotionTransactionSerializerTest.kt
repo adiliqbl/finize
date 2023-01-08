@@ -7,6 +7,8 @@ import com.adiliqbal.finize.network.util.AppJson.toJson
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNull
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 import org.junit.Test
 
 class NotionTransactionSerializerTest {
@@ -144,7 +146,7 @@ class NotionTransactionSerializerTest {
 		assertNull(transaction?.toAccount)
 		assertEquals("budget_id", transaction?.budget)
 		assertEquals("Note text", transaction?.note)
-		assertEquals(LocalDate.parse("2021-11-14"), transaction?.date)
+		assertEquals(LocalDate.parse("2021-11-14").atStartOfDayIn(TimeZone.UTC), transaction?.date)
 	}
 
 	@Test

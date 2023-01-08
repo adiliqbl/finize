@@ -11,12 +11,7 @@ android {
 }
 
 dependencies {
-	api(project(":navigation"))
-
 	implementCompose("api")
 	implementMaterialDesign("api")
-	api(Libraries.UI.Lifecycle)
-	api(Libraries.UI.Splashscreen)
 	api(Libraries.UI.Coil)
-	api(Libraries.UI.Paging)
 }

@@ -29,6 +29,10 @@ gradlePlugin {
 			id = "finize.module"
 			implementationClass = "plugins.ModulePlugin"
 		}
+		register("feature") {
+			id = "finize.feature"
+			implementationClass = "plugins.FeatureModulePlugin"
+		}
 		register("application-compose") {
 			id = "finize.application-compose"
 			implementationClass = "plugins.ComposeApplicationPlugin"

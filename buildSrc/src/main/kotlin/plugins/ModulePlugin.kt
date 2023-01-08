@@ -18,7 +18,7 @@ class ModulePlugin : Plugin<Project> {
 
 			extensions.getByType<LibraryExtension>().apply {
 				with(defaultConfig) {
-					testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+					testInstrumentationRunner = "com.adiliqbal.finize.testing.FinizeTestRunner"
 				}
 
 				configureKotlinAndroid(this)

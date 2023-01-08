@@ -1,5 +1,3 @@
-import Libraries.Test.implementAndroidTesting
-
 plugins {
 	id("finize.module")
 	id("finize.hilt")
@@ -38,6 +36,7 @@ dependencies {
 
 	implementation(Libraries.Kotlin.Json)
 
-	implementAndroidTesting()
+//	implementAndroidTesting()
+	androidTestImplementation(project(":common:testing"))
 	androidTestImplementation(Libraries.Room.Testing)
 }

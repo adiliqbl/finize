@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -17,14 +19,14 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 internal class TransactionDaoTest : BaseDatabaseTest() {
 
-	private val transaction = FakeEntity.transaction(id = "t1", accountFrom = "a1")
+	private val transaction = FakeEntity.transaction(id = "t1", accountFrom = "a1", budget = "b1")
 	private val transactions = listOf(
 		FakeEntity.transaction(
 			id = "t1",
 			accountFrom = "a1",
 			name = "Transaction One",
 			budget = "b1",
-			date = LocalDate(2022, 8, 1)
+			date = LocalDate(2022, 8, 1).atStartOfDayIn(TimeZone.UTC)
 		),
 		FakeEntity.transaction(
 			id = "t2",
@@ -32,7 +34,7 @@ internal class TransactionDaoTest : BaseDatabaseTest() {
 			accountTo = "a2",
 			budget = "b2",
 			name = "Transaction One",
-			date = LocalDate(2022, 8, 10)
+			date = LocalDate(2022, 8, 10).atStartOfDayIn(TimeZone.UTC)
 		),
 		FakeEntity.transaction(
 			id = "t3",
@@ -40,7 +42,7 @@ internal class TransactionDaoTest : BaseDatabaseTest() {
 			accountTo = "a2",
 			budget = "b1",
 			name = "Transaction Three",
-			date = LocalDate(2022, 8, 20)
+			date = LocalDate(2022, 8, 20).atStartOfDayIn(TimeZone.UTC)
 		)
 	)
 
@@ -85,25 +87,49 @@ internal class TransactionDaoTest : BaseDatabaseTest() {
 
 		assertEquals(
 			1,
-			db.transactionDao().filter(TransactionsFilter(date = LocalDate(2022, 8, 10)))
+			db.transactionDao().filter(
+				TransactionsFilter(
+					date = LocalDate(
+						2022,
+						8,
+						10
+					).atStartOfDayIn(TimeZone.UTC)
+				)
+			)
 				.result()?.size
 		)
 		assertEquals(
 			2,
-			db.transactionDao().filter(TransactionsFilter(dateFrom = LocalDate(2022, 8, 10)))
+			db.transactionDao().filter(
+				TransactionsFilter(
+					dateFrom = LocalDate(
+						2022,
+						8,
+						10
+					).atStartOfDayIn(TimeZone.UTC)
+				)
+			)
 				.result()?.size
 		)
 		assertEquals(
 			2,
-			db.transactionDao().filter(TransactionsFilter(dateTo = LocalDate(2022, 8, 10)))
+			db.transactionDao().filter(
+				TransactionsFilter(
+					dateTo = LocalDate(
+						2022,
+						8,
+						10
+					).atStartOfDayIn(TimeZone.UTC)
+				)
+			)
 				.result()?.size
 		)
 		assertEquals(
 			3,
 			db.transactionDao().filter(
 				TransactionsFilter(
-					dateFrom = LocalDate(2022, 8, 1),
-					dateTo = LocalDate(2022, 8, 30)
+					dateFrom = LocalDate(2022, 8, 1).atStartOfDayIn(TimeZone.UTC),
+					dateTo = LocalDate(2022, 8, 30).atStartOfDayIn(TimeZone.UTC)
 				)
 			).result()?.size
 		)

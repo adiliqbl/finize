@@ -48,7 +48,7 @@ abstract class TransactionDao : BaseDao<TransactionEntity>() {
 				filters.add("type LIKE '%'||'${type!!.value}'||'%'")
 			}
 			if (budget != null) {
-				filters.add("budgets LIKE '%'||'$budget'||'%'")
+				filters.add("budget LIKE '%'||'$budget'||'%'")
 			}
 
 			if (date != null) {

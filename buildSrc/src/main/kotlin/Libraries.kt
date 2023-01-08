@@ -1,3 +1,4 @@
+import Libraries.Compose.implementComposeScreen
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.configurationcache.extensions.capitalized
 
@@ -12,7 +13,7 @@ object Libraries {
 	object Kotlin {
 		const val Core = "androidx.core:core-ktx:${Versions.Kotlin.Core}"
 		const val Coroutines =
-			"org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Kotlin.Coroutines}"
+			"org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Kotlin.Coroutines}"
 		const val DateTime = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlin.DateTime}"
 		const val JsonGradlePlugin =
 			"org.jetbrains.kotlin:kotlin-serialization:${Versions.Kotlin.Kotlin}"
@@ -60,8 +61,13 @@ object Libraries {
 			add("kapt", Compiler)
 		}
 
-		fun DependencyHandler.implementHiltTesting() {
-			add("androidTestImplementation", Test)
+		fun DependencyHandler.implementHiltTesting(
+			type: String = "implementation",
+			override: Boolean = false
+		) {
+			val mType = if (override) type else "androidTest${type.capitalized()}"
+			
+			add(mType, Test)
 			add("kaptAndroidTest", TestCompiler)
 			add("androidTestAnnotationProcessor", TestCompiler)
 		}
@@ -89,6 +95,9 @@ object Libraries {
 			add(type, Foundation)
 			add("debug${type.capitalized()}", PreviewTool)
 			add(type, Preview)
+		}
+
+		internal fun DependencyHandler.implementComposeScreen(type: String = "implementation") {
 			add(type, Activity)
 			add(type, ViewModel)
 			add(type, Lifecycle)
@@ -118,13 +127,18 @@ object Libraries {
 			"androidx.compose.material3:material3:${Versions.UI.Material3}"
 		private const val Icons = "androidx.compose.material:material-icons-extended"
 		const val Splashscreen = "androidx.core:core-splashscreen:${Versions.UI.Splashscreen}"
-		const val Lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.UI.Lifecycle}"
+		private const val Lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.UI.Lifecycle}"
 		const val Paging = "androidx.paging:paging-compose:${Versions.Compose.Paging}"
 		const val Coil = "io.coil-kt:coil-compose:${Versions.UI.Coil}"
 
 		fun DependencyHandler.implementMaterialDesign(type: String = "implementation") {
 			add(type, Material3)
 			add(type, Icons)
+		}
+
+		internal fun DependencyHandler.implementScreens(type: String = "implementation") {
+			implementComposeScreen(type)
+			add(type, Lifecycle)
 		}
 	}
 
@@ -179,20 +193,30 @@ object Libraries {
 		private const val MockitoKotlin =
 			"org.mockito.kotlin:mockito-kotlin:${Versions.Test.MockitoKotlin}"
 
-		fun DependencyHandler.implementTesting() {
-			add("testImplementation", JUnit)
-			add("testImplementation", CoroutineTest)
-			add("testImplementation", Mockito)
-			add("testImplementation", MockitoKotlin)
+		fun DependencyHandler.implementTesting(
+			type: String = "implementation",
+			override: Boolean = false
+		) {
+			val mType = if (override) type else "test${type.capitalized()}"
+
+			add(mType, JUnit)
+			add(mType, CoroutineTest)
+			add(mType, Mockito)
+			add(mType, MockitoKotlin)
 		}
 
-		fun DependencyHandler.implementAndroidTesting() {
-			add("androidTestImplementation", CoroutineTest)
-			add("androidTestImplementation", AndroidRunner)
-			add("androidTestImplementation", AndroidJUnit)
-			add("androidTestImplementation", AndroidJUnitKtx)
-			add("androidTestImplementation", AndroidCore)
-			add("androidTestImplementation", AndroidCoreKtx)
+		fun DependencyHandler.implementAndroidTesting(
+			type: String = "implementation",
+			override: Boolean = false
+		) {
+			val mType = if (override) type else "androidTest${type.capitalized()}"
+
+			add(mType, CoroutineTest)
+			add(mType, AndroidRunner)
+			add(mType, AndroidJUnit)
+			add(mType, AndroidJUnitKtx)
+			add(mType, AndroidCore)
+			add(mType, AndroidCoreKtx)
 		}
 	}
 }

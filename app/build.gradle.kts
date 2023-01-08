@@ -24,5 +24,9 @@ dependencies {
 	implementation(project(":sync"))
 	implementation(project(":ui"))
 
+	implementation(project(":feature:auth"))
+	implementation(project(":feature:home"))
+
 	implementation(Libraries.Kotlin.Core)
+	implementation(Libraries.UI.Splashscreen)
 }

@@ -1,5 +1,3 @@
-import Libraries.Test.implementTesting
-
 plugins {
 	id("finize.module")
 	id("finize.hilt")
@@ -15,6 +13,4 @@ dependencies {
 
 	implementation(Libraries.Data.Datastore)
 	implementation(Libraries.Kotlin.Json)
-
-	implementTesting()
 }

@@ -1,5 +1,3 @@
-import Libraries.Test.implementTesting
-
 plugins {
 	id("finize.module")
 	id("finize.hilt")
@@ -18,5 +16,5 @@ dependencies {
 	implementation(Libraries.Kotlin.Core)
 	implementation(Libraries.Kotlin.Coroutines)
 
-	implementTesting()
+	testImplementation(project(":common:testing"))
 }

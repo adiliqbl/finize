@@ -7,7 +7,7 @@ import com.adiliqbal.finize.model.Transaction
 import com.adiliqbal.finize.model.User
 import com.adiliqbal.finize.model.enums.TransactionType
 import com.adiliqbal.finize.model.extensions.ID
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Clock
 
 object FakeModel {
 
@@ -32,6 +32,6 @@ object FakeModel {
 		fromAccount = accountTo,
 		budget = budget,
 		type = type,
-		date = LocalDate.parse("2022-08-08")
+		date = Clock.System.now()
 	)
 }
