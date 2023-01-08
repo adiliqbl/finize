@@ -11,10 +11,10 @@ android {
 }
 
 dependencies {
-	implementWorkManager()
-
 	implementation(Libraries.Kotlin.Core)
 	implementation(Libraries.Kotlin.Coroutines)
+
+	implementWorkManager()
 
 	implementTesting()
 }
