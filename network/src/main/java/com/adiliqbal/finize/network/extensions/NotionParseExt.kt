@@ -1,8 +1,8 @@
 package com.adiliqbal.finize.network.extensions
 
+import com.adiliqbal.finize.common.util.DateUtil
 import com.adiliqbal.finize.model.extensions.ID
 import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.contentOrNull
@@ -67,13 +67,13 @@ internal fun JsonObject.parseNotionDouble(key: String): Double {
 }
 
 @Suppress("UNCHECKED_CAST")
-internal fun JsonObject.parseNotionDate(key: String): LocalDate? {
+internal fun JsonObject.parseNotionDate(key: String): Instant? {
 	return try {
 		val value = get(key)
-		if (value.isPrimitiveType) return LocalDate.parse(value!!.jsonPrimitive.contentOrNull!!)
+		if (value.isPrimitiveType) return DateUtil.parseDate(value!!.jsonPrimitive.contentOrNull!!)
 
 		val obj = value as JsonObject
-		if (obj.containsKey("start")) return LocalDate.parse(obj["start"]!!.jsonPrimitive.content)
+		if (obj.containsKey("start")) return DateUtil.parseDate(obj["start"]!!.jsonPrimitive.content)
 		else if (obj.containsKey("type")) {
 			if (obj.getString("type") == "date") return obj["date"]!!.jsonObject.parseNotionDate("start")
 			else if (obj.getString("type") == "formula") return obj["formula"]!!.jsonObject

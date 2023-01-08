@@ -17,6 +17,8 @@ import com.adiliqbal.finize.network.extensions.toNotionTags
 import com.adiliqbal.finize.network.extensions.toNotionTitle
 import com.adiliqbal.finize.network.model.ApiTransaction
 import com.adiliqbal.finize.network.model.NotionApiTransaction
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
@@ -79,7 +81,8 @@ internal object NotionTransactionSerializer : KSerializer<NotionApiTransaction> 
 					?.takeIf { it.isNotEmpty() }?.get(0),
 				tags = properties.parseNotionTags(TAGS),
 				note = properties.parseNotionString(NOTE),
-				date = properties.parseNotionDate(DATE) ?: DateUtil.currentDay()
+				date = properties.parseNotionDate(DATE)?.atStartOfDayIn(TimeZone.UTC)
+					?: DateUtil.now()
 			)
 		)
 	}

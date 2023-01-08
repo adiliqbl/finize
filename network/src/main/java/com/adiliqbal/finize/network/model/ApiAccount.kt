@@ -19,5 +19,5 @@ data class ApiAccount(
 	override val name: String,
 	override val currentBalance: Double = 0.0,
 	override val startingBalance: Double = 0.0,
-	override val createdAt: Instant = DateUtil.currentTime()
+	override val createdAt: Instant = DateUtil.now()
 ) : BaseApiAccount

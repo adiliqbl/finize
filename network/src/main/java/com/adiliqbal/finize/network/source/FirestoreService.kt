@@ -10,6 +10,7 @@ internal interface FirestoreService {
 		fun accountsDB(userId: String) = "user-accounts/${userId}/accounts"
 		fun budgetsDB(userId: String) = "user-budgets/${userId}/budgets"
 		fun transactionsDB(userId: String) = "user-transactions/${userId}/transactions"
+		fun transactionTemplatesDB(userId: String) = "user-transactions/${userId}/templates"
 	}
 
 	suspend fun collection(path: String): CollectionReference

@@ -2,7 +2,7 @@ package com.adiliqbal.finize.model
 
 import com.adiliqbal.finize.model.enums.TransactionType
 import com.adiliqbal.finize.model.extensions.ID
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Instant
 
 data class Transaction(
 	val id: ID,
@@ -13,5 +13,5 @@ data class Transaction(
 	val budget: ID? = null,
 	val tags: List<String>? = null,
 	val note: String? = null,
-	val date: LocalDate
+	val date: Instant
 )

@@ -54,7 +54,7 @@ internal object NotionAccountSerializer : KSerializer<NotionApiAccount> {
 				name = properties.parseNotionString(NAME) ?: "",
 				currentBalance = properties.parseNotionDouble(CURRENT_BALANCE),
 				startingBalance = properties.parseNotionDouble(STARTING_BALANCE),
-				createdAt = json.parseNotionDateTime(CREATED_TIME) ?: DateUtil.currentTime()
+				createdAt = json.parseNotionDateTime(CREATED_TIME) ?: DateUtil.now()
 			)
 		)
 	}

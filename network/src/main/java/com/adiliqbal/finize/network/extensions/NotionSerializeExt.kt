@@ -1,7 +1,7 @@
 package com.adiliqbal.finize.network.extensions
 
 import com.adiliqbal.finize.model.extensions.ID
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Instant
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.addJsonObject
 import kotlinx.serialization.json.buildJsonArray
@@ -35,7 +35,7 @@ internal fun Double.toNotionNumber() = buildJsonObject {
 	put("number", JsonPrimitive(this@toNotionNumber))
 }
 
-internal fun LocalDate.toNotionDate() = buildJsonObject {
+internal fun Instant.toNotionDate() = buildJsonObject {
 	put("date", buildJsonObject {
 		put("start", JsonPrimitive(this@toNotionDate.toString()))
 	})

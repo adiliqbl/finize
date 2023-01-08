@@ -16,15 +16,19 @@ import kotlinx.coroutines.flow.Flow
 abstract class TransactionDao : BaseDao<TransactionEntity>() {
 
 	@Transaction
-	@Query("SELECT * FROM transactions WHERE id = :id")
+	@Query("SELECT * FROM transactions WHERE id = :id AND isTemplate = 0")
 	abstract fun get(id: ID): Flow<TransactionEntity?>
 
 	@Transaction
-	@Query("SELECT * FROM transactions ORDER BY date DESC")
+	@Query("SELECT * FROM transactions WHERE isTemplate = 0 ORDER BY date DESC")
 	abstract fun getAll(): PagingSource<Int, TransactionEntity>
 
 	@RawQuery(observedEntities = [TransactionEntity::class])
 	protected abstract fun query(query: SupportSQLiteQuery): PagingSource<Int, TransactionEntity>
+
+	@Transaction
+	@Query("SELECT * FROM transactions WHERE isTemplate = 1 ORDER BY date DESC")
+	abstract fun getTemplates(): PagingSource<Int, TransactionEntity>
 
 	open fun filter(filter: TransactionsFilter): PagingSource<Int, TransactionEntity> =
 		with(filter) {
@@ -48,13 +52,13 @@ abstract class TransactionDao : BaseDao<TransactionEntity>() {
 			}
 
 			if (date != null) {
-				filters.add("date=${date!!.toEpochDays()}")
+				filters.add("date=${date!!.toEpochMilliseconds()}")
 			} else if (dateFrom != null && dateTo != null) {
-				filters.add("date>=${dateFrom!!.toEpochDays()} AND date<=${dateTo!!.toEpochDays()}")
+				filters.add("date>=${dateFrom!!.toEpochMilliseconds()} AND date<=${dateTo!!.toEpochMilliseconds()}")
 			} else if (dateFrom != null) {
-				filters.add("date>=${dateFrom!!.toEpochDays()}")
+				filters.add("date>=${dateFrom!!.toEpochMilliseconds()}")
 			} else if (dateTo != null) {
-				filters.add("date<=${dateTo!!.toEpochDays()}")
+				filters.add("date<=${dateTo!!.toEpochMilliseconds()}")
 			}
 
 			if (!name.isNullOrEmpty()) {
@@ -70,7 +74,8 @@ abstract class TransactionDao : BaseDao<TransactionEntity>() {
 				SimpleSQLiteQuery(
 					"""
 					SELECT * FROM transactions
-					WHERE
+					WHERE isTemplate = 0
+					AND
 					${if (filters.size == 1) filters[0] else filters.joinToString("\n AND ")}
 					ORDER BY date DESC
 					""".trimIndent()

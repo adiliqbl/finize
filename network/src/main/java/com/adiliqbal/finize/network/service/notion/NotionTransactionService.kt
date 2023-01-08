@@ -3,10 +3,14 @@ package com.adiliqbal.finize.network.service.notion
 import com.adiliqbal.finize.datastore.NotionPreferences
 import com.adiliqbal.finize.model.extensions.ID
 import com.adiliqbal.finize.model.filter.TransactionsFilter
+import com.adiliqbal.finize.network.extensions.toNotionFilter
 import com.adiliqbal.finize.network.model.ApiTransaction
+import com.adiliqbal.finize.network.model.BaseApiTransaction
 import com.adiliqbal.finize.network.model.NotionApiTransaction
 import com.adiliqbal.finize.network.model.request.CreateNotionPageRequest
+import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery
 import com.adiliqbal.finize.network.model.request.PaginationQuery
+import com.adiliqbal.finize.network.model.response.PaginatedList
 import com.adiliqbal.finize.network.service.TransactionService
 import com.adiliqbal.finize.network.source.NotionService
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
@@ -21,11 +25,11 @@ internal class NotionTransactionService @Inject constructor(
 	private val notionService: NotionService
 ) : TransactionService {
 
-	override suspend fun getTransactions(paging: PaginationQuery, filter: TransactionsFilter?) = TODO("")
-//		notionService.getTransactions(
-//			notionPreferences.transactionsDB(),
-//			NotionDatabaseQuery(paging.copy(filter = filter?.toNotionFilter()))
-//		) as PaginatedList<BaseApiTransaction>
+	override suspend fun getTransactions(paging: PaginationQuery, filter: TransactionsFilter?) =
+		notionService.getTransactions(
+			notionPreferences.transactionsDB(),
+			NotionDatabaseQuery(paging.copy(filter = filter?.toNotionFilter()))
+		) as PaginatedList<BaseApiTransaction>
 
 	override suspend fun createTransaction(transaction: ApiTransaction): NotionApiTransaction {
 		return notionService.createPage(

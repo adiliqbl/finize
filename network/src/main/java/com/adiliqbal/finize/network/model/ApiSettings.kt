@@ -4,5 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiSettings(
-	val currency: String
+	val currency: String,
+	val tags: List<String>? = null
 )

@@ -43,13 +43,13 @@ internal fun CollectionReference.filter(filter: TransactionsFilter?) = apply {
 		if (budget != null) whereEqualTo(ApiTransaction.BUDGET, budget)
 
 		if (date != null) {
-			whereEqualTo(ApiTransaction.DATE, date.toString())
+			whereEqualTo(ApiTransaction.DATE, date!!.toString())
 		} else if (dateFrom != null || dateTo != null) {
 			if (dateFrom != null) {
-				whereGreaterThanOrEqualTo(ApiTransaction.DATE, dateFrom!!.toEpochDays())
+				whereGreaterThanOrEqualTo(ApiTransaction.DATE, dateFrom!!.toString())
 			}
 			if (dateTo != null) {
-				whereLessThanOrEqualTo(ApiTransaction.DATE, dateTo!!.toEpochDays())
+				whereLessThanOrEqualTo(ApiTransaction.DATE, dateTo!!.toString())
 			}
 		}
 

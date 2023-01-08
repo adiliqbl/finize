@@ -2,7 +2,7 @@ package com.adiliqbal.finize.model.filter
 
 import com.adiliqbal.finize.model.enums.TransactionType
 import com.adiliqbal.finize.model.extensions.ID
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Instant
 
 data class TransactionsFilter(
 	val name: String? = null,
@@ -11,7 +11,7 @@ data class TransactionsFilter(
 	val type: TransactionType? = null,
 	val tags: List<String>? = null,
 	val budget: ID? = null,
-	val date: LocalDate? = null,
-	val dateFrom: LocalDate? = null,
-	val dateTo: LocalDate? = null
+	val date: Instant? = null,
+	val dateFrom: Instant? = null,
+	val dateTo: Instant? = null
 )

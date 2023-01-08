@@ -4,7 +4,7 @@ import com.adiliqbal.finize.common.util.DateUtil
 import com.adiliqbal.finize.model.enums.TransactionType
 import com.adiliqbal.finize.model.extensions.ID
 import com.adiliqbal.finize.network.model.serializer.TransactionTypeSerializer
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -17,7 +17,7 @@ interface BaseApiTransaction {
 	val budget: ID?
 	val tags: List<String>?
 	val note: String?
-	val date: LocalDate
+	val date: Instant
 }
 
 @Serializable
@@ -31,7 +31,7 @@ data class ApiTransaction(
 	@SerialName(BUDGET) override val budget: ID? = null,
 	@SerialName(TAGS) override val tags: List<String>? = null,
 	@SerialName(NOTE) override val note: String? = null,
-	@SerialName(DATE) override val date: LocalDate = DateUtil.currentDay(),
+	@SerialName(DATE) override val date: Instant = DateUtil.now(),
 ) : BaseApiTransaction {
 
 	internal companion object Keys {

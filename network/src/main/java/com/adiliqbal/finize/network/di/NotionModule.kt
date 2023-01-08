@@ -4,6 +4,7 @@ import com.adiliqbal.finize.network.Retrofit
 import com.adiliqbal.finize.network.service.notion.NotionAccountService
 import com.adiliqbal.finize.network.service.notion.NotionBudgetService
 import com.adiliqbal.finize.network.service.notion.NotionTransactionService
+import com.adiliqbal.finize.network.service.notion.NotionTransactionTemplateService
 import com.adiliqbal.finize.network.service.notion.NotionUserService
 import com.adiliqbal.finize.network.source.NotionService
 import dagger.Binds
@@ -43,4 +44,8 @@ internal interface NotionModule {
 	@Binds
 	@Singleton
 	fun bindTransactionService(service: NotionTransactionService): NotionTransactionService
+
+	@Binds
+	@Singleton
+	fun bindTransactionTemplateService(service: NotionTransactionTemplateService): NotionTransactionTemplateService
 }

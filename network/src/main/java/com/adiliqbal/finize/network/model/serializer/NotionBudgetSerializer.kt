@@ -54,7 +54,7 @@ internal object NotionBudgetSerializer : KSerializer<NotionApiBudget> {
 				name = properties.parseNotionString(NAME) ?: "",
 				spent = properties.parseNotionDouble(SPENT),
 				maximum = properties.parseNotionDouble(MAXIMUM),
-				createdAt = json.parseNotionDateTime(CREATED_TIME) ?: DateUtil.currentTime()
+				createdAt = json.parseNotionDateTime(CREATED_TIME) ?: DateUtil.now()
 			)
 		)
 	}

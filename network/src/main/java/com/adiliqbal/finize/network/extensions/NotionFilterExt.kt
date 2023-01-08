@@ -4,7 +4,7 @@ import com.adiliqbal.finize.model.enums.TransactionType
 import com.adiliqbal.finize.model.extensions.ID
 import com.adiliqbal.finize.model.filter.TransactionsFilter
 import com.adiliqbal.finize.network.model.serializer.NotionTransactionSerializer
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Instant
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonArray
@@ -143,7 +143,7 @@ internal fun List<String>.toNotionTagsFilter(property: String) = run {
 	}
 }
 
-internal fun LocalDate.toNotionDateFilter(
+internal fun Instant.toNotionDateFilter(
 	property: String,
 	type: NotionDateFilter = NotionDateFilter.EQUALS
 ) = buildJsonObject {

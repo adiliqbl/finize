@@ -9,7 +9,7 @@ import com.adiliqbal.finize.model.extensions.ID
 
 @Entity(
 	tableName = "transactions",
-	indices = [Index("toAccount"), Index("fromAccount"), Index("budget")],
+	indices = [Index("toAccount"), Index("fromAccount"), Index("budget"), Index("type"), Index("date")],
 	foreignKeys =
 	[
 		ForeignKey(
@@ -41,5 +41,6 @@ data class TransactionEntity(
 	val budget: ID? = null,
 	val tags: List<String>? = null,
 	val note: String? = null,
-	val date: Int = 0
+	val date: Long = 0,
+	internal val isTemplate: Boolean = false
 ) : BaseEntity

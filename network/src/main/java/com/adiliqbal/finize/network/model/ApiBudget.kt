@@ -19,5 +19,5 @@ data class ApiBudget(
 	override val name: String,
 	override val spent: Double = 0.0,
 	override val maximum: Double = 0.0,
-	override val createdAt: Instant = DateUtil.currentTime()
+	override val createdAt: Instant = DateUtil.now()
 ) : BaseApiBudget

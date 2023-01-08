@@ -51,9 +51,19 @@ object Libraries {
 		internal const val WorkManagerCompiler =
 			"androidx.hilt:hilt-compiler:${Versions.Hilt.WorkManager}"
 
+		private const val Test = "com.google.dagger:hilt-android-testing:${Versions.Hilt.Hilt}"
+		private const val TestCompiler =
+			"com.google.dagger:hilt-android-compiler:${Versions.Hilt.Hilt}"
+
 		fun DependencyHandler.implementHilt() {
 			add("implementation", Hilt)
 			add("kapt", Compiler)
+		}
+
+		fun DependencyHandler.implementHiltTesting() {
+			add("androidTestImplementation", Test)
+			add("kaptAndroidTest", TestCompiler)
+			add("androidTestAnnotationProcessor", TestCompiler)
 		}
 	}
 
@@ -69,6 +79,7 @@ object Libraries {
 			"androidx.lifecycle:lifecycle-runtime-compose:${Versions.UI.Lifecycle}"
 		private const val Activity =
 			"androidx.activity:activity-compose:${Versions.Compose.Activity}"
+
 		private const val TestManifest = "androidx.compose.ui:ui-test-manifest"
 		private const val TestJUnit = "androidx.compose.ui:ui-test-junit4"
 
@@ -83,7 +94,7 @@ object Libraries {
 			add(type, Lifecycle)
 		}
 
-		fun DependencyHandler.implementComposeTest() {
+		fun DependencyHandler.implementComposeTesting() {
 			add("debugImplementation", TestManifest)
 			add("androidTestImplementation", TestJUnit)
 		}

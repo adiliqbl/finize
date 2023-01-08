@@ -7,7 +7,8 @@ import com.adiliqbal.finize.database.model.TransactionEntity
 import com.adiliqbal.finize.database.model.UserWithSettingsEntity
 import com.adiliqbal.finize.model.enums.TransactionType
 import com.adiliqbal.finize.model.extensions.ID
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 
 object FakeEntity {
 
@@ -27,7 +28,7 @@ object FakeEntity {
 		accountTo: ID? = null,
 		budget: ID? = "budgetId",
 		type: TransactionType = TransactionType.UNKNOWN,
-		date: LocalDate = LocalDate(2022, 8, 8)
+		date: Instant = Clock.System.now()
 	) = TransactionEntity(
 		id = id,
 		name = name,
@@ -35,6 +36,6 @@ object FakeEntity {
 		fromAccount = accountFrom,
 		budget = budget,
 		type = type,
-		date = date.toEpochDays()
+		date = date.toEpochMilliseconds()
 	)
 }
