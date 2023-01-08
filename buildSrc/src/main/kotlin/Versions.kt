@@ -18,7 +18,7 @@ object Versions {
 	}
 
 	object Google {
-		const val PlayServices = "20.4.0"
+		const val Auth = "20.4.0"
 	}
 
 	object Firebase {

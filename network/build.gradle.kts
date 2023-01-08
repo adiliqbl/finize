@@ -2,9 +2,9 @@ import Libraries.Firebase.implementFirebase
 
 plugins {
 	id("finize.module")
-	id("finize.hilt")
+	id("plugins.hilt")
 	id("finize.secrets")
-	id("kotlinx-serialization")
+	id("plugins.serialization")
 }
 
 android {
@@ -30,7 +30,6 @@ dependencies {
 
 	implementation(Libraries.Network.Retrofit)
 	implementation(Libraries.Network.OkHttpInterceptor)
-	implementation(Libraries.Kotlin.Json)
 	implementation(Libraries.Kotlin.JsonConvertor)
 
 	testImplementation(project(":common:testing"))

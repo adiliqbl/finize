@@ -3,7 +3,7 @@ import Libraries.UI.implementMaterialDesign
 
 plugins {
 	id("finize.module")
-	id("finize.compose")
+	id("plugins.compose")
 }
 
 android {

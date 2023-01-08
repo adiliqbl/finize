@@ -17,14 +17,15 @@ object Libraries {
 		const val DateTime = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlin.DateTime}"
 		const val JsonGradlePlugin =
 			"org.jetbrains.kotlin:kotlin-serialization:${Versions.Kotlin.Kotlin}"
-		const val Json = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlin.Json}"
+		internal const val Json =
+			"org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlin.Json}"
 		const val JsonConvertor =
 			"com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:${Versions.Kotlin.JsonConvertor}"
 	}
 
 	object Google {
 		const val PlayServices =
-			"com.google.android.gms:play-service:${Versions.Google.PlayServices}"
+			"com.google.android.gms:play-services-auth:${Versions.Google.Auth}"
 	}
 
 	object Firebase {
@@ -66,7 +67,7 @@ object Libraries {
 			override: Boolean = false
 		) {
 			val mType = if (override) type else "androidTest${type.capitalized()}"
-			
+
 			add(mType, Test)
 			add("kaptAndroidTest", TestCompiler)
 			add("androidTestAnnotationProcessor", TestCompiler)
@@ -127,7 +128,8 @@ object Libraries {
 			"androidx.compose.material3:material3:${Versions.UI.Material3}"
 		private const val Icons = "androidx.compose.material:material-icons-extended"
 		const val Splashscreen = "androidx.core:core-splashscreen:${Versions.UI.Splashscreen}"
-		private const val Lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.UI.Lifecycle}"
+		private const val Lifecycle =
+			"androidx.lifecycle:lifecycle-runtime-ktx:${Versions.UI.Lifecycle}"
 		const val Paging = "androidx.paging:paging-compose:${Versions.Compose.Paging}"
 		const val Coil = "io.coil-kt:coil-compose:${Versions.UI.Coil}"
 

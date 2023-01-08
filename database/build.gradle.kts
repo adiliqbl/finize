@@ -1,7 +1,7 @@
 plugins {
 	id("finize.module")
-	id("finize.hilt")
-	id("kotlinx-serialization")
+	id("plugins.hilt")
+	id("plugins.serialization")
 }
 
 android {
@@ -34,9 +34,6 @@ dependencies {
 	implementation(Libraries.Room.Paging)
 	kapt(Libraries.Room.Compiler)
 
-	implementation(Libraries.Kotlin.Json)
-
-//	implementAndroidTesting()
 	androidTestImplementation(project(":common:testing"))
 	androidTestImplementation(Libraries.Room.Testing)
 }

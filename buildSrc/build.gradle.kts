@@ -37,17 +37,23 @@ gradlePlugin {
 			id = "finize.application-compose"
 			implementationClass = "plugins.ComposeApplicationPlugin"
 		}
-		register("compose") {
-			id = "finize.compose"
-			implementationClass = "plugins.ComposeModulePlugin"
-		}
-		register("hilt") {
-			id = "finize.hilt"
-			implementationClass = "plugins.HiltPlugin"
-		}
 		register("secrets") {
 			id = "finize.secrets"
 			implementationClass = "plugins.SecretsPlugin"
+		}
+
+		register("compose") {
+			id = "plugins.compose"
+			implementationClass = "plugins.ComposeModulePlugin"
+		}
+		register("hilt") {
+			id = "plugins.hilt"
+			implementationClass = "plugins.HiltPlugin"
+		}
+
+		register("serialization") {
+			id = "plugins.serialization"
+			implementationClass = "plugins.SerializationPlugin"
 		}
 	}
 }

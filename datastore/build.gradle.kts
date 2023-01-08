@@ -1,7 +1,7 @@
 plugins {
 	id("finize.module")
-	id("finize.hilt")
-	id("kotlinx-serialization")
+	id("plugins.hilt")
+	id("plugins.serialization")
 }
 
 android {
@@ -12,5 +12,4 @@ dependencies {
 	implementation(project(":model"))
 
 	implementation(Libraries.Data.Datastore)
-	implementation(Libraries.Kotlin.Json)
 }

@@ -5,7 +5,7 @@ import com.adiliqbal.finize.network.Retrofit.Companion.NOTION_API
 
 interface NotionAuthService {
 	companion object {
-		fun deepLink(deepUri: String) =
-			"${NOTION_API}/oauth/authorize?client_id=${BuildConfig.AUTH_ID}&response_type=code&owner=user&redirect_uri=${deepUri}"
+		fun loginLink(loginUri: String) =
+			"${NOTION_API}/oauth/authorize?client_id=${BuildConfig.NOTION_AUTH_ID}&response_type=code&owner=user&redirect_uri=${loginUri}"
 	}
 }

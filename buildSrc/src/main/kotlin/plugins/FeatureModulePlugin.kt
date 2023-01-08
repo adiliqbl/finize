@@ -14,8 +14,8 @@ class FeatureModulePlugin : Plugin<Project> {
 		with(target) {
 			pluginManager.apply {
 				apply("finize.module")
-				apply("finize.hilt")
-				apply("finize.compose")
+				apply("plugins.hilt")
+				apply("plugins.compose")
 			}
 
 			extensions.getByType<LibraryExtension>().apply {

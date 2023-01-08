@@ -1,6 +1,6 @@
 plugins {
 	id("finize.module")
-	id("finize.hilt")
+	id("plugins.hilt")
 }
 
 android {
