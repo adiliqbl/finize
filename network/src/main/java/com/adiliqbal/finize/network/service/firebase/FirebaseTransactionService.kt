@@ -35,8 +35,8 @@ internal class FirebaseTransactionService @Inject constructor(
 		filter: TransactionsFilter?
 	): PaginatedList<BaseApiTransaction> {
 		return firestore.collection(transactionsDB(preferences.userId()))
-			.paginate(paging)
 			.filter(filter)
+			.paginate(paging)
 			.get().result.let {
 				val result = it.toObjects<ApiTransaction>()
 				PaginatedList(result, hasMore = result.size >= paging.pageSize)

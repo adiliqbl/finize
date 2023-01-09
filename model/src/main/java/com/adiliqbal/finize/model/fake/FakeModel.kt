@@ -31,7 +31,7 @@ object FakeModel {
 		toAccount = accountFrom,
 		fromAccount = accountTo,
 		budget = budget,
-		type = type,
+		category = type,
 		date = Clock.System.now()
 	)
 }
