@@ -1,10 +1,13 @@
 package com.adiliqbal.finize.network.model.serializer
 
 import com.adiliqbal.finize.common.util.DateUtil
+import com.adiliqbal.finize.common.util.date
 import com.adiliqbal.finize.network.extensions.getString
+import com.adiliqbal.finize.network.extensions.parseNotionDate
 import com.adiliqbal.finize.network.extensions.parseNotionDateTime
 import com.adiliqbal.finize.network.extensions.parseNotionDouble
 import com.adiliqbal.finize.network.extensions.parseNotionString
+import com.adiliqbal.finize.network.extensions.toNotionDate
 import com.adiliqbal.finize.network.extensions.toNotionNumber
 import com.adiliqbal.finize.network.extensions.toNotionTitle
 import com.adiliqbal.finize.network.model.ApiBudget
@@ -30,6 +33,7 @@ internal object NotionBudgetSerializer : KSerializer<NotionApiBudget> {
 	private const val NAME = "Name"
 	private const val SPENT = "Spent"
 	private const val MAXIMUM = "Maximum"
+	private const val EXPIRE_DATE = "Expire At"
 	private const val CREATED_TIME = "created_time"
 
 	override val descriptor: SerialDescriptor =
@@ -40,6 +44,7 @@ internal object NotionBudgetSerializer : KSerializer<NotionApiBudget> {
 			put(NAME, value.name.toNotionTitle())
 			put(SPENT, value.spent.toNotionNumber())
 			put(MAXIMUM, value.maximum.toNotionNumber())
+			value.expireDate?.let { put(EXPIRE_DATE, it.toNotionDate()) }
 		}
 
 		(encoder as JsonEncoder).encodeJsonElement(body)
@@ -54,6 +59,7 @@ internal object NotionBudgetSerializer : KSerializer<NotionApiBudget> {
 				name = properties.parseNotionString(NAME) ?: "",
 				spent = properties.parseNotionDouble(SPENT),
 				maximum = properties.parseNotionDouble(MAXIMUM),
+				expireDate = properties.parseNotionDate(EXPIRE_DATE)?.date,
 				createdAt = json.parseNotionDateTime(CREATED_TIME) ?: DateUtil.now()
 			)
 		)

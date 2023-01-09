@@ -1,6 +1,5 @@
 package com.adiliqbal.finize.network.extensions
 
-import com.adiliqbal.finize.model.enums.TransactionType
 import com.adiliqbal.finize.model.extensions.ID
 import com.adiliqbal.finize.model.filter.TransactionsFilter
 import com.adiliqbal.finize.network.model.serializer.NotionTransactionSerializer
@@ -43,7 +42,7 @@ internal fun TransactionsFilter.toNotionFilter(): JsonElement? {
 			add(fromAccount!!.toNotionRelationFilter(NotionTransactionSerializer.FROM_ACCOUNT))
 		}
 
-		if (category != null) add(category!!.toNotionTypeFilter(NotionTransactionSerializer.TYPE))
+		if (category != null) add(category!!.toNotionMultiselectFilter(NotionTransactionSerializer.CATEGORY))
 		if (budget != null) add(budget!!.toNotionRelationFilter(NotionTransactionSerializer.BUDGET))
 
 		if (date != null) {
@@ -89,10 +88,6 @@ internal fun TransactionsFilter.toNotionFilter(): JsonElement? {
 				)
 			)
 		}
-
-		if (!tags.isNullOrEmpty()) {
-			add(tags!!.toNotionTagsFilter(NotionTransactionSerializer.TAGS))
-		}
 	}
 
 	return if (filters.isEmpty()) null
@@ -117,27 +112,20 @@ internal fun ID.toNotionRelationFilter(property: String) = buildJsonObject {
 	})
 }
 
-internal fun TransactionType.toNotionTypeFilter(property: String) = buildJsonObject {
-	put("property", JsonPrimitive(property))
-	put("select", buildJsonObject {
-		put("equals", JsonPrimitive(this@toNotionTypeFilter.value))
-	})
-}
-
-fun String.toNotionTagFilter(property: String) = buildJsonObject {
+fun String.toNotionSelectFilter(property: String) = buildJsonObject {
 	put("property", JsonPrimitive(property))
 	put("multi_select", buildJsonObject {
-		put("contains", JsonPrimitive(this@toNotionTagFilter))
+		put("contains", JsonPrimitive(this@toNotionSelectFilter))
 	})
 }
 
-internal fun List<String>.toNotionTagsFilter(property: String) = run {
+internal fun List<String>.toNotionMultiselectFilter(property: String) = run {
 	if (size == 1) {
-		get(0).toNotionTagFilter(property)
+		get(0).toNotionSelectFilter(property)
 	} else {
 		buildJsonObject {
 			put("or", buildJsonArray {
-				this@toNotionTagsFilter.map { add(it.toNotionTagFilter(property)) }
+				this@toNotionMultiselectFilter.map { add(it.toNotionSelectFilter(property)) }
 			})
 		}
 	}

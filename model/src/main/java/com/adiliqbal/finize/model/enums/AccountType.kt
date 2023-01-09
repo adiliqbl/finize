@@ -5,3 +5,5 @@ enum class AccountType(val value: String) {
 	DEPOSIT("deposit"),
 	SAVING("saving");
 }
+
+fun String?.toAccountType() = this?.let { AccountType.valueOf(it) } ?: AccountType.DEPOSIT

@@ -1,9 +1,14 @@
 package com.adiliqbal.finize.network.model.serializer
 
+import com.adiliqbal.finize.common.util.CurrencyUtil
 import com.adiliqbal.finize.common.util.DateUtil
+import com.adiliqbal.finize.common.util.date
+import com.adiliqbal.finize.model.enums.toAccountType
 import com.adiliqbal.finize.network.extensions.getString
+import com.adiliqbal.finize.network.extensions.parseNotionDate
 import com.adiliqbal.finize.network.extensions.parseNotionDateTime
 import com.adiliqbal.finize.network.extensions.parseNotionDouble
+import com.adiliqbal.finize.network.extensions.parseNotionRelation
 import com.adiliqbal.finize.network.extensions.parseNotionString
 import com.adiliqbal.finize.network.extensions.toNotionNumber
 import com.adiliqbal.finize.network.extensions.toNotionTitle
@@ -28,8 +33,11 @@ internal object NotionAccountSerializer : KSerializer<NotionApiAccount> {
 
 	private const val ID = "id"
 	private const val NAME = "Name"
-	private const val CURRENT_BALANCE = "Current Balance"
-	private const val STARTING_BALANCE = "Starting Balance"
+	private const val BALANCE = "Current Balance"
+	private const val CURRENCY = "Currency"
+	private const val BUDGET = "Budget"
+	private const val BUDGET_EXPIRE_DATE = "Budget Expire At"
+	private const val TYPE = "Type"
 	private const val CREATED_TIME = "created_time"
 
 	override val descriptor: SerialDescriptor =
@@ -38,8 +46,7 @@ internal object NotionAccountSerializer : KSerializer<NotionApiAccount> {
 	override fun serialize(encoder: Encoder, value: NotionApiAccount) {
 		val body = buildJsonObject {
 			put(NAME, value.name.toNotionTitle())
-			put(CURRENT_BALANCE, value.currentBalance.toNotionNumber())
-			put(STARTING_BALANCE, value.startingBalance.toNotionNumber())
+			put(BALANCE, value.balance.toNotionNumber())
 		}
 
 		(encoder as JsonEncoder).encodeJsonElement(body)
@@ -52,8 +59,13 @@ internal object NotionAccountSerializer : KSerializer<NotionApiAccount> {
 			ApiAccount(
 				id = json.getString(ID)!!,
 				name = properties.parseNotionString(NAME) ?: "",
-				currentBalance = properties.parseNotionDouble(CURRENT_BALANCE),
-				startingBalance = properties.parseNotionDouble(STARTING_BALANCE),
+				balance = properties.parseNotionDouble(BALANCE),
+				budget = properties.parseNotionRelation(BUDGET)
+					?.takeIf { it.isNotEmpty() }?.get(0),
+				budgetExpireDate = properties.parseNotionDate(BUDGET_EXPIRE_DATE)?.date,
+				currency = properties.parseNotionString(CURRENCY)
+					?: CurrencyUtil.default.currencyCode,
+				type = properties.parseNotionString(TYPE).toAccountType(),
 				createdAt = json.parseNotionDateTime(CREATED_TIME) ?: DateUtil.now()
 			)
 		)

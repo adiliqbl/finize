@@ -2,6 +2,7 @@ package com.adiliqbal.finize.network.extensions
 
 import com.adiliqbal.finize.model.extensions.ID
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.addJsonObject
 import kotlinx.serialization.json.buildJsonArray
@@ -35,6 +36,12 @@ internal fun Double.toNotionNumber() = buildJsonObject {
 	put("number", JsonPrimitive(this@toNotionNumber))
 }
 
+internal fun LocalDate.toNotionDate() = buildJsonObject {
+	put("date", buildJsonObject {
+		put("start", JsonPrimitive(this@toNotionDate.toString()))
+	})
+}
+
 internal fun Instant.toNotionDate() = buildJsonObject {
 	put("date", buildJsonObject {
 		put("start", JsonPrimitive(this@toNotionDate.toString()))
@@ -55,15 +62,15 @@ internal fun List<ID>.toNotionRelation() = buildJsonObject {
 	})
 }
 
-internal fun String.toNotionTag() = buildJsonObject {
+internal fun String.toNotionSelect() = buildJsonObject {
 	put("select", buildJsonArray {
-		addJsonObject { put("name", JsonPrimitive(this@toNotionTag)) }
+		addJsonObject { put("name", JsonPrimitive(this@toNotionSelect)) }
 	})
 }
 
-internal fun List<String>.toNotionTags() = buildJsonObject {
+internal fun List<String>.toNotionMultiselect() = buildJsonObject {
 	put("multi_select", buildJsonArray {
-		this@toNotionTags.forEach {
+		this@toNotionMultiselect.forEach {
 			addJsonObject { put("name", JsonPrimitive(it)) }
 		}
 	})

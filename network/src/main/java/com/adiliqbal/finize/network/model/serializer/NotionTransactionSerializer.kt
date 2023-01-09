@@ -1,19 +1,17 @@
 package com.adiliqbal.finize.network.model.serializer
 
+import com.adiliqbal.finize.common.util.CurrencyUtil
 import com.adiliqbal.finize.common.util.DateUtil
-import com.adiliqbal.finize.model.enums.TransactionType
-import com.adiliqbal.finize.model.enums.toTransactionType
 import com.adiliqbal.finize.network.extensions.getString
 import com.adiliqbal.finize.network.extensions.parseNotionDate
+import com.adiliqbal.finize.network.extensions.parseNotionMultiselect
 import com.adiliqbal.finize.network.extensions.parseNotionRelation
 import com.adiliqbal.finize.network.extensions.parseNotionString
-import com.adiliqbal.finize.network.extensions.parseNotionTag
-import com.adiliqbal.finize.network.extensions.parseNotionTags
 import com.adiliqbal.finize.network.extensions.toNotionDate
+import com.adiliqbal.finize.network.extensions.toNotionMultiselect
 import com.adiliqbal.finize.network.extensions.toNotionRelation
 import com.adiliqbal.finize.network.extensions.toNotionRichString
-import com.adiliqbal.finize.network.extensions.toNotionTag
-import com.adiliqbal.finize.network.extensions.toNotionTags
+import com.adiliqbal.finize.network.extensions.toNotionSelect
 import com.adiliqbal.finize.network.extensions.toNotionTitle
 import com.adiliqbal.finize.network.model.ApiTransaction
 import com.adiliqbal.finize.network.model.NotionApiTransaction
@@ -36,11 +34,11 @@ internal object NotionTransactionSerializer : KSerializer<NotionApiTransaction> 
 
 	internal const val ID = "id"
 	internal const val NAME = "Name"
-	internal const val TYPE = "Type"
+	internal const val CATEGORY = "Type"
 	internal const val TO_ACCOUNT = "To Account"
 	internal const val FROM_ACCOUNT = "From Account"
 	internal const val BUDGET = "Budget"
-	internal const val TAGS = "Tags"
+	private const val CURRENCY = "Currency"
 	private const val NOTE = "Note"
 	internal const val DATE = "Date"
 
@@ -51,12 +49,11 @@ internal object NotionTransactionSerializer : KSerializer<NotionApiTransaction> 
 		val body = buildJsonObject {
 			put(NAME, value.name.toNotionTitle())
 			put(DATE, value.date.toNotionDate())
-			value.type.takeIf { it != TransactionType.UNKNOWN }
-				?.let { put(TYPE, it.value.toNotionTag()) }
+			put(CATEGORY, value.category.toNotionMultiselect())
 			value.fromAccount?.let { put(FROM_ACCOUNT, it.toNotionRelation()) }
 			value.toAccount?.let { put(FROM_ACCOUNT, it.toNotionRelation()) }
 			value.budget?.let { put(BUDGET, it.toNotionRelation()) }
-			value.tags?.let { put(TAGS, it.toNotionTags()) }
+			put(CURRENCY, value.currency.toNotionSelect())
 			value.note?.let { put(NOTE, it.toNotionRichString()) }
 		}
 
@@ -70,14 +67,15 @@ internal object NotionTransactionSerializer : KSerializer<NotionApiTransaction> 
 			ApiTransaction(
 				id = json.getString(ID)!!,
 				name = properties.parseNotionString(NAME) ?: "",
-				type = properties.parseNotionTag(TYPE).toTransactionType(),
+				category = properties.parseNotionMultiselect(CATEGORY)!!,
 				toAccount = properties.parseNotionRelation(TO_ACCOUNT)
 					?.takeIf { it.isNotEmpty() }?.get(0),
 				fromAccount = properties.parseNotionRelation(FROM_ACCOUNT)
 					?.takeIf { it.isNotEmpty() }?.get(0),
 				budget = properties.parseNotionRelation(BUDGET)
 					?.takeIf { it.isNotEmpty() }?.get(0),
-				tags = properties.parseNotionTags(TAGS),
+				currency = properties.parseNotionString(CURRENCY)
+					?: CurrencyUtil.default.currencyCode,
 				note = properties.parseNotionString(NOTE),
 				date = properties.parseNotionDate(DATE) ?: DateUtil.now()
 			)

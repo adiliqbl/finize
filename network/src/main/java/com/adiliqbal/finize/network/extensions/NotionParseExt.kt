@@ -120,7 +120,7 @@ internal fun JsonObject.parseNotionRelation(key: String): List<ID>? {
 }
 
 @Suppress("UNCHECKED_CAST")
-internal fun JsonObject.parseNotionTags(key: String): List<String>? {
+internal fun JsonObject.parseNotionMultiselect(key: String): List<String>? {
 	return try {
 		val value = get(key)
 		if (value is JsonArray) {
@@ -140,7 +140,7 @@ internal fun JsonObject.parseNotionTags(key: String): List<String>? {
 }
 
 @Suppress("UNCHECKED_CAST")
-internal fun JsonObject.parseNotionTag(key: String): String? {
+internal fun JsonObject.parseNotionSelect(key: String): String? {
 	return try {
 		val obj = get(key)?.jsonObject as JsonObject
 		if (obj.getString("type") == "select") {

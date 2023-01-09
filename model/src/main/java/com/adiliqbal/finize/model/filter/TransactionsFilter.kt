@@ -8,7 +8,6 @@ data class TransactionsFilter(
 	val toAccount: ID? = null,
 	val fromAccount: ID? = null,
 	val category: List<String>? = null,
-	val tags: List<String>? = null,
 	val budget: ID? = null,
 	val date: Instant? = null,
 	val dateFrom: Instant? = null,

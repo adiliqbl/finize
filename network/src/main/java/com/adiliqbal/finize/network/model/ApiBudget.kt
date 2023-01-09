@@ -11,7 +11,7 @@ interface BaseApiBudget {
 	val name: String
 	val spent: Double
 	val maximum: Double
-	val expireDate: LocalDate
+	val expireDate: LocalDate?
 	val createdAt: Instant
 }
 
@@ -21,6 +21,6 @@ data class ApiBudget(
 	override val name: String,
 	override val spent: Double = 0.0,
 	override val maximum: Double = 0.0,
-	override val expireDate: LocalDate,
+	override val expireDate: LocalDate? = null,
 	override val createdAt: Instant = DateUtil.now()
 ) : BaseApiBudget
