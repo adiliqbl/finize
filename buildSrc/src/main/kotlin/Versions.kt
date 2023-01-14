@@ -9,7 +9,7 @@ object Versions {
 	}
 
 	object Kotlin {
-		const val Kotlin = "1.7.20"
+		const val Kotlin = "1.8.0"
 		const val Core = "1.9.0"
 		const val Coroutines = "1.6.2"
 		const val DateTime = "0.4.0"
