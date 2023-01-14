@@ -29,7 +29,6 @@ tasks.register("validate", Exec::class) {
 	commandLine = listOf(
 		"./gradlew",
 		"--init-script",
-		"gradlew",
 		"scripts/spotless.gradle.kts",
 		"--no-configuration-cache",
 		"check"
@@ -39,7 +38,6 @@ tasks.register("lint", Exec::class) {
 	commandLine = listOf(
 		"./gradlew",
 		"--init-script",
-		"gradlew",
 		"scripts/spotless.gradle.kts",
 		"--no-configuration-cache",
 		"spotlessApply"
