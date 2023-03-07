@@ -3,7 +3,7 @@ package com.adiliqbal.finize.network.model.serializer
 import com.adiliqbal.finize.common.util.CurrencyUtil
 import com.adiliqbal.finize.common.util.DateUtil
 import com.adiliqbal.finize.common.util.date
-import com.adiliqbal.finize.model.enums.toAccountType
+import com.adiliqbal.finize.model.enums.accountToType
 import com.adiliqbal.finize.network.extensions.getString
 import com.adiliqbal.finize.network.extensions.parseNotionDate
 import com.adiliqbal.finize.network.extensions.parseNotionDateTime
@@ -65,7 +65,7 @@ internal object NotionAccountSerializer : KSerializer<NotionApiAccount> {
 				budgetExpireDate = properties.parseNotionDate(BUDGET_EXPIRE_DATE)?.date,
 				currency = properties.parseNotionString(CURRENCY)
 					?: CurrencyUtil.default.currencyCode,
-				type = properties.parseNotionString(TYPE).toAccountType(),
+				type = properties.parseNotionString(TYPE).accountToType(),
 				createdAt = json.parseNotionDateTime(CREATED_TIME) ?: DateUtil.now()
 			)
 		)

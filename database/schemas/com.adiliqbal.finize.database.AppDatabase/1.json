@@ -138,7 +138,7 @@
       },
       {
         "tableName": "transactions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `type` TEXT NOT NULL, `toAccount` TEXT, `fromAccount` TEXT, `budget` TEXT, `tags` TEXT, `note` TEXT, `date` INTEGER NOT NULL, `isTemplate` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`toAccount`) REFERENCES `accounts`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`fromAccount`) REFERENCES `accounts`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`budget`) REFERENCES `budgets`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `type` TEXT NOT NULL, `accountTo` TEXT, `accountFrom` TEXT, `budget` TEXT, `tags` TEXT, `note` TEXT, `date` INTEGER NOT NULL, `isTemplate` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`accountTo`) REFERENCES `accounts`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`accountFrom`) REFERENCES `accounts`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`budget`) REFERENCES `budgets`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "id",
@@ -159,14 +159,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "toAccount",
-            "columnName": "toAccount",
+            "fieldPath": "accountTo",
+            "columnName": "accountTo",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "fromAccount",
-            "columnName": "fromAccount",
+            "fieldPath": "accountFrom",
+            "columnName": "accountFrom",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -209,22 +209,22 @@
         },
         "indices": [
           {
-            "name": "index_transactions_toAccount",
+            "name": "index_transactions_accountTo",
             "unique": false,
             "columnNames": [
-              "toAccount"
+              "accountTo"
             ],
             "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_transactions_toAccount` ON `${TABLE_NAME}` (`toAccount`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_transactions_accountTo` ON `${TABLE_NAME}` (`accountTo`)"
           },
           {
-            "name": "index_transactions_fromAccount",
+            "name": "index_transactions_accountFrom",
             "unique": false,
             "columnNames": [
-              "fromAccount"
+              "accountFrom"
             ],
             "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_transactions_fromAccount` ON `${TABLE_NAME}` (`fromAccount`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_transactions_accountFrom` ON `${TABLE_NAME}` (`accountFrom`)"
           },
           {
             "name": "index_transactions_budget",
@@ -260,7 +260,7 @@
             "onDelete": "RESTRICT",
             "onUpdate": "NO ACTION",
             "columns": [
-              "toAccount"
+              "accountTo"
             ],
             "referencedColumns": [
               "id"
@@ -271,7 +271,7 @@
             "onDelete": "RESTRICT",
             "onUpdate": "NO ACTION",
             "columns": [
-              "fromAccount"
+              "accountFrom"
             ],
             "referencedColumns": [
               "id"

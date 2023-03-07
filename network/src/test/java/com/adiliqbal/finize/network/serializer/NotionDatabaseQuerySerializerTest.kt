@@ -30,8 +30,8 @@ class NotionDatabaseQuerySerializerTest {
 				sortField = "date",
 				sortOrder = SortOrder.DESCENDING,
 				filter = TransactionsFilter(
-					toAccount = "to",
-					fromAccount = "from"
+					accountTo = "to",
+					accountFrom = "from"
 				).toNotionFilter(),
 				pageSize = 20
 			)
@@ -51,8 +51,8 @@ class NotionDatabaseQuerySerializerTest {
 			PaginationQuery(
 				sortField = "date",
 				filter = TransactionsFilter(
-					toAccount = "to",
-					fromAccount = "from"
+					accountTo = "to",
+					accountFrom = "from"
 				).toNotionFilter(),
 				cursor = "cursor",
 				pageSize = 20

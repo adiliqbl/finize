@@ -50,8 +50,8 @@ internal object NotionTransactionSerializer : KSerializer<NotionApiTransaction> 
 			put(NAME, value.name.toNotionTitle())
 			put(DATE, value.date.toNotionDate())
 			put(CATEGORY, value.category.toNotionMultiselect())
-			value.fromAccount?.let { put(FROM_ACCOUNT, it.toNotionRelation()) }
-			value.toAccount?.let { put(FROM_ACCOUNT, it.toNotionRelation()) }
+			value.accountFrom?.let { put(FROM_ACCOUNT, it.toNotionRelation()) }
+			value.accountTo?.let { put(FROM_ACCOUNT, it.toNotionRelation()) }
 			value.budget?.let { put(BUDGET, it.toNotionRelation()) }
 			put(CURRENCY, value.currency.toNotionSelect())
 			value.note?.let { put(NOTE, it.toNotionRichString()) }
@@ -68,9 +68,9 @@ internal object NotionTransactionSerializer : KSerializer<NotionApiTransaction> 
 				id = json.getString(ID)!!,
 				name = properties.parseNotionString(NAME) ?: "",
 				category = properties.parseNotionMultiselect(CATEGORY)!!,
-				toAccount = properties.parseNotionRelation(TO_ACCOUNT)
+				accountTo = properties.parseNotionRelation(TO_ACCOUNT)
 					?.takeIf { it.isNotEmpty() }?.get(0),
-				fromAccount = properties.parseNotionRelation(FROM_ACCOUNT)
+				accountFrom = properties.parseNotionRelation(FROM_ACCOUNT)
 					?.takeIf { it.isNotEmpty() }?.get(0),
 				budget = properties.parseNotionRelation(BUDGET)
 					?.takeIf { it.isNotEmpty() }?.get(0),

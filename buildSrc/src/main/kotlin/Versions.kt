@@ -2,14 +2,14 @@ import org.gradle.api.JavaVersion
 
 object Versions {
 	object Build {
-		val Java = JavaVersion.VERSION_1_8
+		val Java = JavaVersion.VERSION_11
 		const val Desugar = "1.1.5"
 		const val GoogleService = "4.3.13"
 		const val Secrets = "2.0.1"
 	}
 
 	object Kotlin {
-		const val Kotlin = "1.7.20"
+		const val Kotlin = "1.8.0"
 		const val Core = "1.9.0"
 		const val Coroutines = "1.6.2"
 		const val DateTime = "0.4.0"

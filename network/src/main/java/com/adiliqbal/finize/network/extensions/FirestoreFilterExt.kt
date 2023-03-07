@@ -38,16 +38,16 @@ internal fun CollectionReference.filter(filter: TransactionsFilter?) = apply {
 			}
 		}
 
-		if (!toAccount.isNullOrEmpty() && toAccount == fromAccount) {
-			whereEqualTo(ApiTransaction.FROM_ACCOUNT, toAccount)
-			whereEqualTo(ApiTransaction.TO_ACCOUNT, toAccount)
-		} else if (!toAccount.isNullOrEmpty() && !fromAccount.isNullOrEmpty()) {
-			whereEqualTo(ApiTransaction.FROM_ACCOUNT, fromAccount)
-			whereEqualTo(ApiTransaction.TO_ACCOUNT, toAccount)
-		} else if (!toAccount.isNullOrEmpty() && fromAccount.isNullOrEmpty()) {
-			whereEqualTo(ApiTransaction.TO_ACCOUNT, toAccount)
-		} else if (!fromAccount.isNullOrEmpty() && toAccount.isNullOrEmpty()) {
-			whereEqualTo(ApiTransaction.FROM_ACCOUNT, fromAccount)
+		if (!accountTo.isNullOrEmpty() && accountTo == accountFrom) {
+			whereEqualTo(ApiTransaction.FROM_ACCOUNT, accountTo)
+			whereEqualTo(ApiTransaction.TO_ACCOUNT, accountTo)
+		} else if (!accountTo.isNullOrEmpty() && !accountFrom.isNullOrEmpty()) {
+			whereEqualTo(ApiTransaction.FROM_ACCOUNT, accountFrom)
+			whereEqualTo(ApiTransaction.TO_ACCOUNT, accountTo)
+		} else if (!accountTo.isNullOrEmpty() && accountFrom.isNullOrEmpty()) {
+			whereEqualTo(ApiTransaction.TO_ACCOUNT, accountTo)
+		} else if (!accountFrom.isNullOrEmpty() && accountTo.isNullOrEmpty()) {
+			whereEqualTo(ApiTransaction.FROM_ACCOUNT, accountFrom)
 		}
 
 		if (budget != null) whereEqualTo(ApiTransaction.BUDGET, budget)

@@ -2,7 +2,7 @@ package com.adiliqbal.finize.model.fake
 
 import com.adiliqbal.finize.model.Account
 import com.adiliqbal.finize.model.Budget
-import com.adiliqbal.finize.model.Settings
+import com.adiliqbal.finize.model.Profile
 import com.adiliqbal.finize.model.Transaction
 import com.adiliqbal.finize.model.User
 import com.adiliqbal.finize.model.enums.TransactionType
@@ -11,13 +11,13 @@ import kotlinx.datetime.Clock
 
 object FakeModel {
 
-	fun user(id: ID = "userId") = User(id = id, name = "name", settings = Settings())
+	fun user(id: ID = "userId") = User(id = id, name = "name", profile = Profile())
 
 	fun account(id: ID = "accountId") =
 		Account(id = id, name = "account", startingBalance = 10.0, currentBalance = 50.0)
 
 	fun budget(id: ID = "budgetId") =
-		Budget(id = id, name = "budget", maximum = 30.0)
+		Budget(id = id, name = "budget", limit = 30.0)
 
 	fun transaction(
 		id: ID = "transactionId",
@@ -28,8 +28,8 @@ object FakeModel {
 	) = Transaction(
 		id = id,
 		name = "transaction",
-		toAccount = accountFrom,
-		fromAccount = accountTo,
+		accountTo = accountFrom,
+		accountFrom = accountTo,
 		budget = budget,
 		category = type,
 		date = Clock.System.now()

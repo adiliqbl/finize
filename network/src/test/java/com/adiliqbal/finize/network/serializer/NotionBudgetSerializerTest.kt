@@ -81,7 +81,7 @@ class NotionBudgetSerializerTest {
 		assertEquals("budget_id", budget?.id)
 		assertEquals("Food", budget?.name)
 		assertEquals(10.0, budget?.spent)
-		assertEquals(50.0, budget?.maximum)
+		assertEquals(50.0, budget?.limit)
 	}
 
 	@Test
@@ -91,7 +91,7 @@ class NotionBudgetSerializerTest {
 				id = "id",
 				name = "name",
 				spent = 10.0,
-				maximum = 50.0
+				limit = 50.0
 			)
 		)
 		budget.toJson()
