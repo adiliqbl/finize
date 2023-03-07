@@ -9,8 +9,8 @@ import kotlinx.serialization.Serializable
 interface BaseApiBudget {
 	val id: ID
 	val name: String
+	val limit: Double
 	val spent: Double
-	val maximum: Double
 	val expireDate: LocalDate?
 	val createdAt: Instant
 }
@@ -19,8 +19,8 @@ interface BaseApiBudget {
 data class ApiBudget(
 	override val id: ID,
 	override val name: String,
+	override val limit: Double = 0.0,
 	override val spent: Double = 0.0,
-	override val maximum: Double = 0.0,
 	override val expireDate: LocalDate? = null,
 	override val createdAt: Instant = DateUtil.now()
 ) : BaseApiBudget

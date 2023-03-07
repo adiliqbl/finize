@@ -22,24 +22,24 @@ internal enum class NotionTextFilter(val key: String) {
 
 internal fun TransactionsFilter.toNotionFilter(): JsonElement? {
 	val filters = buildJsonArray {
-		if (!toAccount.isNullOrEmpty() && toAccount == fromAccount) {
+		if (!accountTo.isNullOrEmpty() && accountTo == accountFrom) {
 			add(buildJsonObject {
 				put("or", buildJsonArray {
-					add(toAccount!!.toNotionRelationFilter(NotionTransactionSerializer.TO_ACCOUNT))
-					add(toAccount!!.toNotionRelationFilter(NotionTransactionSerializer.FROM_ACCOUNT))
+					add(accountTo!!.toNotionRelationFilter(NotionTransactionSerializer.TO_ACCOUNT))
+					add(accountTo!!.toNotionRelationFilter(NotionTransactionSerializer.FROM_ACCOUNT))
 				})
 			})
-		} else if (!toAccount.isNullOrEmpty() && !fromAccount.isNullOrEmpty()) {
+		} else if (!accountTo.isNullOrEmpty() && !accountFrom.isNullOrEmpty()) {
 			add(buildJsonObject {
 				put("and", buildJsonArray {
-					add(toAccount!!.toNotionRelationFilter(NotionTransactionSerializer.TO_ACCOUNT))
-					add(fromAccount!!.toNotionRelationFilter(NotionTransactionSerializer.FROM_ACCOUNT))
+					add(accountTo!!.toNotionRelationFilter(NotionTransactionSerializer.TO_ACCOUNT))
+					add(accountFrom!!.toNotionRelationFilter(NotionTransactionSerializer.FROM_ACCOUNT))
 				})
 			})
-		} else if (!toAccount.isNullOrEmpty() && fromAccount.isNullOrEmpty()) {
-			add(toAccount!!.toNotionRelationFilter(NotionTransactionSerializer.TO_ACCOUNT))
-		} else if (!fromAccount.isNullOrEmpty() && toAccount.isNullOrEmpty()) {
-			add(fromAccount!!.toNotionRelationFilter(NotionTransactionSerializer.FROM_ACCOUNT))
+		} else if (!accountTo.isNullOrEmpty() && accountFrom.isNullOrEmpty()) {
+			add(accountTo!!.toNotionRelationFilter(NotionTransactionSerializer.TO_ACCOUNT))
+		} else if (!accountFrom.isNullOrEmpty() && accountTo.isNullOrEmpty()) {
+			add(accountFrom!!.toNotionRelationFilter(NotionTransactionSerializer.FROM_ACCOUNT))
 		}
 
 		if (category != null) add(category!!.toNotionMultiselectFilter(NotionTransactionSerializer.CATEGORY))

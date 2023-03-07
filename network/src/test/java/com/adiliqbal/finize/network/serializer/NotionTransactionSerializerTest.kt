@@ -142,8 +142,8 @@ class NotionTransactionSerializerTest {
 		assertEquals("Expense", transaction?.type?.value)
 		assertEquals(1, transaction?.tags?.size)
 
-		assertEquals("from_account_id", transaction?.fromAccount)
-		assertNull(transaction?.toAccount)
+		assertEquals("from_account_id", transaction?.accountFrom)
+		assertNull(transaction?.accountTo)
 		assertEquals("budget_id", transaction?.budget)
 		assertEquals("Note text", transaction?.note)
 		assertEquals(LocalDate.parse("2021-11-14").atStartOfDayIn(TimeZone.UTC), transaction?.date)
@@ -155,8 +155,8 @@ class NotionTransactionSerializerTest {
 			ApiTransaction(
 				id = "id",
 				name = "name",
-				toAccount = "toAccount",
-				fromAccount = "fromAccount",
+				accountTo = "accountTo",
+				accountFrom = "accountFrom",
 				budget = "budgetId",
 				tags = listOf("one", "two")
 			)

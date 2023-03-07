@@ -34,14 +34,14 @@ abstract class TransactionDao : BaseDao<TransactionEntity>() {
 		with(filter) {
 			val filters = mutableListOf<String>()
 
-			if (!toAccount.isNullOrEmpty() && toAccount == fromAccount) {
-				filters.add("fromAccount='$toAccount' OR toAccount='$toAccount'")
-			} else if (!toAccount.isNullOrEmpty() && !fromAccount.isNullOrEmpty()) {
-				filters.add("fromAccount='$fromAccount' AND toAccount='$toAccount'")
-			} else if (!toAccount.isNullOrEmpty() && fromAccount.isNullOrEmpty()) {
-				filters.add("toAccount='$toAccount'")
-			} else if (!fromAccount.isNullOrEmpty() && toAccount.isNullOrEmpty()) {
-				filters.add("fromAccount='$fromAccount'")
+			if (!accountTo.isNullOrEmpty() && accountTo == accountFrom) {
+				filters.add("accountFrom='$accountTo' OR accountTo='$accountTo'")
+			} else if (!accountTo.isNullOrEmpty() && !accountFrom.isNullOrEmpty()) {
+				filters.add("accountFrom='$accountFrom' AND accountTo='$accountTo'")
+			} else if (!accountTo.isNullOrEmpty() && accountFrom.isNullOrEmpty()) {
+				filters.add("accountTo='$accountTo'")
+			} else if (!accountFrom.isNullOrEmpty() && accountTo.isNullOrEmpty()) {
+				filters.add("accountFrom='$accountFrom'")
 			}
 
 			if (category != null) {

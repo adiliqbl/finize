@@ -141,38 +141,38 @@ internal class TransactionDaoTest : BaseDatabaseTest() {
 
 		assertEquals(
 			2,
-			db.transactionDao().filter(TransactionsFilter(fromAccount = "a1")).result()?.size
+			db.transactionDao().filter(TransactionsFilter(accountFrom = "a1")).result()?.size
 		)
 		assertEquals(
 			0,
-			db.transactionDao().filter(TransactionsFilter(toAccount = "a1")).result()?.size
+			db.transactionDao().filter(TransactionsFilter(accountTo = "a1")).result()?.size
 		)
 		assertEquals(
 			0,
-			db.transactionDao().filter(TransactionsFilter(fromAccount = "a2")).result()?.size
+			db.transactionDao().filter(TransactionsFilter(accountFrom = "a2")).result()?.size
 		)
 		assertEquals(
 			2,
-			db.transactionDao().filter(TransactionsFilter(toAccount = "a2")).result()?.size
+			db.transactionDao().filter(TransactionsFilter(accountTo = "a2")).result()?.size
 		)
 		assertEquals(
 			1,
-			db.transactionDao().filter(TransactionsFilter(fromAccount = "a1", toAccount = "a2"))
+			db.transactionDao().filter(TransactionsFilter(accountFrom = "a1", accountTo = "a2"))
 				.result()?.size
 		)
 		assertEquals(
 			0,
-			db.transactionDao().filter(TransactionsFilter(fromAccount = "a2", toAccount = "a1"))
+			db.transactionDao().filter(TransactionsFilter(accountFrom = "a2", accountTo = "a1"))
 				.result()?.size
 		)
 		assertEquals(
 			2,
-			db.transactionDao().filter(TransactionsFilter(fromAccount = "a1", toAccount = "a1"))
+			db.transactionDao().filter(TransactionsFilter(accountFrom = "a1", accountTo = "a1"))
 				.result()?.size
 		)
 		assertEquals(
 			2,
-			db.transactionDao().filter(TransactionsFilter(fromAccount = "a2", toAccount = "a2"))
+			db.transactionDao().filter(TransactionsFilter(accountFrom = "a2", accountTo = "a2"))
 				.result()?.size
 		)
 	}
@@ -198,13 +198,13 @@ internal class TransactionDaoTest : BaseDatabaseTest() {
 		assertEquals(
 			1,
 			db.transactionDao()
-				.filter(TransactionsFilter(toAccount = "a2", name = "One", budget = "b2"))
+				.filter(TransactionsFilter(accountTo = "a2", name = "One", budget = "b2"))
 				.result()?.size
 		)
 		assertEquals(
 			1,
 			db.transactionDao()
-				.filter(TransactionsFilter(toAccount = "a2", budget = "b1"))
+				.filter(TransactionsFilter(accountTo = "a2", budget = "b1"))
 				.result()?.size
 		)
 	}

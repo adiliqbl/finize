@@ -32,8 +32,8 @@ object FakeEntity {
 	) = TransactionEntity(
 		id = id,
 		name = name,
-		toAccount = accountTo,
-		fromAccount = accountFrom,
+		accountTo = accountTo,
+		accountFrom = accountFrom,
 		budget = budget,
 		type = type,
 		date = date.toEpochMilliseconds()

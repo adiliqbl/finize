@@ -43,7 +43,7 @@ internal object NotionBudgetSerializer : KSerializer<NotionApiBudget> {
 		val body = buildJsonObject {
 			put(NAME, value.name.toNotionTitle())
 			put(SPENT, value.spent.toNotionNumber())
-			put(MAXIMUM, value.maximum.toNotionNumber())
+			put(MAXIMUM, value.limit.toNotionNumber())
 			value.expireDate?.let { put(EXPIRE_DATE, it.toNotionDate()) }
 		}
 
@@ -58,7 +58,7 @@ internal object NotionBudgetSerializer : KSerializer<NotionApiBudget> {
 				id = json.getString(ID)!!,
 				name = properties.parseNotionString(NAME) ?: "",
 				spent = properties.parseNotionDouble(SPENT),
-				maximum = properties.parseNotionDouble(MAXIMUM),
+				limit = properties.parseNotionDouble(MAXIMUM),
 				expireDate = properties.parseNotionDate(EXPIRE_DATE)?.date,
 				createdAt = json.parseNotionDateTime(CREATED_TIME) ?: DateUtil.now()
 			)
