@@ -4,7 +4,6 @@ import com.adiliqbal.finize.datastore.AppPreferences
 import com.adiliqbal.finize.model.extensions.ID
 import com.adiliqbal.finize.model.filter.TransactionsFilter
 import com.adiliqbal.finize.network.extensions.filter
-import com.adiliqbal.finize.network.extensions.generateKeywords
 import com.adiliqbal.finize.network.extensions.paginate
 import com.adiliqbal.finize.network.model.ApiTransaction
 import com.adiliqbal.finize.network.model.BaseApiTransaction
@@ -46,17 +45,13 @@ internal class FirebaseTransactionService @Inject constructor(
 	override suspend fun createTransaction(transaction: ApiTransaction): ApiTransaction {
 		return firestore.create(
 			transactionsDB(preferences.userId()),
-			transaction.toJson().decodeJson<JsonObject>()!!.apply {
-				plus(ApiTransaction.KEYWORDS to generateKeywords(transaction.name))
-			}
+			transaction.toJson().decodeJson<JsonObject>()!!
 		).let { transaction.copy(id = it) }
 	}
 
 	override suspend fun updateTransaction(transaction: ApiTransaction) = firestore.update(
 		path = transactionDoc(preferences.userId(), transaction.id),
-		doc = transaction.toJson().decodeJson<JsonObject>()!!.apply {
-			plus(ApiTransaction.KEYWORDS to generateKeywords(transaction.name))
-		}
+		doc = transaction.toJson().decodeJson<JsonObject>()!!
 	)
 
 	override suspend fun deleteTransaction(id: ID) =

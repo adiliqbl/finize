@@ -9,6 +9,7 @@ android {
 
 dependencies {
 	implementation(project(":model"))
+	implementation(project(":common"))
 	implementation(project(":database"))
 	implementation(project(":datastore"))
 	implementation(project(":network"))

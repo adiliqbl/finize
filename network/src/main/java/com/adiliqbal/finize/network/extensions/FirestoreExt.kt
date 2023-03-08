@@ -34,13 +34,3 @@ internal inline fun <reified T : Any> DocumentReference.listen(
 		onEvent(value?.toObject(T::class.java))
 	}
 }
-
-internal fun generateKeywords(text: String): List<String> {
-	val keywords = mutableListOf<String>()
-	for (i in text.indices) {
-		for (j in (i+1)..text.length) {
-			keywords.add(text.slice(i until j))
-		}
-	}
-	return keywords
-}
