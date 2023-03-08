@@ -39,19 +39,19 @@ internal fun CollectionReference.filter(filter: TransactionsFilter?) = apply {
 		}
 
 		if (!accountTo.isNullOrEmpty() && accountTo == accountFrom) {
-			whereEqualTo(ApiTransaction.FROM_ACCOUNT, accountTo)
-			whereEqualTo(ApiTransaction.TO_ACCOUNT, accountTo)
+			whereEqualTo(ApiTransaction.ACCOUNT_FROM, accountTo)
+			whereEqualTo(ApiTransaction.ACCOUNT_TO, accountTo)
 		} else if (!accountTo.isNullOrEmpty() && !accountFrom.isNullOrEmpty()) {
-			whereEqualTo(ApiTransaction.FROM_ACCOUNT, accountFrom)
-			whereEqualTo(ApiTransaction.TO_ACCOUNT, accountTo)
+			whereEqualTo(ApiTransaction.ACCOUNT_FROM, accountFrom)
+			whereEqualTo(ApiTransaction.ACCOUNT_TO, accountTo)
 		} else if (!accountTo.isNullOrEmpty() && accountFrom.isNullOrEmpty()) {
-			whereEqualTo(ApiTransaction.TO_ACCOUNT, accountTo)
+			whereEqualTo(ApiTransaction.ACCOUNT_TO, accountTo)
 		} else if (!accountFrom.isNullOrEmpty() && accountTo.isNullOrEmpty()) {
-			whereEqualTo(ApiTransaction.FROM_ACCOUNT, accountFrom)
+			whereEqualTo(ApiTransaction.ACCOUNT_FROM, accountFrom)
 		}
 
 		if (budget != null) whereEqualTo(ApiTransaction.BUDGET, budget)
-		if (category != null) category?.forEach { whereArrayContains(ApiTransaction.CATEGORY, it) }
+		if (categories != null) categories?.forEach { whereArrayContains(ApiTransaction.CATEGORIES, it) }
 
 		if (!name.isNullOrEmpty()) whereArrayContains(ApiTransaction.KEYWORDS, name!!)
 	}

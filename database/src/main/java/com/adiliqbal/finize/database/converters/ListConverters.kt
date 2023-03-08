@@ -4,7 +4,7 @@ import androidx.room.TypeConverter
 import com.adiliqbal.finize.database.util.AppJson.decodeJson
 import com.adiliqbal.finize.database.util.AppJson.toJson
 
-class ListConverters {
+internal class ListConverters {
 
 	@TypeConverter
 	fun toStringList(value: String?): List<String>? = value?.decodeJson<List<String>>()

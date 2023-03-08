@@ -1,8 +1,7 @@
 package com.adiliqbal.finize.model
 
-import java.util.Currency
-import java.util.Locale
+import java.util.*
 
 data class Profile(
-	val currency: Currency = Currency.getInstance(Locale.getDefault())
+	val currency: Currency
 )

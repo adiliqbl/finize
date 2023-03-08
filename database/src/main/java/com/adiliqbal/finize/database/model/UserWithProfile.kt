@@ -6,9 +6,10 @@ import androidx.room.PrimaryKey
 import com.adiliqbal.finize.model.extensions.ID
 
 @Entity(tableName = "users")
-data class UserWithSettingsEntity(
+data class UserWithProfile(
 	@PrimaryKey override val id: ID,
 	val name: String,
+	val email: String,
 	val image: String? = null,
-	@Embedded(prefix = "settings_") val settings: SettingsEntity
+	@Embedded(prefix = "profile_") val profile: ProfileEntity
 ) : BaseEntity

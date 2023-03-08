@@ -23,7 +23,7 @@ internal class UserDaoTest : BaseDatabaseTest() {
 
 		val data = db.userDao().get(user.id).first()
 		assertEquals(user.id, data?.id)
-		assertEquals(user.settings.currency, data?.settings?.currency)
+		assertEquals(user.profile.currency, data?.profile?.currency)
 	}
 
 	@Test
@@ -32,14 +32,15 @@ internal class UserDaoTest : BaseDatabaseTest() {
 
 		var data = db.userDao().get(user.id).first()
 		assertEquals(user.name, data?.name)
-		assertEquals(user.settings.currency, data?.settings?.currency)
+		assertEquals(user.profile.currency, data?.profile?.currency)
 
-		db.userDao().update(UserEntity(user.id, "New Name", "image"))
+		db.userDao().update(UserEntity(user.id, "New Name", "email", "image"))
 
 		data = db.userDao().get(user.id).first()
 		assertEquals("New Name", data?.name)
+		assertEquals("email", data?.email)
 		assertEquals("image", data?.image)
-		assertEquals(user.settings.currency, data?.settings?.currency)
+		assertEquals(user.profile.currency, data?.profile?.currency)
 	}
 
 	@Test

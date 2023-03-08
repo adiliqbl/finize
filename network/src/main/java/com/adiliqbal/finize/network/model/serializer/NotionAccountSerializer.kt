@@ -2,10 +2,8 @@ package com.adiliqbal.finize.network.model.serializer
 
 import com.adiliqbal.finize.common.util.CurrencyUtil
 import com.adiliqbal.finize.common.util.DateUtil
-import com.adiliqbal.finize.common.util.date
-import com.adiliqbal.finize.model.enums.accountToType
+import com.adiliqbal.finize.model.enums.toAccountType
 import com.adiliqbal.finize.network.extensions.getString
-import com.adiliqbal.finize.network.extensions.parseNotionDate
 import com.adiliqbal.finize.network.extensions.parseNotionDateTime
 import com.adiliqbal.finize.network.extensions.parseNotionDouble
 import com.adiliqbal.finize.network.extensions.parseNotionRelation
@@ -36,7 +34,6 @@ internal object NotionAccountSerializer : KSerializer<NotionApiAccount> {
 	private const val BALANCE = "Current Balance"
 	private const val CURRENCY = "Currency"
 	private const val BUDGET = "Budget"
-	private const val BUDGET_EXPIRE_DATE = "Budget Expire At"
 	private const val TYPE = "Type"
 	private const val CREATED_TIME = "created_time"
 
@@ -62,10 +59,9 @@ internal object NotionAccountSerializer : KSerializer<NotionApiAccount> {
 				balance = properties.parseNotionDouble(BALANCE),
 				budget = properties.parseNotionRelation(BUDGET)
 					?.takeIf { it.isNotEmpty() }?.get(0),
-				budgetExpireDate = properties.parseNotionDate(BUDGET_EXPIRE_DATE)?.date,
 				currency = properties.parseNotionString(CURRENCY)
 					?: CurrencyUtil.default.currencyCode,
-				type = properties.parseNotionString(TYPE).accountToType(),
+				type = properties.parseNotionString(TYPE).toAccountType(),
 				createdAt = json.parseNotionDateTime(CREATED_TIME) ?: DateUtil.now()
 			)
 		)

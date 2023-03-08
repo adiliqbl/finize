@@ -1,9 +1,8 @@
 package com.adiliqbal.finize.model.enums
 
 enum class AccountType(val value: String) {
-	INVESTMENT("investment"),
-	DEPOSIT("deposit"),
-	SAVING("saving");
+	INVESTMENT("investment"), DEPOSIT("deposit");
 }
 
-fun String?.accountToType() = this?.let { AccountType.valueOf(it) } ?: AccountType.DEPOSIT
+fun String?.toAccountType() =
+	this?.let { str -> AccountType.values().find { it.value === str } } ?: AccountType.DEPOSIT

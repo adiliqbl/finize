@@ -2,40 +2,54 @@ package com.adiliqbal.finize.database.model.fake
 
 import com.adiliqbal.finize.database.model.AccountEntity
 import com.adiliqbal.finize.database.model.BudgetEntity
-import com.adiliqbal.finize.database.model.SettingsEntity
+import com.adiliqbal.finize.database.model.ProfileEntity
 import com.adiliqbal.finize.database.model.TransactionEntity
-import com.adiliqbal.finize.database.model.UserWithSettingsEntity
-import com.adiliqbal.finize.model.enums.TransactionType
+import com.adiliqbal.finize.database.model.UserWithProfile
+import com.adiliqbal.finize.model.Money
+import com.adiliqbal.finize.model.enums.AccountType
 import com.adiliqbal.finize.model.extensions.ID
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import java.util.*
 
 object FakeEntity {
 
 	fun user(id: ID = "userId", name: String = "name") =
-		UserWithSettingsEntity(id = id, name = name, settings = SettingsEntity("currency"))
+		UserWithProfile(id = id, name = name, email = "email", profile = ProfileEntity("currency"))
 
-	fun account(id: ID = "accountId") =
-		AccountEntity(id = id, name = "account", startingBalance = 10.0, currentBalance = 50.0)
+	fun account(id: ID = "accountId", budget: ID? = null, type: AccountType = AccountType.DEPOSIT) =
+		AccountEntity(
+			id = id,
+			name = "account",
+			balance = 50.0,
+			budget = budget,
+			type = type,
+			currency = "currency"
+		)
 
 	fun budget(id: ID = "budgetId") =
-		BudgetEntity(id = id, name = "budget", maximum = 30.0)
+		BudgetEntity(id = id, name = "budget", limit = 30.0)
 
 	fun transaction(
 		id: ID = "transactionId",
 		name: String = "transaction",
+		amount: Double = 0.0,
+		categories: List<String> = emptyList(),
 		accountFrom: ID? = null,
 		accountTo: ID? = null,
 		budget: ID? = "budgetId",
-		type: TransactionType = TransactionType.UNKNOWN,
 		date: Instant = Clock.System.now()
 	) = TransactionEntity(
 		id = id,
 		name = name,
+		amount = Money(amount, Currency.getInstance("PKR")),
+		amountTo = null,
+		amountFrom = null,
+		amountLocal = Money(amount, Currency.getInstance("PKR")),
 		accountTo = accountTo,
 		accountFrom = accountFrom,
 		budget = budget,
-		type = type,
+		categories = categories,
 		date = date.toEpochMilliseconds()
 	)
 }

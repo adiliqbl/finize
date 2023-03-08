@@ -1,8 +1,8 @@
 package com.adiliqbal.finize.model
 
-import java.util.Currency
+import java.util.*
 
 data class Money(
-	val amount: BigDecimal,
+	val amount: Double,
 	val currency: Currency
 )

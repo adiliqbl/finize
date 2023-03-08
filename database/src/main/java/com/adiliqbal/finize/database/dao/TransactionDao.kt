@@ -44,9 +44,8 @@ abstract class TransactionDao : BaseDao<TransactionEntity>() {
 				filters.add("accountFrom='$accountFrom'")
 			}
 
-			if (category != null) {
-				filters.add("type LIKE '%'||'${category!!.value}'||'%'")
-			}
+			categories?.forEach { category -> filters.add("categories LIKE '%'||'$category'||'%'") }
+
 			if (budget != null) {
 				filters.add("budget LIKE '%'||'$budget'||'%'")
 			}
@@ -63,10 +62,6 @@ abstract class TransactionDao : BaseDao<TransactionEntity>() {
 
 			if (!name.isNullOrEmpty()) {
 				filters.add("name LIKE '%'||'$name'||'%'")
-			}
-
-			if (!tags.isNullOrEmpty()) {
-				tags!!.forEach { tag -> filters.add("tags LIKE '%'||'$tag'||'%'") }
 			}
 
 			if (filters.isEmpty()) getAll()

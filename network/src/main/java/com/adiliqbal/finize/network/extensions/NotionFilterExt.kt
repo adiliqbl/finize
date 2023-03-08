@@ -42,7 +42,7 @@ internal fun TransactionsFilter.toNotionFilter(): JsonElement? {
 			add(accountFrom!!.toNotionRelationFilter(NotionTransactionSerializer.FROM_ACCOUNT))
 		}
 
-		if (category != null) add(category!!.toNotionMultiselectFilter(NotionTransactionSerializer.CATEGORY))
+		if (categories != null) add(categories!!.toNotionMultiselectFilter(NotionTransactionSerializer.CATEGORIES))
 		if (budget != null) add(budget!!.toNotionRelationFilter(NotionTransactionSerializer.BUDGET))
 
 		if (date != null) {

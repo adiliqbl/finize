@@ -6,8 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.adiliqbal.finize.database.converters.DateConverters
-import com.adiliqbal.finize.database.converters.EnumConverters
 import com.adiliqbal.finize.database.converters.ListConverters
+import com.adiliqbal.finize.database.converters.ObjectConverters
 import com.adiliqbal.finize.database.dao.AccountDao
 import com.adiliqbal.finize.database.dao.BudgetDao
 import com.adiliqbal.finize.database.dao.TransactionDao
@@ -15,12 +15,12 @@ import com.adiliqbal.finize.database.dao.UserDao
 import com.adiliqbal.finize.database.model.AccountEntity
 import com.adiliqbal.finize.database.model.BudgetEntity
 import com.adiliqbal.finize.database.model.TransactionEntity
-import com.adiliqbal.finize.database.model.UserWithSettingsEntity
+import com.adiliqbal.finize.database.model.UserWithProfile
 
 @Database(
 	entities =
 	[
-		UserWithSettingsEntity::class,
+		UserWithProfile::class,
 		AccountEntity::class,
 		BudgetEntity::class,
 		TransactionEntity::class
@@ -28,7 +28,7 @@ import com.adiliqbal.finize.database.model.UserWithSettingsEntity
 	version = 1,
 	autoMigrations = []
 )
-@TypeConverters(DateConverters::class, ListConverters::class, EnumConverters::class)
+@TypeConverters(DateConverters::class, ListConverters::class, ObjectConverters::class)
 internal abstract class AppDatabase : RoomDatabase() {
 
 	companion object {
