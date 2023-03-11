@@ -4,6 +4,7 @@ import com.adiliqbal.finize.network.service.AuthService
 import com.adiliqbal.finize.network.service.firebase.FirebaseAccountService
 import com.adiliqbal.finize.network.service.firebase.FirebaseAuthService
 import com.adiliqbal.finize.network.service.firebase.FirebaseBudgetService
+import com.adiliqbal.finize.network.service.firebase.FirebasePaymentCategoryService
 import com.adiliqbal.finize.network.service.firebase.FirebaseTransactionService
 import com.adiliqbal.finize.network.source.FirestoreService
 import com.adiliqbal.finize.network.source.FirestoreServiceImpl
@@ -55,4 +56,8 @@ internal interface FirebaseModule {
 	@Binds
 	@Singleton
 	fun bindTransactionService(service: FirebaseTransactionService): FirebaseTransactionService
+
+	@Binds
+	@Singleton
+	fun bindPaymentCategoryService(service: FirebasePaymentCategoryService): FirebasePaymentCategoryService
 }

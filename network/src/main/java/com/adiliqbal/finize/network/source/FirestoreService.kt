@@ -11,6 +11,7 @@ internal interface FirestoreService {
 		fun budgetsDB(userId: String) = "user-budgets/${userId}/budgets"
 		fun transactionsDB(userId: String) = "user-transactions/${userId}/transactions"
 		fun transactionTemplatesDB(userId: String) = "user-transactions/${userId}/templates"
+		fun paymentCategoriesDB() = "finize-transaction-categories"
 	}
 
 	suspend fun collection(path: String): CollectionReference

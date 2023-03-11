@@ -5,12 +5,14 @@ import com.adiliqbal.finize.model.enums.AuthType
 import com.adiliqbal.finize.network.service.AccountService
 import com.adiliqbal.finize.network.service.AuthService
 import com.adiliqbal.finize.network.service.BudgetService
+import com.adiliqbal.finize.network.service.PaymentCategoryService
 import com.adiliqbal.finize.network.service.TransactionService
 import com.adiliqbal.finize.network.service.TransactionTemplateService
 import com.adiliqbal.finize.network.service.UserService
 import com.adiliqbal.finize.network.service.firebase.FirebaseAccountService
 import com.adiliqbal.finize.network.service.firebase.FirebaseAuthService
 import com.adiliqbal.finize.network.service.firebase.FirebaseBudgetService
+import com.adiliqbal.finize.network.service.firebase.FirebasePaymentCategoryService
 import com.adiliqbal.finize.network.service.firebase.FirebaseTransactionService
 import com.adiliqbal.finize.network.service.firebase.FirebaseTransactionTemplateService
 import com.adiliqbal.finize.network.service.firebase.FirebaseUserService
@@ -67,5 +69,9 @@ internal object ServiceModule {
 		@Binds
 		@Singleton
 		fun bindTransactionTemplateService(service: FirebaseTransactionTemplateService): TransactionTemplateService
+
+		@Binds
+		@Singleton
+		fun bindPaymentCategoryService(service: FirebasePaymentCategoryService): PaymentCategoryService
 	}
 }
