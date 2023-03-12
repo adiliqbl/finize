@@ -27,14 +27,16 @@ internal fun CollectionReference.paginate(query: PaginationQuery) = apply {
 
 internal fun CollectionReference.filter(filter: TransactionsFilter?) = apply {
 	filter?.run {
-		if (date != null) {
-			whereEqualTo(ApiTransaction.DATE, date!!.toString())
-		} else if (dateFrom != null || dateTo != null) {
-			if (dateFrom != null) {
-				whereGreaterThanOrEqualTo(ApiTransaction.DATE, dateFrom!!.toString())
-			}
-			if (dateTo != null) {
-				whereLessThanOrEqualTo(ApiTransaction.DATE, dateTo!!.toString())
+		if (dateFrom != null || dateTo != null) {
+			if (dateFrom == dateTo) {
+				whereEqualTo(ApiTransaction.DATE, dateTo!!.toString())
+			} else {
+				if (dateFrom != null) {
+					whereGreaterThanOrEqualTo(ApiTransaction.DATE, dateFrom!!.toString())
+				}
+				if (dateTo != null) {
+					whereLessThanOrEqualTo(ApiTransaction.DATE, dateTo!!.toString())
+				}
 			}
 		}
 
@@ -51,7 +53,12 @@ internal fun CollectionReference.filter(filter: TransactionsFilter?) = apply {
 		}
 
 		if (budget != null) whereEqualTo(ApiTransaction.BUDGET, budget)
-		if (categories != null) categories?.forEach { whereArrayContains(ApiTransaction.CATEGORIES, it) }
+		if (categories != null) categories?.forEach {
+			whereArrayContains(
+				ApiTransaction.CATEGORIES,
+				it
+			)
+		}
 
 		if (!name.isNullOrEmpty()) whereArrayContains(ApiTransaction.KEYWORDS, name!!)
 	}

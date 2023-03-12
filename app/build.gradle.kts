@@ -1,3 +1,5 @@
+import Libraries.Firebase.implementFirebase
+
 plugins {
 	id("finize.application")
 	id("finize.application-compose")
@@ -15,6 +17,7 @@ android {
 }
 
 dependencies {
+	implementation(project(":common"))
 	implementation(project(":data"))
 	implementation(project(":database"))
 	implementation(project(":datastore"))
@@ -29,4 +32,7 @@ dependencies {
 
 	implementation(Libraries.Kotlin.Core)
 	implementation(Libraries.UI.Splashscreen)
+
+	implementFirebase()
+	implementation(Libraries.Firebase.Crashlytics)
 }

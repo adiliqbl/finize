@@ -42,28 +42,34 @@ internal fun TransactionsFilter.toNotionFilter(): JsonElement? {
 			add(accountFrom!!.toNotionRelationFilter(NotionTransactionSerializer.FROM_ACCOUNT))
 		}
 
-		if (categories != null) add(categories!!.toNotionMultiselectFilter(NotionTransactionSerializer.CATEGORIES))
+		if (categories != null) add(
+			categories!!.toNotionMultiselectFilter(
+				NotionTransactionSerializer.CATEGORIES
+			)
+		)
 		if (budget != null) add(budget!!.toNotionRelationFilter(NotionTransactionSerializer.BUDGET))
 
-		if (date != null) {
-			add(date!!.toNotionDateFilter(NotionTransactionSerializer.DATE))
-		} else if (dateFrom != null && dateTo != null) {
-			add(buildJsonObject {
-				put("and", buildJsonArray {
-					add(
-						dateFrom!!.toNotionDateFilter(
-							NotionTransactionSerializer.DATE,
-							NotionDateFilter.FROM
+		if (dateFrom != null && dateTo != null) {
+			if (dateTo == dateFrom) {
+				add(dateTo!!.toNotionDateFilter(NotionTransactionSerializer.DATE))
+			} else {
+				add(buildJsonObject {
+					put("and", buildJsonArray {
+						add(
+							dateFrom!!.toNotionDateFilter(
+								NotionTransactionSerializer.DATE,
+								NotionDateFilter.FROM
+							)
 						)
-					)
-					add(
-						dateTo!!.toNotionDateFilter(
-							NotionTransactionSerializer.DATE,
-							NotionDateFilter.TO
+						add(
+							dateTo!!.toNotionDateFilter(
+								NotionTransactionSerializer.DATE,
+								NotionDateFilter.TO
+							)
 						)
-					)
+					})
 				})
-			})
+			}
 		} else if (dateFrom != null) {
 			add(
 				dateFrom!!.toNotionDateFilter(

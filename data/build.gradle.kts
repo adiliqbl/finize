@@ -17,5 +17,7 @@ dependencies {
 	implementation(Libraries.Kotlin.Core)
 	implementation(Libraries.Kotlin.Coroutines)
 
+	implementation(Libraries.UI.Paging)
+
 	testImplementation(project(":common:testing"))
 }

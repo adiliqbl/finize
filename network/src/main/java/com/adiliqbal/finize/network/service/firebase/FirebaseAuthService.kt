@@ -17,6 +17,15 @@ internal class FirebaseAuthService @Inject constructor(
 	private val auth: FirebaseAuth
 ) : AuthService {
 
+	override suspend fun getUser() = auth.currentUser?.let {
+		ApiUser(
+			id = it.uid,
+			name = it.displayName ?: "",
+			email = it.email ?: "",
+			image = it.photoUrl?.path
+		)
+	}
+
 	override suspend fun register(user: ApiUser) {
 		service.create(usersDB(user.id), user.toJson().decodeJson<JsonObject>()!!)
 	}
