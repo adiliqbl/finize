@@ -32,7 +32,7 @@ class NotionBudgetSerializerTest {
 						"function": "sum"
 					}
 				},
-				"Maximum": {
+				"Limit": {
 					"id": "max",
 					"type": "number",
 					"number": 50
@@ -80,7 +80,6 @@ class NotionBudgetSerializerTest {
 		val budget = json.decodeJson<NotionApiBudget>()
 		assertEquals("budget_id", budget?.id)
 		assertEquals("Food", budget?.name)
-		assertEquals(10.0, budget?.spent)
 		assertEquals(50.0, budget?.limit)
 	}
 
@@ -90,7 +89,6 @@ class NotionBudgetSerializerTest {
 			ApiBudget(
 				id = "id",
 				name = "name",
-				spent = 10.0,
 				limit = 50.0
 			)
 		)

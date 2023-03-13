@@ -7,6 +7,7 @@ import com.adiliqbal.finize.network.extensions.getString
 import com.adiliqbal.finize.network.extensions.parseNotionDateTime
 import com.adiliqbal.finize.network.extensions.parseNotionDouble
 import com.adiliqbal.finize.network.extensions.parseNotionRelation
+import com.adiliqbal.finize.network.extensions.parseNotionSelect
 import com.adiliqbal.finize.network.extensions.parseNotionString
 import com.adiliqbal.finize.network.extensions.toNotionNumber
 import com.adiliqbal.finize.network.extensions.toNotionTitle
@@ -59,9 +60,9 @@ internal object NotionAccountSerializer : KSerializer<NotionApiAccount> {
 				balance = properties.parseNotionDouble(BALANCE),
 				budget = properties.parseNotionRelation(BUDGET)
 					?.takeIf { it.isNotEmpty() }?.get(0),
-				currency = properties.parseNotionString(CURRENCY)
+				currency = properties.parseNotionSelect(CURRENCY)
 					?: CurrencyUtil.default.currencyCode,
-				type = properties.parseNotionString(TYPE).toAccountType(),
+				type = properties.parseNotionSelect(TYPE).toAccountType(),
 				createdAt = json.parseNotionDateTime(CREATED_TIME) ?: DateUtil.now()
 			)
 		)

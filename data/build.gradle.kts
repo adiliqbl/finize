@@ -1,6 +1,7 @@
 plugins {
 	id("finize.module")
 	id("plugins.hilt")
+	id("plugins.serialization")
 }
 
 android {

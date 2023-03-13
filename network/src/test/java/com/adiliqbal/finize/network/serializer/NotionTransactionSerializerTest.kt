@@ -1,5 +1,6 @@
 package com.adiliqbal.finize.network.serializer
 
+import com.adiliqbal.finize.network.model.ApiMoney
 import com.adiliqbal.finize.network.model.ApiTransaction
 import com.adiliqbal.finize.network.model.NotionApiTransaction
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
@@ -25,7 +26,7 @@ class NotionTransactionSerializerTest {
 			},
 			"archived": false,
 			"properties": {
-				"Tags": {
+				"Categories": {
 					"id": "",
 					"type": "multi_select",
 					"multi_select": [
@@ -59,19 +60,53 @@ class NotionTransactionSerializerTest {
 						}
 					]
 				},
-				"Type": {
-					"id": "",
-					"type": "select",
-					"select": {
-						"id": "expense_id",
-						"name": "Expense",
-						"color": "red"
-					}
-				},
 				"Amount": {
 					"id": "",
 					"type": "number",
 					"number": 40
+				},
+				"Currency": {
+					"id": "",
+					"type": "text",
+					"text": {
+						"content": "CURR",
+						"link": null
+					}
+				},
+				"Amount To": {
+					"id": "",
+					"type": "number"
+				},
+				"Currency To": {
+					"id": "",
+					"type": "text",
+					"text": {}
+				},
+				"Amount From": {
+					"id": "",
+					"type": "number",
+					"number": 40
+				},
+				"Currency From": {
+					"id": "",
+					"type": "text",
+					"text": {
+						"content": "CURR",
+						"link": null
+					}
+				},
+				"Amount Local": {
+					"id": "",
+					"type": "number",
+					"number": 40
+				},
+				"Currency Local": {
+					"id": "",
+					"type": "text",
+					"text": {
+						"content": "CURR",
+						"link": null
+					}
 				},
 				"From Account": {
 					"id": "",
@@ -139,8 +174,15 @@ class NotionTransactionSerializerTest {
 		assertEquals("transaction_id", transaction?.id)
 		assertEquals("Food", transaction?.name)
 
-		assertEquals("Expense", transaction?.type?.value)
-		assertEquals(1, transaction?.tags?.size)
+		assertEquals(40.0, transaction?.amount?.amount)
+		assertEquals("CURR", transaction?.amount?.currency)
+		assertNull(transaction?.amountTo)
+		assertEquals(40.0, transaction?.amountFrom?.amount)
+		assertEquals("CURR", transaction?.amountFrom?.currency)
+		assertEquals(40.0, transaction?.amountLocal?.amount)
+		assertEquals("CURR", transaction?.amountLocal?.currency)
+
+		assertEquals(1, transaction?.categories?.size)
 
 		assertEquals("from_account_id", transaction?.accountFrom)
 		assertNull(transaction?.accountTo)
@@ -158,7 +200,8 @@ class NotionTransactionSerializerTest {
 				accountTo = "accountTo",
 				accountFrom = "accountFrom",
 				budget = "budgetId",
-				tags = listOf("one", "two")
+				categories = listOf("one", "two"),
+				amount = ApiMoney(10.0, "CURR")
 			)
 		)
 		transaction.toJson()

@@ -1,5 +1,6 @@
 package com.adiliqbal.finize.network.serializer
 
+import com.adiliqbal.finize.model.enums.AccountType
 import com.adiliqbal.finize.network.model.ApiAccount
 import com.adiliqbal.finize.network.model.NotionApiAccount
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
@@ -55,6 +56,24 @@ class NotionAccountSerializerTest {
 					"type": "number",
 					"number": null
 				},
+				"Currency": {
+					"id": "",
+					"type": "select",
+					"select": {
+						"id": "currency_id",
+						"name": "CURR",
+						"color": "red"
+					}
+				},
+				"Type": {
+					"id": "",
+					"type": "select",
+					"select": {
+						"id": "type_id",
+						"name": "INVESTMENT",
+						"color": "red"
+					}
+				},
 				"Name": {
 					"id": "title",
 					"type": "title",
@@ -85,8 +104,9 @@ class NotionAccountSerializerTest {
 		val account = json.decodeJson<NotionApiAccount>()
 		assertEquals("account_id", account?.id)
 		assertEquals("Account", account?.name)
-		assertEquals(10.0, account?.currentBalance)
-		assertEquals(0.0, account?.startingBalance)
+		assertEquals("CURR", account?.currency)
+		assertEquals(AccountType.INVESTMENT, account?.type)
+		assertEquals(10.0, account?.balance)
 		assertEquals("2023-04-12T09:01:00Z", account?.createdAt?.toString())
 	}
 
@@ -96,8 +116,9 @@ class NotionAccountSerializerTest {
 			ApiAccount(
 				id = "id",
 				name = "name",
-				currentBalance = 10.0,
-				startingBalance = 50.0
+				balance = 50.0,
+				currency = "CURR",
+				type = AccountType.DEPOSIT
 			)
 		)
 		account.toJson()
