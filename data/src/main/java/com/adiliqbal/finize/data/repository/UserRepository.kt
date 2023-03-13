@@ -10,5 +10,5 @@ interface UserRepository {
 
 	suspend fun updateUser(user: User)
 
-	suspend fun updateProfile(user: Profile)
+	suspend fun updateProfile(profile: Profile)
 }

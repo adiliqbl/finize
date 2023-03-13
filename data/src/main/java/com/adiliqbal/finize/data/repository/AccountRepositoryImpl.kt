@@ -6,7 +6,7 @@ import com.adiliqbal.finize.data.conversion.toApi
 import com.adiliqbal.finize.data.conversion.toEntity
 import com.adiliqbal.finize.data.conversion.toModel
 import com.adiliqbal.finize.data.extensions.launchSafeApi
-import com.adiliqbal.finize.data.extensions.withoutExceptions
+import com.adiliqbal.finize.data.extensions.withExceptions
 import com.adiliqbal.finize.database.dao.AccountDao
 import com.adiliqbal.finize.model.Account
 import com.adiliqbal.finize.model.extensions.ID
@@ -35,11 +35,10 @@ internal class AccountRepositoryImpl @Inject constructor(
 	}
 
 	override fun getAccount(id: ID): Flow<Account> =
-		accountDao.get(id).withoutExceptions().map { it.toModel() }
+		accountDao.get(id).withExceptions().map { it.toModel() }
 
 	override suspend fun createAccount(account: Account): Account {
-		val newAccount = accountService.createAccount(account.toApi())
-		return newAccount.toEntity().let {
+		return accountService.createAccount(account.toApi()).toEntity().let {
 			accountDao.upsert(it)
 			it.toModel()
 		}

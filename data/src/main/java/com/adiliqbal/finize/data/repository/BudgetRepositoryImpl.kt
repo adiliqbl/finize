@@ -6,7 +6,7 @@ import com.adiliqbal.finize.data.conversion.toApi
 import com.adiliqbal.finize.data.conversion.toEntity
 import com.adiliqbal.finize.data.conversion.toModel
 import com.adiliqbal.finize.data.extensions.launchSafeApi
-import com.adiliqbal.finize.data.extensions.withoutExceptions
+import com.adiliqbal.finize.data.extensions.withExceptions
 import com.adiliqbal.finize.database.dao.BudgetDao
 import com.adiliqbal.finize.model.Budget
 import com.adiliqbal.finize.model.extensions.ID
@@ -36,11 +36,10 @@ internal class BudgetRepositoryImpl @Inject constructor(
 	}
 
 	override fun getBudget(id: ID): Flow<Budget> =
-		budgetDao.get(id).withoutExceptions().map { it.toModel() }
+		budgetDao.get(id).withExceptions().map { it.toModel() }
 
 	override suspend fun createBudget(budget: Budget): Budget {
-		val newBudget = budgetService.createBudget(budget.toApi())
-		return newBudget.toEntity().let {
+		return budgetService.createBudget(budget.toApi()).toEntity().let {
 			budgetDao.upsert(it)
 			it.toModel()
 		}

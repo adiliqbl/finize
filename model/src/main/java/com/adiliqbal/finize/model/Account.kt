@@ -6,7 +6,7 @@ import kotlinx.datetime.Instant
 import java.util.*
 
 data class Account(
-	val id: ID,
+	val id: ID = "",
 	val name: String,
 	val balance: Double = 0.0,
 	val type: AccountType,

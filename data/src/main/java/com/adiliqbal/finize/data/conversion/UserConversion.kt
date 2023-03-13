@@ -7,13 +7,14 @@ import com.adiliqbal.finize.model.Profile
 import com.adiliqbal.finize.model.User
 import com.adiliqbal.finize.network.model.ApiProfile
 import com.adiliqbal.finize.network.model.ApiUser
+import com.adiliqbal.finize.network.model.BaseApiUser
 
 internal fun User.toApi() = ApiUser(
 	id, name, email, image, profile = profile.toApi()
 )
 
-internal fun ApiUser.toEntity() = UserWithProfile(
-	id, name, email, image,
+internal fun BaseApiUser.toEntity() = UserWithProfile(
+	id, name, email ?: "", image,
 	profile = profile?.toEntity() ?: ProfileEntity(currency = CurrencyUtil.default.currencyCode)
 )
 

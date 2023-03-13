@@ -28,7 +28,7 @@ abstract class TransactionDao : BaseDao<TransactionEntity>("transactions") {
 
 	@Transaction
 	@Query("SELECT * FROM transactions WHERE isTemplate = 1 ORDER BY date DESC")
-	abstract fun getTemplates(): List<TransactionEntity>
+	abstract fun getTemplates(): Flow<List<TransactionEntity>>
 
 	open fun filter(filter: TransactionsFilter): PagingSource<Int, TransactionEntity> =
 		with(filter) {

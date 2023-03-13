@@ -18,6 +18,6 @@ internal fun CoroutineScope.launchSafeApi(logger: Logger? = null, block: suspend
 		}
 	}
 
-internal fun <T : Any> Flow<T?>.withoutExceptions() = map {
+internal fun <T : Any> Flow<T?>.withExceptions() = map {
 	it ?: throw NotFoundException(message = "Not Found")
 }

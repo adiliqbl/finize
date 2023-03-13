@@ -21,7 +21,6 @@ interface BaseApiTransaction {
 	val note: String?
 	val categories: List<String>
 	val date: Instant
-	val isTemplate: Boolean
 }
 
 @Serializable
@@ -38,8 +37,7 @@ data class ApiTransaction(
 	@SerialName(TASK) override val task: ID? = null,
 	@SerialName(NOTE) override val note: String? = null,
 	@SerialName(CATEGORIES) override val categories: List<String>,
-	@SerialName(DATE) override val date: Instant = DateUtil.now(),
-	override val isTemplate: Boolean = false
+	@SerialName(DATE) override val date: Instant = DateUtil.now()
 ) : BaseApiTransaction {
 
 	companion object Keys {

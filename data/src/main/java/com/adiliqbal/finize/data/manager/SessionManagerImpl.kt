@@ -14,9 +14,6 @@ constructor(
 	override suspend fun login(credentials: AuthCredentials) {
 	}
 
-	override suspend fun onResume(credentials: AuthCredentials) {
-	}
-
 	override suspend fun logout(context: Context) {
 		dataCleaner.clean()
 		workManager.cancelAll()

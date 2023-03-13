@@ -34,8 +34,7 @@ internal fun BaseApiTransaction.toEntity() = TransactionEntity(
 	task = task,
 	note = note,
 	categories = categories,
-	date = date,
-	isTemplate = isTemplate
+	date = date
 )
 
 internal fun TransactionEntity.toModel() = Transaction(

@@ -4,7 +4,7 @@ import com.adiliqbal.finize.model.extensions.ID
 import kotlinx.datetime.Instant
 
 data class Transaction(
-	val id: ID,
+	val id: ID = "",
 	val name: String,
 	val amount: Money,
 	val amountTo: Money? = null,

@@ -1,6 +1,7 @@
 package com.adiliqbal.finize.network.service.firebase
 
 import com.adiliqbal.finize.network.model.ApiUser
+import com.adiliqbal.finize.network.model.BaseApiUser
 import com.adiliqbal.finize.network.service.AuthService
 import com.adiliqbal.finize.network.source.FirestoreService
 import com.adiliqbal.finize.network.source.FirestoreService.Companion.usersDB
@@ -26,8 +27,9 @@ internal class FirebaseAuthService @Inject constructor(
 		)
 	}
 
-	override suspend fun register(user: ApiUser) {
+	override suspend fun register(user: ApiUser): BaseApiUser {
 		service.create(usersDB(user.id), user.toJson().decodeJson<JsonObject>()!!)
+		return user
 	}
 
 	override suspend fun logout() = auth.signOut()
