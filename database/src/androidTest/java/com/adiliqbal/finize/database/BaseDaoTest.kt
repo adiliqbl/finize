@@ -76,8 +76,13 @@ internal class BaseDaoTest : BaseDatabaseTest() {
 	@Test
 	fun delete() = runTest {
 		db.userDao().insert(FakeEntity.user("one"))
+		db.userDao().insert(FakeEntity.user("two"))
 		assertNotNull(db.userDao().get("one").firstOrNull())
+		assertNotNull(db.userDao().get("two").firstOrNull())
+
 		db.userDao().delete(FakeEntity.user("one"))
+		db.userDao().delete("two")
 		assertNull(db.userDao().get("one").firstOrNull())
+		assertNull(db.userDao().get("two").firstOrNull())
 	}
 }

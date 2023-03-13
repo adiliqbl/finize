@@ -9,6 +9,7 @@ import com.adiliqbal.finize.model.User
 import com.adiliqbal.finize.model.enums.AccountType
 import com.adiliqbal.finize.model.extensions.ID
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import java.util.*
 
 object FakeModel {
@@ -25,10 +26,12 @@ object FakeModel {
 		name = "account",
 		balance = 50.0,
 		currency = Currency.getInstance("PKR"),
-		type = type
+		type = type,
+		createdAt = Instant.DISTANT_FUTURE
 	)
 
-	fun budget(id: ID = "budgetId") = Budget(id = id, name = "budget", limit = 30.0)
+	fun budget(id: ID = "budgetId") =
+		Budget(id = id, name = "budget", limit = 30.0, createdAt = Instant.DISTANT_FUTURE)
 
 	fun transaction(
 		id: ID = "transactionId",

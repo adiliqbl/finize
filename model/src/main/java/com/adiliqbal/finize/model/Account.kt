@@ -12,5 +12,5 @@ data class Account(
 	val type: AccountType,
 	val currency: Currency,
 	val budget: Budget? = null,
-	val createdAt: Instant? = null
+	val createdAt: Instant
 )

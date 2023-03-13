@@ -16,6 +16,8 @@ interface TransactionService {
 		filter: TransactionsFilter? = null
 	): PaginatedList<BaseApiTransaction>
 
+	suspend fun getTransaction(id: ID): BaseApiTransaction
+
 	suspend fun createTransaction(transaction: ApiTransaction): BaseApiTransaction
 
 	suspend fun updateTransaction(transaction: ApiTransaction)

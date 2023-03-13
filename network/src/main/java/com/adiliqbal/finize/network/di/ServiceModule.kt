@@ -1,7 +1,7 @@
 package com.adiliqbal.finize.network.di
 
 import com.adiliqbal.finize.datastore.AppPreferences
-import com.adiliqbal.finize.model.enums.AuthType
+import com.adiliqbal.finize.model.enums.DataProvider
 import com.adiliqbal.finize.network.service.AccountService
 import com.adiliqbal.finize.network.service.AuthService
 import com.adiliqbal.finize.network.service.BudgetService
@@ -36,7 +36,7 @@ internal object ServiceModule {
 		preferences: AppPreferences,
 		notion: NotionAccountService,
 		firebase: FirebaseAccountService,
-	): AccountService = if (preferences.authType() == AuthType.NOTION) notion else firebase
+	): AccountService = if (preferences.provider() == DataProvider.NOTION) notion else firebase
 
 	@Provides
 	@Singleton
@@ -44,7 +44,7 @@ internal object ServiceModule {
 		preferences: AppPreferences,
 		notion: NotionBudgetService,
 		firebase: FirebaseBudgetService,
-	): BudgetService = if (preferences.authType() == AuthType.NOTION) notion else firebase
+	): BudgetService = if (preferences.provider() == DataProvider.NOTION) notion else firebase
 
 	@Provides
 	@Singleton
@@ -52,7 +52,7 @@ internal object ServiceModule {
 		preferences: AppPreferences,
 		notion: NotionTransactionService,
 		firebase: FirebaseTransactionService,
-	): TransactionService = if (preferences.authType() == AuthType.NOTION) notion else firebase
+	): TransactionService = if (preferences.provider() == DataProvider.NOTION) notion else firebase
 
 	@Module
 	@InstallIn(SingletonComponent::class)

@@ -2,15 +2,14 @@ package com.adiliqbal.finize.database.model.fake
 
 import com.adiliqbal.finize.database.model.AccountEntity
 import com.adiliqbal.finize.database.model.BudgetEntity
+import com.adiliqbal.finize.database.model.MoneyEntity
 import com.adiliqbal.finize.database.model.ProfileEntity
 import com.adiliqbal.finize.database.model.TransactionEntity
 import com.adiliqbal.finize.database.model.UserWithProfile
-import com.adiliqbal.finize.model.Money
 import com.adiliqbal.finize.model.enums.AccountType
 import com.adiliqbal.finize.model.extensions.ID
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import java.util.*
 
 object FakeEntity {
 
@@ -24,11 +23,12 @@ object FakeEntity {
 			balance = 50.0,
 			budget = budget,
 			type = type,
-			currency = "currency"
+			currency = "currency",
+			createdAt = Instant.DISTANT_FUTURE
 		)
 
 	fun budget(id: ID = "budgetId") =
-		BudgetEntity(id = id, name = "budget", limit = 30.0)
+		BudgetEntity(id = id, name = "budget", limit = 30.0, createdAt = Instant.DISTANT_FUTURE)
 
 	fun transaction(
 		id: ID = "transactionId",
@@ -42,14 +42,14 @@ object FakeEntity {
 	) = TransactionEntity(
 		id = id,
 		name = name,
-		amount = Money(amount, Currency.getInstance("PKR")),
+		amount = MoneyEntity(amount, "PKR"),
 		amountTo = null,
 		amountFrom = null,
-		amountLocal = Money(amount, Currency.getInstance("PKR")),
+		amountLocal = MoneyEntity(amount, "PKR"),
 		accountTo = accountTo,
 		accountFrom = accountFrom,
 		budget = budget,
 		categories = categories,
-		date = date.toEpochMilliseconds()
+		date = date
 	)
 }

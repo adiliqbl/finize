@@ -42,6 +42,11 @@ internal class FirebaseTransactionService @Inject constructor(
 			}
 	}
 
+	override suspend fun getTransaction(id: ID): BaseApiTransaction {
+		return firestore.document(transactionDoc(preferences.userId(), id)).get()
+			.result.toObject(ApiTransaction::class.java)!!
+	}
+
 	override suspend fun createTransaction(transaction: ApiTransaction): ApiTransaction {
 		return firestore.create(
 			transactionsDB(preferences.userId()),

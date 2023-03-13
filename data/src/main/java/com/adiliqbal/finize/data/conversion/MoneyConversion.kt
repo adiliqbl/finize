@@ -5,8 +5,8 @@ import com.adiliqbal.finize.database.model.MoneyEntity
 import com.adiliqbal.finize.model.Money
 import com.adiliqbal.finize.network.model.ApiMoney
 
+internal fun Money.toApi() = ApiMoney(amount, currency.currencyCode)
+
 internal fun ApiMoney.toEntity() = MoneyEntity(amount, currency)
 
-internal fun MoneyEntity.toModel() = Money(
-	amount, CurrencyUtil.of(currency)
-)
+internal fun MoneyEntity.toModel() = Money(amount, CurrencyUtil.of(currency))

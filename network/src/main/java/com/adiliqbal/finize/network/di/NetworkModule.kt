@@ -1,8 +1,6 @@
 package com.adiliqbal.finize.network.di
 
-import com.adiliqbal.finize.datastore.AppPreferences
 import com.adiliqbal.finize.network.Retrofit
-import com.adiliqbal.finize.network.util.AuthInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -23,21 +21,15 @@ internal object NetworkModule {
 
 	@Provides
 	@Singleton
-	fun provideAuthInterceptor(preferences: AppPreferences) = AuthInterceptor(preferences)
-
-	@Provides
-	@Singleton
 	fun provideHttpLoggingInterceptor() =
 		HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
 
 	@Provides
 	@Singleton
 	fun provideOkHttpClient(
-		authInterceptor: AuthInterceptor,
 		loggingInterceptor: HttpLoggingInterceptor
 	) =
 		OkHttpClient.Builder()
-			.addInterceptor(authInterceptor)
 			.addInterceptor(loggingInterceptor)
 			.build()
 

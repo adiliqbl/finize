@@ -31,6 +31,10 @@ internal class NotionTransactionService @Inject constructor(
 			NotionDatabaseQuery(paging.copy(filter = filter?.toNotionFilter()))
 		) as PaginatedList<BaseApiTransaction>
 
+	override suspend fun getTransaction(id: ID): BaseApiTransaction {
+		return notionService.getPage(id).decodeJson<NotionApiTransaction>()!!
+	}
+
 	override suspend fun createTransaction(transaction: ApiTransaction): NotionApiTransaction {
 		return notionService.createPage(
 			CreateNotionPageRequest(

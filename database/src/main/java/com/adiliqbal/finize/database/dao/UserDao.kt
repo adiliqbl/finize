@@ -11,7 +11,7 @@ import com.adiliqbal.finize.model.extensions.ID
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class UserDao : BaseDao<UserWithProfile>() {
+abstract class UserDao : BaseDao<UserWithProfile>("users") {
 
 	@RewriteQueriesToDropUnusedColumns
 	@Query("SELECT * FROM users WHERE id = :id")

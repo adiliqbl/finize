@@ -28,5 +28,5 @@ data class AccountEntity(
 	val balance: Double = 0.0,
 	val currency: String,
 	val budget: ID? = null,
-	val createdAt: Instant? = null
+	val createdAt: Instant
 ) : BaseEntity

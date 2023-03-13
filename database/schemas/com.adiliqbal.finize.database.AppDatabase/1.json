@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "6a50584f8c5c0b60e411a2b3c24a77c3",
+    "identityHash": "86dacd4a8e8512444b5dd1c45a37ce43",
     "entities": [
       {
         "tableName": "users",
@@ -50,7 +50,7 @@
       },
       {
         "tableName": "accounts",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `type` TEXT NOT NULL, `balance` REAL NOT NULL, `currency` TEXT NOT NULL, `budget` TEXT, `createdAt` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`budget`) REFERENCES `budgets`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `type` TEXT NOT NULL, `balance` REAL NOT NULL, `currency` TEXT NOT NULL, `budget` TEXT, `createdAt` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`budget`) REFERENCES `budgets`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "id",
@@ -92,7 +92,7 @@
             "fieldPath": "createdAt",
             "columnName": "createdAt",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -128,7 +128,7 @@
       },
       {
         "tableName": "budgets",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `limit` REAL NOT NULL, `expireAt` INTEGER, `createdAt` INTEGER, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `limit` REAL NOT NULL, `expireAt` INTEGER, `createdAt` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -158,7 +158,7 @@
             "fieldPath": "createdAt",
             "columnName": "createdAt",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -376,7 +376,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6a50584f8c5c0b60e411a2b3c24a77c3')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '86dacd4a8e8512444b5dd1c45a37ce43')"
     ]
   }
 }

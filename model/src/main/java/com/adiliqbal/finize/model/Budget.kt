@@ -9,5 +9,5 @@ data class Budget(
 	val name: String,
 	val limit: Double = 0.0,
 	val expireAt: LocalDate? = null,
-	val createdAt: Instant? = null
+	val createdAt: Instant
 )

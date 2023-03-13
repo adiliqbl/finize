@@ -13,7 +13,7 @@ import com.adiliqbal.finize.model.filter.TransactionsFilter
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class TransactionDao : BaseDao<TransactionEntity>() {
+abstract class TransactionDao : BaseDao<TransactionEntity>("transactions") {
 
 	@Transaction
 	@Query("SELECT * FROM transactions WHERE id = :id AND isTemplate = 0")
@@ -24,11 +24,11 @@ abstract class TransactionDao : BaseDao<TransactionEntity>() {
 	abstract fun getAll(): PagingSource<Int, TransactionEntity>
 
 	@RawQuery(observedEntities = [TransactionEntity::class])
-	protected abstract fun query(query: SupportSQLiteQuery): PagingSource<Int, TransactionEntity>
+	protected abstract fun pageQuery(query: SupportSQLiteQuery): PagingSource<Int, TransactionEntity>
 
 	@Transaction
 	@Query("SELECT * FROM transactions WHERE isTemplate = 1 ORDER BY date DESC")
-	abstract fun getTemplates(): PagingSource<Int, TransactionEntity>
+	abstract fun getTemplates(): List<TransactionEntity>
 
 	open fun filter(filter: TransactionsFilter): PagingSource<Int, TransactionEntity> =
 		with(filter) {
@@ -50,10 +50,12 @@ abstract class TransactionDao : BaseDao<TransactionEntity>() {
 				filters.add("budget LIKE '%'||'$budget'||'%'")
 			}
 
-			if (date != null) {
-				filters.add("date=${date!!.toEpochMilliseconds()}")
-			} else if (dateFrom != null && dateTo != null) {
-				filters.add("date>=${dateFrom!!.toEpochMilliseconds()} AND date<=${dateTo!!.toEpochMilliseconds()}")
+			if (dateFrom != null && dateTo != null) {
+				if (dateFrom == dateTo) {
+					filters.add("date=${dateTo!!.toEpochMilliseconds()}")
+				} else {
+					filters.add("date>=${dateFrom!!.toEpochMilliseconds()} AND date<=${dateTo!!.toEpochMilliseconds()}")
+				}
 			} else if (dateFrom != null) {
 				filters.add("date>=${dateFrom!!.toEpochMilliseconds()}")
 			} else if (dateTo != null) {
@@ -65,7 +67,7 @@ abstract class TransactionDao : BaseDao<TransactionEntity>() {
 			}
 
 			if (filters.isEmpty()) getAll()
-			else query(
+			else pageQuery(
 				SimpleSQLiteQuery(
 					"""
 					SELECT * FROM transactions

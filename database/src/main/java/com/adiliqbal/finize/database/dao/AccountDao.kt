@@ -9,7 +9,7 @@ import com.adiliqbal.finize.model.extensions.ID
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class AccountDao : BaseDao<AccountEntity>() {
+abstract class AccountDao : BaseDao<AccountEntity>("accounts") {
 
 	@Transaction
 	@Query("SELECT * FROM accounts WHERE id = :id")
@@ -17,5 +17,5 @@ abstract class AccountDao : BaseDao<AccountEntity>() {
 
 	@Transaction
 	@Query("SELECT * FROM accounts ORDER BY name")
-	abstract fun getAll(): Flow<List<AccountEntity>?>
+	abstract fun getAll(): Flow<List<AccountEntity>>
 }

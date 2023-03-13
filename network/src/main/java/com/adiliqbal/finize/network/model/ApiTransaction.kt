@@ -42,7 +42,7 @@ data class ApiTransaction(
 	override val isTemplate: Boolean = false
 ) : BaseApiTransaction {
 
-	internal companion object Keys {
+	companion object Keys {
 		internal const val NAME = "name"
 		internal const val KEYWORDS = "keywords"
 		internal const val AMOUNT = "amount"
@@ -55,7 +55,7 @@ data class ApiTransaction(
 		private const val TASK = "task"
 		private const val NOTE = "note"
 		internal const val CATEGORIES = "categories"
-		internal const val DATE = "date"
+		const val DATE = "date"
 	}
 }
 
