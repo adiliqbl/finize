@@ -4,10 +4,7 @@ import android.content.Context
 import com.adiliqbal.finize.datastore.model.AuthCredentials
 import javax.inject.Inject
 
-internal class SessionManagerImpl
-@Inject
-constructor(
-	private val workManager: WorkManager,
+internal class SessionManagerImpl @Inject constructor(
 	private val dataCleaner: DataCleaner,
 ) : SessionManager {
 
@@ -16,6 +13,5 @@ constructor(
 
 	override suspend fun logout(context: Context) {
 		dataCleaner.clean()
-		workManager.cancelAll()
 	}
 }
