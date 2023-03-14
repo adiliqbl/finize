@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AuthCredentials(
-	val botId: String,
-	val accessToken: String,
-	val workspaceId: String?,
-	val workspaceName: String?
+    val botId: String,
+    val accessToken: String,
+    val workspaceId: String?,
+    val workspaceName: String?
 )

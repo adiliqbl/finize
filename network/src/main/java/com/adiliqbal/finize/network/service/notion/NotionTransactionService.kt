@@ -15,40 +15,44 @@ import com.adiliqbal.finize.network.service.TransactionService
 import com.adiliqbal.finize.network.source.NotionService
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
 import com.adiliqbal.finize.network.util.AppJson.toJson
-import kotlinx.serialization.json.JsonObject
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.serialization.json.JsonObject
 
 @Singleton
-internal class NotionTransactionService @Inject constructor(
-	private val notionPreferences: NotionPreferences,
-	private val notionService: NotionService
+internal class NotionTransactionService
+@Inject
+constructor(
+    private val notionPreferences: NotionPreferences,
+    private val notionService: NotionService
 ) : TransactionService {
 
-	override suspend fun getTransactions(paging: PaginationQuery, filter: TransactionsFilter?) =
-		notionService.getTransactions(
-			notionPreferences.transactionsDB(),
-			NotionDatabaseQuery(paging.copy(filter = filter?.toNotionFilter()))
-		) as PaginatedList<BaseApiTransaction>
+    override suspend fun getTransactions(paging: PaginationQuery, filter: TransactionsFilter?) =
+        notionService.getTransactions(
+            notionPreferences.transactionsDB(),
+            NotionDatabaseQuery(paging.copy(filter = filter?.toNotionFilter()))
+        )
+            as PaginatedList<BaseApiTransaction>
 
-	override suspend fun getTransaction(id: ID): BaseApiTransaction {
-		return notionService.getPage(id).decodeJson<NotionApiTransaction>()!!
-	}
+    override suspend fun getTransaction(id: ID): BaseApiTransaction {
+        return notionService.getPage(id).decodeJson<NotionApiTransaction>()!!
+    }
 
-	override suspend fun createTransaction(transaction: ApiTransaction): NotionApiTransaction {
-		return notionService.createPage(
-			CreateNotionPageRequest(
-				notionPreferences.transactionsDB(),
-				NotionApiTransaction(transaction).toJson().decodeJson<JsonObject>()!!
-			)
-		).decodeJson<NotionApiTransaction>()!!
-	}
+    override suspend fun createTransaction(transaction: ApiTransaction): NotionApiTransaction {
+        return notionService
+            .createPage(
+                CreateNotionPageRequest(
+                    notionPreferences.transactionsDB(),
+                    NotionApiTransaction(transaction).toJson().decodeJson<JsonObject>()!!
+                )
+            )
+            .decodeJson<NotionApiTransaction>()!!
+    }
 
-	override suspend fun updateTransaction(transaction: ApiTransaction) =
-		notionService.updatePage(
-			transaction.id,
-			NotionApiTransaction(transaction).toJson().decodeJson<JsonObject>()!!
-		)
+    override suspend fun updateTransaction(transaction: ApiTransaction) =
+        notionService.updatePage(
+            transaction.id, NotionApiTransaction(transaction).toJson().decodeJson<JsonObject>()!!
+        )
 
-	override suspend fun deleteTransaction(id: ID) = notionService.deletePage(id)
+    override suspend fun deleteTransaction(id: ID) = notionService.deletePage(id)
 }

@@ -13,14 +13,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 abstract class UserDao : BaseDao<UserWithProfile>("users") {
 
-	@RewriteQueriesToDropUnusedColumns
-	@Query("SELECT * FROM users WHERE id = :id")
-	abstract fun get(id: ID): Flow<UserWithProfile?>
+    @RewriteQueriesToDropUnusedColumns
+    @Query("SELECT * FROM users WHERE id = :id")
+    abstract fun get(id: ID): Flow<UserWithProfile?>
 
-	@RewriteQueriesToDropUnusedColumns
-	@Query("SELECT * FROM users")
-	abstract fun getAll(): Flow<List<UserEntity>?>
+    @RewriteQueriesToDropUnusedColumns
+    @Query("SELECT * FROM users")
+    abstract fun getAll(): Flow<List<UserEntity>?>
 
-	@Update(entity = UserWithProfile::class, onConflict = OnConflictStrategy.REPLACE)
-	abstract suspend fun update(item: UserEntity)
+    @Update(entity = UserWithProfile::class, onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun update(item: UserEntity)
 }

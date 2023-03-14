@@ -8,25 +8,22 @@ import kotlinx.coroutines.flow.Flow
 
 interface TransactionRepository {
 
-	fun getTransactions(filter: TransactionsFilter? = null): Flow<PagingData<Transaction>>
+    fun getTransactions(filter: TransactionsFilter? = null): Flow<PagingData<Transaction>>
 
-	fun getTransaction(id: ID): Flow<Transaction>
+    fun getTransaction(id: ID): Flow<Transaction>
 
-	suspend fun createTransaction(transaction: Transaction): Transaction
+    suspend fun createTransaction(transaction: Transaction): Transaction
 
-	suspend fun updateTransaction(transaction: Transaction)
+    suspend fun updateTransaction(transaction: Transaction)
 
-	suspend fun deleteTransaction(id: ID)
+    suspend fun deleteTransaction(id: ID)
 
+    /** Templates */
+    fun getTemplates(): Flow<List<Transaction>>
 
-	/**
-	 * Templates
-	 */
-	fun getTemplates(): Flow<List<Transaction>>
+    suspend fun createTemplate(template: Transaction)
 
-	suspend fun createTemplate(template: Transaction)
+    suspend fun updateTemplate(template: Transaction)
 
-	suspend fun updateTemplate(template: Transaction)
-
-	suspend fun deleteTemplate(id: ID)
+    suspend fun deleteTemplate(id: ID)
 }

@@ -15,44 +15,44 @@ import com.google.accompanist.navigation.animation.composable
 
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.composable(
-	destination: NavDestination,
-	animation: NavAnimation? = SlideNavAnimation,
-	content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
+    destination: NavDestination,
+    animation: NavAnimation? = SlideNavAnimation,
+    content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
 ) {
-	if (animation != null) {
-		composable(
-			route = destination.route,
-			arguments = destination.arguments,
-			deepLinks = destination.deepLinks,
-			enterTransition = { animation.enterTransition },
-			exitTransition = { animation.exitTransition },
-			popEnterTransition = { animation.popEnterTransition },
-			popExitTransition = { animation.popExitTransition },
-			content = content
-		)
-	} else {
-		composable(
-			route = destination.route,
-			arguments = destination.arguments,
-			deepLinks = destination.deepLinks,
-			content = content
-		)
-	}
+    if (animation != null) {
+        composable(
+            route = destination.route,
+            arguments = destination.arguments,
+            deepLinks = destination.deepLinks,
+            enterTransition = { animation.enterTransition },
+            exitTransition = { animation.exitTransition },
+            popEnterTransition = { animation.popEnterTransition },
+            popExitTransition = { animation.popExitTransition },
+            content = content
+        )
+    } else {
+        composable(
+            route = destination.route,
+            arguments = destination.arguments,
+            deepLinks = destination.deepLinks,
+            content = content
+        )
+    }
 }
 
 fun NavGraphBuilder.composableSimple(
-	destination: NavDestination,
-	content: @Composable (NavBackStackEntry) -> Unit
+    destination: NavDestination,
+    content: @Composable (NavBackStackEntry) -> Unit
 ) {
-	composable(
-		route = destination.route,
-		arguments = destination.arguments,
-		deepLinks = destination.deepLinks,
-		content = content
-	)
+    composable(
+        route = destination.route,
+        arguments = destination.arguments,
+        deepLinks = destination.deepLinks,
+        content = content
+    )
 }
 
 fun NavOptionsBuilder.asRoot(@IdRes id: Int = 0) = apply {
-	popUpTo(id)
-	launchSingleTop = true
+    popUpTo(id)
+    launchSingleTop = true
 }

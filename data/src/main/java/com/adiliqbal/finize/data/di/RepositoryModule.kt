@@ -19,18 +19,13 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 internal interface RepositoryModule {
 
-	@Binds
-	fun bindAuthRepository(repository: AuthRepositoryImpl): AuthRepository
+    @Binds fun bindAuthRepository(repository: AuthRepositoryImpl): AuthRepository
 
-	@Binds
-	fun bindUserRepository(repository: UserRepositoryImpl): UserRepository
+    @Binds fun bindUserRepository(repository: UserRepositoryImpl): UserRepository
 
-	@Binds
-	fun bindAccountRepository(repository: AccountRepositoryImpl): AccountRepository
+    @Binds fun bindAccountRepository(repository: AccountRepositoryImpl): AccountRepository
 
-	@Binds
-	fun bindBudgetRepository(repository: BudgetRepositoryImpl): BudgetRepository
+    @Binds fun bindBudgetRepository(repository: BudgetRepositoryImpl): BudgetRepository
 
-	@Binds
-	fun bindTransactionRepository(repository: TransactionRepositoryImpl): TransactionRepository
+    @Binds fun bindTransactionRepository(repository: TransactionRepositoryImpl): TransactionRepository
 }

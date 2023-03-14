@@ -17,30 +17,25 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 internal interface NotionModule {
 
-	@Module
-	@InstallIn(SingletonComponent::class)
-	object ProviderModule {
+    @Module
+    @InstallIn(SingletonComponent::class)
+    object ProviderModule {
 
-		@Provides
-		@Singleton
-		fun provideNotionService(retrofit: Retrofit) =
-			retrofit.notion.create(NotionService::class.java)
+        @Provides
+        @Singleton
+        fun provideNotionService(retrofit: Retrofit) = retrofit.notion.create(NotionService::class.java)
 
-		@Provides
-		@Singleton
-		fun provideUserService(retrofit: Retrofit): NotionUserService =
-			retrofit.notion.create(NotionUserService::class.java)
-	}
+        @Provides
+        @Singleton
+        fun provideUserService(retrofit: Retrofit): NotionUserService =
+            retrofit.notion.create(NotionUserService::class.java)
+    }
 
-	@Binds
-	@Singleton
-	fun bindAccountService(service: NotionAccountService): NotionAccountService
+    @Binds @Singleton fun bindAccountService(service: NotionAccountService): NotionAccountService
 
-	@Binds
-	@Singleton
-	fun bindBudgetService(service: NotionBudgetService): NotionBudgetService
+    @Binds @Singleton fun bindBudgetService(service: NotionBudgetService): NotionBudgetService
 
-	@Binds
-	@Singleton
-	fun bindTransactionService(service: NotionTransactionService): NotionTransactionService
+    @Binds
+    @Singleton
+    fun bindTransactionService(service: NotionTransactionService): NotionTransactionService
 }

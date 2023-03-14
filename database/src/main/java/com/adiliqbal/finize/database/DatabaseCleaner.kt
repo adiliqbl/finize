@@ -4,12 +4,11 @@ import javax.inject.Inject
 
 interface DatabaseCleaner {
 
-	fun clean()
+    fun clean()
 }
 
-internal class DatabaseCleanerImpl @Inject constructor(
-	private val database: AppDatabase
-) : DatabaseCleaner {
+internal class DatabaseCleanerImpl @Inject constructor(private val database: AppDatabase) :
+    DatabaseCleaner {
 
-	override fun clean() = database.clearAllTables()
+    override fun clean() = database.clearAllTables()
 }

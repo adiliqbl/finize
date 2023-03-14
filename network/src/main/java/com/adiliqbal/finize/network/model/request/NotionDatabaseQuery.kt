@@ -7,10 +7,10 @@ import kotlinx.serialization.Serializable
 internal class NotionDatabaseQuery(query: PaginationQuery) : BasePaginationQuery by query
 
 internal object NotionDatabaseKeys {
-	const val SORT = "sorts"
-	const val SORT_FIELD = "property"
-	const val SORT_ORDER = "direction"
-	const val FILTER = "filter"
-	const val CURSOR = "start_cursor"
-	const val PAGE_SIZE = "page_size"
+    const val SORT = "sorts"
+    const val SORT_FIELD = "property"
+    const val SORT_ORDER = "direction"
+    const val FILTER = "filter"
+    const val CURSOR = "start_cursor"
+    const val PAGE_SIZE = "page_size"
 }

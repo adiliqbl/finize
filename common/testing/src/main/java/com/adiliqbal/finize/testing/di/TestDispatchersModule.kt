@@ -12,12 +12,12 @@ import kotlinx.coroutines.test.TestDispatcher
 
 @Module
 @TestInstallIn(
-	components = [SingletonComponent::class],
-	replaces = [DispatchersModule::class],
+    components = [SingletonComponent::class],
+    replaces = [DispatchersModule::class],
 )
 object TestDispatchersModule {
 
-	@Provides
-	@Dispatcher(Thread.IO)
-	fun providesIODispatcher(testDispatcher: TestDispatcher): CoroutineDispatcher = testDispatcher
+    @Provides
+    @Dispatcher(Thread.IO)
+    fun providesIODispatcher(testDispatcher: TestDispatcher): CoroutineDispatcher = testDispatcher
 }

@@ -8,9 +8,9 @@ import kotlinx.datetime.LocalDate
 
 @Entity(tableName = "budgets")
 data class BudgetEntity(
-	@PrimaryKey override val id: ID,
-	val name: String,
-	val limit: Double = 0.0,
-	val expireAt: LocalDate? = null,
-	val createdAt: Instant
+    @PrimaryKey override val id: ID,
+    val name: String,
+    val limit: Double = 0.0,
+    val expireAt: LocalDate? = null,
+    val createdAt: Instant
 ) : BaseEntity

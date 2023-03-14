@@ -15,12 +15,12 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 internal object DatabaseModule {
 
-	@Provides
-	@Singleton
-	fun provideDatabase(@ApplicationContext context: Context) = AppDatabase.getInstance(context)
+    @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext context: Context) = AppDatabase.getInstance(context)
 
-	@Provides
-	@Singleton
-	fun provideDatabaseCleaner(appDatabase: AppDatabase): DatabaseCleaner =
-		DatabaseCleanerImpl(appDatabase)
+    @Provides
+    @Singleton
+    fun provideDatabaseCleaner(appDatabase: AppDatabase): DatabaseCleaner =
+        DatabaseCleanerImpl(appDatabase)
 }

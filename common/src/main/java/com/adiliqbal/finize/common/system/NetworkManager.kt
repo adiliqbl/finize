@@ -16,34 +16,33 @@ import kotlinx.coroutines.flow.callbackFlow
 
 object NetworkManager {
 
-	private const val CONNECTED_DELAY = 200L
+    private const val CONNECTED_DELAY = 200L
 
-	private fun networkCallback(
-		callback: (ConnectionState) -> Unit
-	): ConnectivityManager.NetworkCallback {
-		return object : ConnectivityManager.NetworkCallback() {
-			override fun onAvailable(network: Network) = callback(ConnectionState.Available)
-			override fun onLost(network: Network) = callback(ConnectionState.Unavailable)
-		}
-	}
+    private fun networkCallback(
+        callback: (ConnectionState) -> Unit
+    ): ConnectivityManager.NetworkCallback {
+        return object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) = callback(ConnectionState.Available)
+            override fun onLost(network: Network) = callback(ConnectionState.Unavailable)
+        }
+    }
 
-	fun observeConnection(context: Context, currentState: Boolean = false) = callbackFlow {
-		val callback = networkCallback { withScope(Dispatchers.Unconfined) { notify(it) } }
+    fun observeConnection(context: Context, currentState: Boolean = false) = callbackFlow {
+        val callback = networkCallback { withScope(Dispatchers.Unconfined) { notify(it) } }
 
-		val connectivityManager =
-			context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-		val networkRequest =
-			NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-				.build()
-		connectivityManager.registerNetworkCallback(networkRequest, callback)
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkRequest =
+            NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build()
+        connectivityManager.registerNetworkCallback(networkRequest, callback)
 
-		if (currentState) notify(connectivityManager.connectivityState())
+        if (currentState) notify(connectivityManager.connectivityState())
 
-		awaitClose { connectivityManager.unregisterNetworkCallback(callback) }
-	}
+        awaitClose { connectivityManager.unregisterNetworkCallback(callback) }
+    }
 
-	private suspend fun ProducerScope<ConnectionState>.notify(state: ConnectionState) {
-		if (state is ConnectionState.Available) delay(CONNECTED_DELAY)
-		trySend(state)
-	}
+    private suspend fun ProducerScope<ConnectionState>.notify(state: ConnectionState) {
+        if (state is ConnectionState.Available) delay(CONNECTED_DELAY)
+        trySend(state)
+    }
 }

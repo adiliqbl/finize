@@ -9,7 +9,7 @@ object Versions {
 	}
 
 	object Kotlin {
-		const val Kotlin = "1.8.0"
+		const val Kotlin = "1.8.10"
 		const val Core = "1.9.0"
 		const val Coroutines = "1.6.2"
 		const val DateTime = "0.4.0"
@@ -33,8 +33,8 @@ object Versions {
 	}
 
 	object Compose {
-		const val BOM = "2022.12.00"
-		const val Compiler = "1.3.2"
+		const val BOM = "2023.01.00"
+		const val Compiler = "1.4.3"
 		const val Activity = "1.6.1"
 		const val Paging = "1.0.0-alpha17"
 	}

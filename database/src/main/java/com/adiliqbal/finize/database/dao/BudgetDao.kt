@@ -10,11 +10,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 abstract class BudgetDao : BaseDao<BudgetEntity>("budgets") {
 
-	@Transaction
-	@Query("SELECT * FROM budgets WHERE id = :id")
-	abstract fun get(id: ID): Flow<BudgetEntity?>
+    @Transaction
+    @Query("SELECT * FROM budgets WHERE id = :id")
+    abstract fun get(id: ID): Flow<BudgetEntity?>
 
-	@Transaction
-	@Query("SELECT * FROM budgets ORDER BY name")
-	abstract fun getAll(): Flow<List<BudgetEntity>>
+    @Transaction
+    @Query("SELECT * FROM budgets ORDER BY name")
+    abstract fun getAll(): Flow<List<BudgetEntity>>
 }

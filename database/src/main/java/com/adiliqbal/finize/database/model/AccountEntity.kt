@@ -9,24 +9,24 @@ import com.adiliqbal.finize.model.extensions.ID
 import kotlinx.datetime.Instant
 
 @Entity(
-	tableName = "accounts",
-	indices = [Index("budget")],
-	foreignKeys =
-	[
-		ForeignKey(
-			entity = BudgetEntity::class,
-			parentColumns = ["id"],
-			childColumns = ["budget"],
-			onDelete = ForeignKey.SET_NULL
-		)
-	]
+    tableName = "accounts",
+    indices = [Index("budget")],
+    foreignKeys =
+    [
+        ForeignKey(
+            entity = BudgetEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["budget"],
+            onDelete = ForeignKey.SET_NULL
+        )
+    ]
 )
 data class AccountEntity(
-	@PrimaryKey override val id: ID,
-	val name: String,
-	val type: AccountType,
-	val balance: Double = 0.0,
-	val currency: String,
-	val budget: ID? = null,
-	val createdAt: Instant
+    @PrimaryKey override val id: ID,
+    val name: String,
+    val type: AccountType,
+    val balance: Double = 0.0,
+    val currency: String,
+    val budget: ID? = null,
+    val createdAt: Instant
 ) : BaseEntity

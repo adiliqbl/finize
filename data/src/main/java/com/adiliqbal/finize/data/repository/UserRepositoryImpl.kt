@@ -11,40 +11,39 @@ import com.adiliqbal.finize.datastore.AppPreferences
 import com.adiliqbal.finize.model.Profile
 import com.adiliqbal.finize.model.User
 import com.adiliqbal.finize.network.service.UserService
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapNotNull
-import javax.inject.Inject
 
-internal class UserRepositoryImpl @Inject constructor(
-	private val userDao: UserDao,
-	private val preferences: AppPreferences,
-	private val userService: UserService
+internal class UserRepositoryImpl
+@Inject
+constructor(
+    private val userDao: UserDao,
+    private val preferences: AppPreferences,
+    private val userService: UserService
 ) : UserRepository {
 
-	override fun getUser() = channelFlowWithAwait {
-		val id = preferences.userId()
-		withScope(Dispatchers.Unconfined) {
-			userDao.get(id).mapNotNull { it?.toModel() }.collect { trySend(it) }
-		}
-		launchSafeApi {
-			userService.getUser(id)?.let { userDao.upsert(it.toEntity()) }
-		}
-	}
+    override fun getUser() = channelFlowWithAwait {
+        val id = preferences.userId()
+        withScope(Dispatchers.Unconfined) {
+            userDao.get(id).mapNotNull { it?.toModel() }.collect { trySend(it) }
+        }
+        launchSafeApi { userService.getUser(id)?.let { userDao.upsert(it.toEntity()) } }
+    }
 
-	override suspend fun updateUser(user: User) {
-		return user.toApi().let {
-			userService.updateUser(it)
-			val entity = it.toEntity()
-			userDao.upsert(entity)
-			entity.toModel()
-		}
-	}
+    override suspend fun updateUser(user: User) {
+        return user.toApi().let {
+            userService.updateUser(it)
+            val entity = it.toEntity()
+            userDao.upsert(entity)
+            entity.toModel()
+        }
+    }
 
-	override suspend fun updateProfile(profile: Profile) {
-		val user = userDao.get(preferences.userId()).first()!!
-			.toModel().copy(profile = profile).toApi()
-		userService.updateUser(user)
-		userDao.upsert(user.toEntity())
-	}
+    override suspend fun updateProfile(profile: Profile) {
+        val user = userDao.get(preferences.userId()).first()!!.toModel().copy(profile = profile).toApi()
+        userService.updateUser(user)
+        userDao.upsert(user.toEntity())
+    }
 }

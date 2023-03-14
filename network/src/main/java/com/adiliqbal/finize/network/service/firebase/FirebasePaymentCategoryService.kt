@@ -9,11 +9,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class FirebasePaymentCategoryService @Inject constructor(
-	private val firestore: FirestoreService
-) : PaymentCategoryService {
+internal class FirebasePaymentCategoryService
+@Inject
+constructor(private val firestore: FirestoreService) : PaymentCategoryService {
 
-	override suspend fun getPaymentCategories(): List<ApiPaymentCategory> {
-		return firestore.collection(paymentCategoriesDB()).get().result.toObjects()
-	}
+    override suspend fun getPaymentCategories(): List<ApiPaymentCategory> {
+        return firestore.collection(paymentCategoriesDB()).get().result.toObjects()
+    }
 }

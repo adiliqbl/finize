@@ -30,41 +30,39 @@ import kotlinx.serialization.json.jsonObject
 @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
 internal object NotionAccountSerializer : KSerializer<NotionApiAccount> {
 
-	private const val ID = "id"
-	private const val NAME = "Name"
-	private const val BALANCE = "Current Balance"
-	private const val CURRENCY = "Currency"
-	private const val BUDGET = "Budget"
-	private const val TYPE = "Type"
-	private const val CREATED_TIME = "created_time"
+    private const val ID = "id"
+    private const val NAME = "Name"
+    private const val BALANCE = "Current Balance"
+    private const val CURRENCY = "Currency"
+    private const val BUDGET = "Budget"
+    private const val TYPE = "Type"
+    private const val CREATED_TIME = "created_time"
 
-	override val descriptor: SerialDescriptor =
-		buildSerialDescriptor("NotionAccount", PolymorphicKind.SEALED)
+    override val descriptor: SerialDescriptor =
+        buildSerialDescriptor("NotionAccount", PolymorphicKind.SEALED)
 
-	override fun serialize(encoder: Encoder, value: NotionApiAccount) {
-		val body = buildJsonObject {
-			put(NAME, value.name.toNotionTitle())
-			put(BALANCE, value.balance.toNotionNumber())
-		}
+    override fun serialize(encoder: Encoder, value: NotionApiAccount) {
+        val body = buildJsonObject {
+            put(NAME, value.name.toNotionTitle())
+            put(BALANCE, value.balance.toNotionNumber())
+        }
 
-		(encoder as JsonEncoder).encodeJsonElement(body)
-	}
+        (encoder as JsonEncoder).encodeJsonElement(body)
+    }
 
-	override fun deserialize(decoder: Decoder): NotionApiAccount {
-		val json = (decoder as JsonDecoder).decodeJsonElement() as JsonObject
-		val properties = json["properties"]!!.jsonObject
-		return NotionApiAccount(
-			ApiAccount(
-				id = json.getString(ID)!!,
-				name = properties.parseNotionString(NAME) ?: "",
-				balance = properties.parseNotionDouble(BALANCE),
-				budget = properties.parseNotionRelation(BUDGET)
-					?.takeIf { it.isNotEmpty() }?.get(0),
-				currency = properties.parseNotionSelect(CURRENCY)
-					?: CurrencyUtil.default.currencyCode,
-				type = properties.parseNotionSelect(TYPE).toAccountType(),
-				createdAt = json.parseNotionDateTime(CREATED_TIME) ?: DateUtil.now()
-			)
-		)
-	}
+    override fun deserialize(decoder: Decoder): NotionApiAccount {
+        val json = (decoder as JsonDecoder).decodeJsonElement() as JsonObject
+        val properties = json["properties"]!!.jsonObject
+        return NotionApiAccount(
+            ApiAccount(
+                id = json.getString(ID)!!,
+                name = properties.parseNotionString(NAME) ?: "",
+                balance = properties.parseNotionDouble(BALANCE),
+                budget = properties.parseNotionRelation(BUDGET)?.takeIf { it.isNotEmpty() }?.get(0),
+                currency = properties.parseNotionSelect(CURRENCY) ?: CurrencyUtil.default.currencyCode,
+                type = properties.parseNotionSelect(TYPE).toAccountType(),
+                createdAt = json.parseNotionDateTime(CREATED_TIME) ?: DateUtil.now()
+            )
+        )
+    }
 }

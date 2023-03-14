@@ -13,9 +13,7 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 internal interface DataModule {
 
-	@Binds
-	fun provideDataCleaner(dataCleaner: DataCleanerImpl): DataCleaner
+    @Binds fun provideDataCleaner(dataCleaner: DataCleanerImpl): DataCleaner
 
-	@Binds
-	fun providePreferences(preferences: PreferencesImpl): Preferences
+    @Binds fun providePreferences(preferences: PreferencesImpl): Preferences
 }

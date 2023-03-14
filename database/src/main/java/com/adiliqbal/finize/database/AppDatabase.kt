@@ -17,44 +17,39 @@ import com.adiliqbal.finize.database.model.TransactionEntity
 import com.adiliqbal.finize.database.model.UserWithProfile
 
 @Database(
-	entities =
-	[
-		UserWithProfile::class,
-		AccountEntity::class,
-		BudgetEntity::class,
-		TransactionEntity::class
-	],
-	version = 1,
-	autoMigrations = []
+    entities =
+    [
+        UserWithProfile::class,
+        AccountEntity::class,
+        BudgetEntity::class,
+        TransactionEntity::class
+    ],
+    version = 1,
+    autoMigrations = []
 )
 @TypeConverters(DateConverters::class, ListConverters::class)
 internal abstract class AppDatabase : RoomDatabase() {
 
-	companion object {
+    companion object {
 
-		private const val DB_NAME = "finize-database"
+        private const val DB_NAME = "finize-database"
 
-		@Volatile
-		private var INSTANCE: AppDatabase? = null
+        @Volatile private var INSTANCE: AppDatabase? = null
 
-		internal fun getInstance(context: Context): AppDatabase =
-			INSTANCE ?: synchronized(this) {
-				INSTANCE ?: buildDatabase(context).also {
-					INSTANCE = it
-				}
-			}
+        internal fun getInstance(context: Context): AppDatabase =
+            INSTANCE ?: synchronized(this) { INSTANCE ?: buildDatabase(context).also { INSTANCE = it } }
 
-		private fun buildDatabase(context: Context) =
-			Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, DB_NAME)
-				.fallbackToDestructiveMigration()
-				.build()
-	}
+        private fun buildDatabase(context: Context) =
+            Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, DB_NAME)
+                .fallbackToDestructiveMigration()
+                .build()
+    }
 
-	abstract fun userDao(): UserDao
+    abstract fun userDao(): UserDao
 
-	abstract fun accountDao(): AccountDao
+    abstract fun accountDao(): AccountDao
 
-	abstract fun budgetDao(): BudgetDao
+    abstract fun budgetDao(): BudgetDao
 
-	abstract fun transactionDao(): TransactionDao
+    abstract fun transactionDao(): TransactionDao
 }

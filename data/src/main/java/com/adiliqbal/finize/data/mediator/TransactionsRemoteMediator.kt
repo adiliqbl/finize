@@ -19,63 +19,66 @@ import java.net.UnknownHostException
 
 @OptIn(ExperimentalPagingApi::class)
 internal class TransactionsRemoteMediator(
-	private val transactionDao: TransactionDao,
-	private val transactionService: TransactionService,
-	private val filter: TransactionsFilter?,
-	private val logger: Logger
+    private val transactionDao: TransactionDao,
+    private val transactionService: TransactionService,
+    private val filter: TransactionsFilter?,
+    private val logger: Logger
 ) : RemoteMediator<Int, TransactionEntity>() {
 
-	private var page: Int = 1
+    private var page: Int = 1
 
-	override suspend fun load(
-		loadType: LoadType,
-		state: PagingState<Int, TransactionEntity>
-	): MediatorResult {
-		return try {
-			val lastTransactionId = when (loadType) {
-				LoadType.REFRESH -> {
-					page = 1
-					null
-				}
-				LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
-				LoadType.APPEND -> {
-					val lastItem =
-						state.lastItemOrNull()
-							?: return MediatorResult.Success(endOfPaginationReached = true)
-					page += 1
-					lastItem.id
-				}
-			}
+    override suspend fun load(
+        loadType: LoadType,
+        state: PagingState<Int, TransactionEntity>
+    ): MediatorResult {
+        return try {
+            val lastTransactionId =
+                when (loadType) {
+                    LoadType.REFRESH -> {
+                        page = 1
+                        null
+                    }
+                    LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
+                    LoadType.APPEND -> {
+                        val lastItem =
+                            state.lastItemOrNull()
+                                ?: return MediatorResult.Success(endOfPaginationReached = true)
+                        page += 1
+                        lastItem.id
+                    }
+                }
 
-			val response = transactionService.getTransactions(
-				filter = filter,
-				paging = PaginationQuery(
-					page = page,
-					pageSize = lastTransactionId?.let { state.config.pageSize }
-						?: state.config.initialPageSize,
-					sortOrder = SortOrder.DESCENDING,
-					sortField = ApiTransaction.Keys.DATE,
-					cursor = lastTransactionId,
-				)
-			)
+            val response =
+                transactionService.getTransactions(
+                    filter = filter,
+                    paging =
+                    PaginationQuery(
+                        page = page,
+                        pageSize = lastTransactionId?.let { state.config.pageSize }
+                            ?: state.config.initialPageSize,
+                        sortOrder = SortOrder.DESCENDING,
+                        sortField = ApiTransaction.Keys.DATE,
+                        cursor = lastTransactionId,
+                    )
+                )
 
-			response.data?.map { it.toEntity() }?.let { transactionDao.upsert(it) }
+            response.data?.map { it.toEntity() }?.let { transactionDao.upsert(it) }
 
-			logger.d("Loading Transactions: $loadType - $lastTransactionId: ${response.data?.size ?: 0}")
+            logger.d("Loading Transactions: $loadType - $lastTransactionId: ${response.data?.size ?: 0}")
 
-			MediatorResult.Success(
-				endOfPaginationReached =
-				response.data.isNullOrEmpty() || response.data!!.size < state.config.pageSize
-			)
-		} catch (e: UnknownHostException) {
-			MediatorResult.Error(e)
-		} catch (e: IOException) {
-			MediatorResult.Error(e)
-		} catch (e: Exception) {
-			logger.e(e)
-			MediatorResult.Error(e)
-		}
-	}
+            MediatorResult.Success(
+                endOfPaginationReached =
+                response.data.isNullOrEmpty() || response.data!!.size < state.config.pageSize
+            )
+        } catch (e: UnknownHostException) {
+            MediatorResult.Error(e)
+        } catch (e: IOException) {
+            MediatorResult.Error(e)
+        } catch (e: Exception) {
+            logger.e(e)
+            MediatorResult.Error(e)
+        }
+    }
 
-	override suspend fun initialize() = InitializeAction.LAUNCH_INITIAL_REFRESH
+    override suspend fun initialize() = InitializeAction.LAUNCH_INITIAL_REFRESH
 }

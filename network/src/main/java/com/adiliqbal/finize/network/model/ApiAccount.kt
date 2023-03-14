@@ -8,24 +8,24 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 interface BaseApiAccount {
-	val id: ID
-	val name: String
-	val balance: Double
-	val type: AccountType
-	val budget: ID?
-	val currency: String
-	val createdAt: Instant
+    val id: ID
+    val name: String
+    val balance: Double
+    val type: AccountType
+    val budget: ID?
+    val currency: String
+    val createdAt: Instant
 }
 
 @Serializable
 data class ApiAccount(
-	override val id: ID,
-	override val name: String,
-	override val type: AccountType,
-	override val balance: Double = 0.0,
-	override val currency: String,
-	override val budget: ID? = null,
-	override val createdAt: Instant = DateUtil.now()
+    override val id: ID,
+    override val name: String,
+    override val type: AccountType,
+    override val balance: Double = 0.0,
+    override val currency: String,
+    override val budget: ID? = null,
+    override val createdAt: Instant = DateUtil.now()
 ) : BaseApiAccount
 
 @Serializable(with = NotionAccountSerializer::class)

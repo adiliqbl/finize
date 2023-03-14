@@ -8,20 +8,20 @@ import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 
 interface BaseApiBudget {
-	val id: ID
-	val name: String
-	val limit: Double
-	val expireAt: LocalDate?
-	val createdAt: Instant
+    val id: ID
+    val name: String
+    val limit: Double
+    val expireAt: LocalDate?
+    val createdAt: Instant
 }
 
 @Serializable
 data class ApiBudget(
-	override val id: ID,
-	override val name: String,
-	override val limit: Double = 0.0,
-	override val expireAt: LocalDate? = null,
-	override val createdAt: Instant = DateUtil.now()
+    override val id: ID,
+    override val name: String,
+    override val limit: Double = 0.0,
+    override val expireAt: LocalDate? = null,
+    override val createdAt: Instant = DateUtil.now()
 ) : BaseApiBudget
 
 @Serializable(with = NotionBudgetSerializer::class)

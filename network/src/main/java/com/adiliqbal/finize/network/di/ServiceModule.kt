@@ -30,48 +30,46 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 internal object ServiceModule {
 
-	@Provides
-	@Singleton
-	suspend fun provideAccountService(
-		preferences: AppPreferences,
-		notion: NotionAccountService,
-		firebase: FirebaseAccountService,
-	): AccountService = if (preferences.provider() == DataProvider.NOTION) notion else firebase
+    @Provides
+    @Singleton
+    suspend fun provideAccountService(
+        preferences: AppPreferences,
+        notion: NotionAccountService,
+        firebase: FirebaseAccountService,
+    ): AccountService = if (preferences.provider() == DataProvider.NOTION) notion else firebase
 
-	@Provides
-	@Singleton
-	suspend fun provideBudgetService(
-		preferences: AppPreferences,
-		notion: NotionBudgetService,
-		firebase: FirebaseBudgetService,
-	): BudgetService = if (preferences.provider() == DataProvider.NOTION) notion else firebase
+    @Provides
+    @Singleton
+    suspend fun provideBudgetService(
+        preferences: AppPreferences,
+        notion: NotionBudgetService,
+        firebase: FirebaseBudgetService,
+    ): BudgetService = if (preferences.provider() == DataProvider.NOTION) notion else firebase
 
-	@Provides
-	@Singleton
-	suspend fun provideTransactionService(
-		preferences: AppPreferences,
-		notion: NotionTransactionService,
-		firebase: FirebaseTransactionService,
-	): TransactionService = if (preferences.provider() == DataProvider.NOTION) notion else firebase
+    @Provides
+    @Singleton
+    suspend fun provideTransactionService(
+        preferences: AppPreferences,
+        notion: NotionTransactionService,
+        firebase: FirebaseTransactionService,
+    ): TransactionService = if (preferences.provider() == DataProvider.NOTION) notion else firebase
 
-	@Module
-	@InstallIn(SingletonComponent::class)
-	internal interface BindingModule {
+    @Module
+    @InstallIn(SingletonComponent::class)
+    internal interface BindingModule {
 
-		@Binds
-		@Singleton
-		fun bindAuthService(service: FirebaseAuthService): AuthService
+        @Binds @Singleton fun bindAuthService(service: FirebaseAuthService): AuthService
 
-		@Binds
-		@Singleton
-		fun bindUserService(service: FirebaseUserService): UserService
+        @Binds @Singleton fun bindUserService(service: FirebaseUserService): UserService
 
-		@Binds
-		@Singleton
-		fun bindTransactionTemplateService(service: FirebaseTransactionTemplateService): TransactionTemplateService
+        @Binds
+        @Singleton
+        fun bindTransactionTemplateService(
+            service: FirebaseTransactionTemplateService
+        ): TransactionTemplateService
 
-		@Binds
-		@Singleton
-		fun bindPaymentCategoryService(service: FirebasePaymentCategoryService): PaymentCategoryService
-	}
+        @Binds
+        @Singleton
+        fun bindPaymentCategoryService(service: FirebasePaymentCategoryService): PaymentCategoryService
+    }
 }

@@ -10,139 +10,132 @@ import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
 
 internal enum class NotionDateFilter(val key: String) {
-	FROM("after"),
-	TO("before"),
-	EQUALS("equals")
+    FROM("after"),
+    TO("before"),
+    EQUALS("equals")
 }
 
 internal enum class NotionTextFilter(val key: String) {
-	CONTAINS("contains"),
-	EQUALS("equals")
+    CONTAINS("contains"),
+    EQUALS("equals")
 }
 
 internal fun TransactionsFilter.toNotionFilter(): JsonElement? {
-	val filters = buildJsonArray {
-		if (!accountTo.isNullOrEmpty() && accountTo == accountFrom) {
-			add(buildJsonObject {
-				put("or", buildJsonArray {
-					add(accountTo!!.toNotionRelationFilter(NotionTransactionSerializer.TO_ACCOUNT))
-					add(accountTo!!.toNotionRelationFilter(NotionTransactionSerializer.FROM_ACCOUNT))
-				})
-			})
-		} else if (!accountTo.isNullOrEmpty() && !accountFrom.isNullOrEmpty()) {
-			add(buildJsonObject {
-				put("and", buildJsonArray {
-					add(accountTo!!.toNotionRelationFilter(NotionTransactionSerializer.TO_ACCOUNT))
-					add(accountFrom!!.toNotionRelationFilter(NotionTransactionSerializer.FROM_ACCOUNT))
-				})
-			})
-		} else if (!accountTo.isNullOrEmpty() && accountFrom.isNullOrEmpty()) {
-			add(accountTo!!.toNotionRelationFilter(NotionTransactionSerializer.TO_ACCOUNT))
-		} else if (!accountFrom.isNullOrEmpty() && accountTo.isNullOrEmpty()) {
-			add(accountFrom!!.toNotionRelationFilter(NotionTransactionSerializer.FROM_ACCOUNT))
-		}
+    val filters = buildJsonArray {
+        if (!accountTo.isNullOrEmpty() && accountTo == accountFrom) {
+            add(
+                buildJsonObject {
+                    put(
+                        "or",
+                        buildJsonArray {
+                            add(accountTo!!.toNotionRelationFilter(NotionTransactionSerializer.TO_ACCOUNT))
+                            add(accountTo!!.toNotionRelationFilter(NotionTransactionSerializer.FROM_ACCOUNT))
+                        }
+                    )
+                }
+            )
+        } else if (!accountTo.isNullOrEmpty() && !accountFrom.isNullOrEmpty()) {
+            add(
+                buildJsonObject {
+                    put(
+                        "and",
+                        buildJsonArray {
+                            add(accountTo!!.toNotionRelationFilter(NotionTransactionSerializer.TO_ACCOUNT))
+                            add(
+                                accountFrom!!.toNotionRelationFilter(
+                                    NotionTransactionSerializer.FROM_ACCOUNT
+                                )
+                            )
+                        }
+                    )
+                }
+            )
+        } else if (!accountTo.isNullOrEmpty() && accountFrom.isNullOrEmpty()) {
+            add(accountTo!!.toNotionRelationFilter(NotionTransactionSerializer.TO_ACCOUNT))
+        } else if (!accountFrom.isNullOrEmpty() && accountTo.isNullOrEmpty()) {
+            add(accountFrom!!.toNotionRelationFilter(NotionTransactionSerializer.FROM_ACCOUNT))
+        }
 
-		if (categories != null) add(
-			categories!!.toNotionMultiselectFilter(
-				NotionTransactionSerializer.CATEGORIES
-			)
-		)
-		if (budget != null) add(budget!!.toNotionRelationFilter(NotionTransactionSerializer.BUDGET))
+        if (categories != null)
+            add(categories!!.toNotionMultiselectFilter(NotionTransactionSerializer.CATEGORIES))
+        if (budget != null) add(budget!!.toNotionRelationFilter(NotionTransactionSerializer.BUDGET))
 
-		if (dateFrom != null && dateTo != null) {
-			if (dateTo == dateFrom) {
-				add(dateTo!!.toNotionDateFilter(NotionTransactionSerializer.DATE))
-			} else {
-				add(buildJsonObject {
-					put("and", buildJsonArray {
-						add(
-							dateFrom!!.toNotionDateFilter(
-								NotionTransactionSerializer.DATE,
-								NotionDateFilter.FROM
-							)
-						)
-						add(
-							dateTo!!.toNotionDateFilter(
-								NotionTransactionSerializer.DATE,
-								NotionDateFilter.TO
-							)
-						)
-					})
-				})
-			}
-		} else if (dateFrom != null) {
-			add(
-				dateFrom!!.toNotionDateFilter(
-					NotionTransactionSerializer.DATE,
-					NotionDateFilter.FROM
-				)
-			)
-		} else if (dateTo != null) {
-			add(
-				dateTo!!.toNotionDateFilter(
-					NotionTransactionSerializer.DATE,
-					NotionDateFilter.TO
-				)
-			)
-		}
+        if (dateFrom != null && dateTo != null) {
+            if (dateTo == dateFrom) {
+                add(dateTo!!.toNotionDateFilter(NotionTransactionSerializer.DATE))
+            } else {
+                add(
+                    buildJsonObject {
+                        put(
+                            "and",
+                            buildJsonArray {
+                                add(
+                                    dateFrom!!.toNotionDateFilter(
+                                        NotionTransactionSerializer.DATE, NotionDateFilter.FROM
+                                    )
+                                )
+                                add(
+                                    dateTo!!.toNotionDateFilter(
+                                        NotionTransactionSerializer.DATE, NotionDateFilter.TO
+                                    )
+                                )
+                            }
+                        )
+                    }
+                )
+            }
+        } else if (dateFrom != null) {
+            add(dateFrom!!.toNotionDateFilter(NotionTransactionSerializer.DATE, NotionDateFilter.FROM))
+        } else if (dateTo != null) {
+            add(dateTo!!.toNotionDateFilter(NotionTransactionSerializer.DATE, NotionDateFilter.TO))
+        }
 
-		if (!name.isNullOrEmpty()) {
-			add(
-				name!!.toNotionTextFilter(
-					NotionTransactionSerializer.NAME,
-					NotionTextFilter.CONTAINS
-				)
-			)
-		}
-	}
+        if (!name.isNullOrEmpty()) {
+            add(name!!.toNotionTextFilter(NotionTransactionSerializer.NAME, NotionTextFilter.CONTAINS))
+        }
+    }
 
-	return if (filters.isEmpty()) null
-	else if (filters.size == 1) filters[0]
-	else buildJsonObject { put("and", filters) }
+    return if (filters.isEmpty()) null
+    else if (filters.size == 1) filters[0] else buildJsonObject { put("and", filters) }
 }
 
 internal fun String.toNotionTextFilter(
-	property: String,
-	type: NotionTextFilter = NotionTextFilter.CONTAINS
+    property: String,
+    type: NotionTextFilter = NotionTextFilter.CONTAINS
 ) = buildJsonObject {
-	put("property", JsonPrimitive(property))
-	put("text", buildJsonObject {
-		put(type.key, JsonPrimitive(this@toNotionTextFilter))
-	})
+    put("property", JsonPrimitive(property))
+    put("text", buildJsonObject { put(type.key, JsonPrimitive(this@toNotionTextFilter)) })
 }
 
 internal fun ID.toNotionRelationFilter(property: String) = buildJsonObject {
-	put("property", JsonPrimitive(property))
-	put("relation", buildJsonObject {
-		put("contains", JsonPrimitive(this@toNotionRelationFilter))
-	})
+    put("property", JsonPrimitive(property))
+    put("relation", buildJsonObject { put("contains", JsonPrimitive(this@toNotionRelationFilter)) })
 }
 
 fun String.toNotionSelectFilter(property: String) = buildJsonObject {
-	put("property", JsonPrimitive(property))
-	put("multi_select", buildJsonObject {
-		put("contains", JsonPrimitive(this@toNotionSelectFilter))
-	})
+    put("property", JsonPrimitive(property))
+    put("multi_select", buildJsonObject { put("contains", JsonPrimitive(this@toNotionSelectFilter)) })
 }
 
 internal fun List<String>.toNotionMultiselectFilter(property: String) = run {
-	if (size == 1) {
-		get(0).toNotionSelectFilter(property)
-	} else {
-		buildJsonObject {
-			put("or", buildJsonArray {
-				this@toNotionMultiselectFilter.map { add(it.toNotionSelectFilter(property)) }
-			})
-		}
-	}
+    if (size == 1) {
+        get(0).toNotionSelectFilter(property)
+    } else {
+        buildJsonObject {
+            put(
+                "or",
+                buildJsonArray {
+                    this@toNotionMultiselectFilter.map { add(it.toNotionSelectFilter(property)) }
+                }
+            )
+        }
+    }
 }
 
 internal fun Instant.toNotionDateFilter(
-	property: String,
-	type: NotionDateFilter = NotionDateFilter.EQUALS
+    property: String,
+    type: NotionDateFilter = NotionDateFilter.EQUALS
 ) = buildJsonObject {
-	put("property", JsonPrimitive(property))
-	put("date", buildJsonObject {
-		put(type.key, JsonPrimitive(this@toNotionDateFilter.toString()))
-	})
+    put("property", JsonPrimitive(property))
+    put("date", buildJsonObject { put(type.key, JsonPrimitive(this@toNotionDateFilter.toString())) })
 }

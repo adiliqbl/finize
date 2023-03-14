@@ -18,27 +18,24 @@ import retrofit2.http.Path
 
 internal interface NotionService {
 
-	@POST(value = "/databases/{db}/query")
-	suspend fun getAccounts(@Path("db") db: String): PaginatedList<NotionApiAccount>
+    @POST(value = "/databases/{db}/query")
+    suspend fun getAccounts(@Path("db") db: String): PaginatedList<NotionApiAccount>
 
-	@POST(value = "/databases/{db}/query")
-	suspend fun getBudgets(@Path("db") db: String): PaginatedList<NotionApiBudget>
+    @POST(value = "/databases/{db}/query")
+    suspend fun getBudgets(@Path("db") db: String): PaginatedList<NotionApiBudget>
 
-	@POST(value = "/databases/{db}/query")
-	suspend fun getTransactions(
-		@Path("db") db: String,
-		@Body body: NotionDatabaseQuery? = null
-	): PaginatedList<NotionApiTransaction>
+    @POST(value = "/databases/{db}/query")
+    suspend fun getTransactions(
+        @Path("db") db: String,
+        @Body body: NotionDatabaseQuery? = null
+    ): PaginatedList<NotionApiTransaction>
 
-	@POST(value = "/pages")
-	suspend fun createPage(@Body body: CreateNotionPageRequest): String
+    @POST(value = "/pages") suspend fun createPage(@Body body: CreateNotionPageRequest): String
 
-	@GET(value = "/pages/{id}")
-	suspend fun getPage(@Path("id") id: ID): String
+    @GET(value = "/pages/{id}") suspend fun getPage(@Path("id") id: ID): String
 
-	@PATCH(value = "/pages/{id}")
-	suspend fun updatePage(@Path("id") id: ID, @Field("properties") body: JsonObject)
+    @PATCH(value = "/pages/{id}")
+    suspend fun updatePage(@Path("id") id: ID, @Field("properties") body: JsonObject)
 
-	@DELETE(value = "/pages/{id}")
-	suspend fun deletePage(@Path("id") id: ID)
+    @DELETE(value = "/pages/{id}") suspend fun deletePage(@Path("id") id: ID)
 }

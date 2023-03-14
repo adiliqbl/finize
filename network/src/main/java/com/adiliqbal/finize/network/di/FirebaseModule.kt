@@ -22,42 +22,32 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 internal interface FirebaseModule {
 
-	@Module
-	@InstallIn(SingletonComponent::class)
-	object ProviderModule {
+    @Module
+    @InstallIn(SingletonComponent::class)
+    object ProviderModule {
 
-		@Provides
-		fun provideFirestore() = Firebase.firestore
+        @Provides fun provideFirestore() = Firebase.firestore
 
-		@Provides
-		fun provideAuth() = Firebase.auth
-	}
+        @Provides fun provideAuth() = Firebase.auth
+    }
 
-	@Binds
-	@Singleton
-	fun bindFirestoreService(service: FirestoreServiceImpl): FirestoreService
+    @Binds @Singleton fun bindFirestoreService(service: FirestoreServiceImpl): FirestoreService
 
-	@Binds
-	@Singleton
-	fun bindAuthService(service: FirebaseAuthService): AuthService
+    @Binds @Singleton fun bindAuthService(service: FirebaseAuthService): AuthService
 
-	@Binds
-	@Singleton
-	fun bindUserService(service: FirebaseAccountService): FirebaseAccountService
+    @Binds @Singleton fun bindUserService(service: FirebaseAccountService): FirebaseAccountService
 
-	@Binds
-	@Singleton
-	fun bindAccountService(service: FirebaseAccountService): FirebaseAccountService
+    @Binds @Singleton fun bindAccountService(service: FirebaseAccountService): FirebaseAccountService
 
-	@Binds
-	@Singleton
-	fun bindBudgetService(service: FirebaseBudgetService): FirebaseBudgetService
+    @Binds @Singleton fun bindBudgetService(service: FirebaseBudgetService): FirebaseBudgetService
 
-	@Binds
-	@Singleton
-	fun bindTransactionService(service: FirebaseTransactionService): FirebaseTransactionService
+    @Binds
+    @Singleton
+    fun bindTransactionService(service: FirebaseTransactionService): FirebaseTransactionService
 
-	@Binds
-	@Singleton
-	fun bindPaymentCategoryService(service: FirebasePaymentCategoryService): FirebasePaymentCategoryService
+    @Binds
+    @Singleton
+    fun bindPaymentCategoryService(
+        service: FirebasePaymentCategoryService
+    ): FirebasePaymentCategoryService
 }

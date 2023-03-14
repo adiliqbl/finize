@@ -7,9 +7,9 @@ import com.adiliqbal.finize.model.extensions.ID
 
 @Entity(tableName = "users")
 data class UserWithProfile(
-	@PrimaryKey override val id: ID,
-	val name: String,
-	val email: String,
-	val image: String? = null,
-	@Embedded(prefix = "profile_") val profile: ProfileEntity
+    @PrimaryKey override val id: ID,
+    val name: String,
+    val email: String,
+    val image: String? = null,
+    @Embedded(prefix = "profile_") val profile: ProfileEntity
 ) : BaseEntity

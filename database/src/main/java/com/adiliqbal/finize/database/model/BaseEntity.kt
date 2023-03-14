@@ -1,5 +1,5 @@
 package com.adiliqbal.finize.database.model
 
 interface BaseEntity {
-	val id: String
+    val id: String
 }

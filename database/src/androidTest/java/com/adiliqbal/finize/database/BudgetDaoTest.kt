@@ -13,32 +13,32 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 internal class BudgetDaoTest : BaseDatabaseTest() {
 
-	private val budget = FakeEntity.budget()
+    private val budget = FakeEntity.budget()
 
-	@Test
-	fun insertBudget() = runTest {
-		db.budgetDao().upsert(budget)
-		db.budgetDao().upsert(budget)
+    @Test
+    fun insertBudget() = runTest {
+        db.budgetDao().upsert(budget)
+        db.budgetDao().upsert(budget)
 
-		val data = db.budgetDao().get(budget.id).first()
-		assertEquals(budget.id, data?.id)
-	}
+        val data = db.budgetDao().get(budget.id).first()
+        assertEquals(budget.id, data?.id)
+    }
 
-	@Test
-	fun getBudgets() = runTest {
-		db.budgetDao().upsert(budget)
-		db.budgetDao().upsert(budget.copy(id = "budget2"))
+    @Test
+    fun getBudgets() = runTest {
+        db.budgetDao().upsert(budget)
+        db.budgetDao().upsert(budget.copy(id = "budget2"))
 
-		val data = db.budgetDao().getAll().firstOrNull()
-		assertEquals(2, data?.size)
-	}
+        val data = db.budgetDao().getAll().firstOrNull()
+        assertEquals(2, data?.size)
+    }
 
-	@Test
-	fun deleteBudget() = runTest {
-		db.budgetDao().upsert(budget)
-		db.budgetDao().delete(budget)
+    @Test
+    fun deleteBudget() = runTest {
+        db.budgetDao().upsert(budget)
+        db.budgetDao().delete(budget)
 
-		assertNull(db.budgetDao().get(budget.id).firstOrNull())
-		assertTrue(db.budgetDao().getAll().firstOrNull()?.size == 0)
-	}
+        assertNull(db.budgetDao().get(budget.id).firstOrNull())
+        assertTrue(db.budgetDao().getAll().firstOrNull()?.size == 0)
+    }
 }

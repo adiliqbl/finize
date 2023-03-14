@@ -4,5 +4,5 @@ import com.adiliqbal.finize.model.User
 
 interface AuthRepository {
 
-	suspend fun register(user: User): User
+    suspend fun register(user: User): User
 }

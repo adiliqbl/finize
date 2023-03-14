@@ -10,13 +10,13 @@ import com.adiliqbal.finize.network.model.response.PaginatedList
 import com.adiliqbal.finize.network.model.serializer.NotionTransactionSerializer.DATE
 
 interface TransactionService {
-	suspend fun getTransactions(
-		paging: PaginationQuery = PaginationQuery(sortField = DATE, sortOrder = DESCENDING),
-		filter: TransactionsFilter? = null
-	): PaginatedList<BaseApiTransaction>
+    suspend fun getTransactions(
+        paging: PaginationQuery = PaginationQuery(sortField = DATE, sortOrder = DESCENDING),
+        filter: TransactionsFilter? = null
+    ): PaginatedList<BaseApiTransaction>
 
-	suspend fun getTransaction(id: ID): BaseApiTransaction
-	suspend fun createTransaction(transaction: ApiTransaction): BaseApiTransaction
-	suspend fun updateTransaction(transaction: ApiTransaction)
-	suspend fun deleteTransaction(id: ID)
+    suspend fun getTransaction(id: ID): BaseApiTransaction
+    suspend fun createTransaction(transaction: ApiTransaction): BaseApiTransaction
+    suspend fun updateTransaction(transaction: ApiTransaction)
+    suspend fun deleteTransaction(id: ID)
 }

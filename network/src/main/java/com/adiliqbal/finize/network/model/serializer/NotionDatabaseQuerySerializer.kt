@@ -1,12 +1,12 @@
 package com.adiliqbal.finize.network.model.serializer
 
-import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery
 import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.CURSOR
 import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.FILTER
 import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.PAGE_SIZE
 import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.SORT
 import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.SORT_FIELD
 import com.adiliqbal.finize.network.model.request.NotionDatabaseKeys.SORT_ORDER
+import com.adiliqbal.finize.network.model.request.NotionDatabaseQuery
 import com.adiliqbal.finize.network.model.request.PaginationQuery
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
@@ -28,23 +28,27 @@ internal object NotionDatabaseQuerySerializer : KSerializer<NotionDatabaseQuery>
 	override val descriptor: SerialDescriptor =
 		buildSerialDescriptor("NotionDatabaseQuery", PolymorphicKind.SEALED)
 
-	override fun serialize(encoder: Encoder, value: NotionDatabaseQuery) = with(value) {
-		val body = buildJsonObject {
-			sortField?.let {
-				put(SORT, buildJsonArray {
-					addJsonObject {
-						put(SORT_FIELD, JsonPrimitive(sortField))
-						put(SORT_ORDER, JsonPrimitive(sortOrder.value))
-					}
-				})
+	override fun serialize(encoder: Encoder, value: NotionDatabaseQuery) =
+		with(value) {
+			val body = buildJsonObject {
+				sortField?.let {
+					put(
+						SORT,
+						buildJsonArray {
+							addJsonObject {
+								put(SORT_FIELD, JsonPrimitive(sortField))
+								put(SORT_ORDER, JsonPrimitive(sortOrder.value))
+							}
+						}
+					)
+				}
+				filter?.let { put(FILTER, it) }
+				put(PAGE_SIZE, JsonPrimitive(pageSize))
+				cursor?.let { put(CURSOR, JsonPrimitive(it)) }
 			}
-			filter?.let { put(FILTER, it) }
-			put(PAGE_SIZE, JsonPrimitive(pageSize))
-			cursor?.let { put(CURSOR, JsonPrimitive(it)) }
-		}
 
-		(encoder as JsonEncoder).encodeJsonElement(body)
-	}
+			(encoder as JsonEncoder).encodeJsonElement(body)
+		}
 
 	override fun deserialize(decoder: Decoder) = NotionDatabaseQuery(PaginationQuery())
 }

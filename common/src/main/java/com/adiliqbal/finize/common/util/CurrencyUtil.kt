@@ -4,7 +4,8 @@ import java.util.*
 
 object CurrencyUtil {
 
-	val default: Currency get() = Currency.getInstance(Locale.getDefault())
+    val default: Currency
+        get() = Currency.getInstance(Locale.getDefault())
 
-	fun of(code: String): Currency = Currency.getInstance(code)
+    fun of(code: String): Currency = Currency.getInstance(code)
 }

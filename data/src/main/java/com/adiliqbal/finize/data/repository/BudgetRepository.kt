@@ -6,13 +6,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface BudgetRepository {
 
-	fun getBudgets(search: String? = null): Flow<List<Budget>>
+    fun getBudgets(search: String? = null): Flow<List<Budget>>
 
-	fun getBudget(id: ID): Flow<Budget>
+    fun getBudget(id: ID): Flow<Budget>
 
-	suspend fun createBudget(budget: Budget): Budget
+    suspend fun createBudget(budget: Budget): Budget
 
-	suspend fun updateBudget(budget: Budget)
+    suspend fun updateBudget(budget: Budget)
 
-	suspend fun deleteBudget(id: ID)
+    suspend fun deleteBudget(id: ID)
 }

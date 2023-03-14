@@ -6,8 +6,8 @@ import com.adiliqbal.finize.network.model.BaseApiAccount
 import com.adiliqbal.finize.network.model.response.PaginatedList
 
 interface AccountService {
-	suspend fun getAccounts(): PaginatedList<BaseApiAccount>
-	suspend fun createAccount(account: ApiAccount): BaseApiAccount
-	suspend fun updateAccount(account: ApiAccount)
-	suspend fun deleteAccount(id: ID)
+    suspend fun getAccounts(): PaginatedList<BaseApiAccount>
+    suspend fun createAccount(account: ApiAccount): BaseApiAccount
+    suspend fun updateAccount(account: ApiAccount)
+    suspend fun deleteAccount(id: ID)
 }

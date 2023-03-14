@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class DatastoreCleaner @Inject constructor(private val dataStore: DataStore<Preferences>) {
 
-	suspend fun clean() {
-		dataStore.edit { it.clear() }
-	}
+    suspend fun clean() {
+        dataStore.edit { it.clear() }
+    }
 }
