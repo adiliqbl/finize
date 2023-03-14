@@ -14,7 +14,7 @@ import kotlinx.datetime.Instant
 object FakeEntity {
 
     fun user(id: ID = "userId", name: String = "name") =
-        UserWithProfile(id = id, name = name, email = "email", profile = ProfileEntity("currency"))
+        UserWithProfile(id = id, name = name, email = "email", profile = ProfileEntity("PKR"))
 
     fun account(id: ID = "accountId", budget: ID? = null, type: AccountType = AccountType.DEPOSIT) =
         AccountEntity(
@@ -23,7 +23,7 @@ object FakeEntity {
             balance = 50.0,
             budget = budget,
             type = type,
-            currency = "currency",
+            currency = "PKR",
             createdAt = Instant.DISTANT_FUTURE
         )
 

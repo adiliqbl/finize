@@ -11,10 +11,10 @@ import com.adiliqbal.finize.datastore.AppPreferences
 import com.adiliqbal.finize.model.Profile
 import com.adiliqbal.finize.model.User
 import com.adiliqbal.finize.network.service.UserService
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapNotNull
+import javax.inject.Inject
 
 internal class UserRepositoryImpl
 @Inject
@@ -29,7 +29,7 @@ constructor(
         withScope(Dispatchers.Unconfined) {
             userDao.get(id).mapNotNull { it?.toModel() }.collect { trySend(it) }
         }
-        launchSafeApi { userService.getUser(id)?.let { userDao.upsert(it.toEntity()) } }
+        launchSafeApi(Dispatchers.IO) { userService.getUser(id)?.let { userDao.upsert(it.toEntity()) } }
     }
 
     override suspend fun updateUser(user: User) {

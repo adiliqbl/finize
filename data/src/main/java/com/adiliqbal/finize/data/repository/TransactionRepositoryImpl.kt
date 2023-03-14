@@ -20,10 +20,10 @@ import com.adiliqbal.finize.model.extensions.ID
 import com.adiliqbal.finize.model.filter.TransactionsFilter
 import com.adiliqbal.finize.network.service.TransactionService
 import com.adiliqbal.finize.network.service.TransactionTemplateService
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 internal class TransactionRepositoryImpl
 @Inject
@@ -54,7 +54,7 @@ constructor(
         withScope(Dispatchers.Unconfined) {
             transactionDao.get(id).withExceptions().map { trySend(it.toModel()) }
         }
-        launchSafeApi {
+        launchSafeApi(Dispatchers.IO) {
             transactionService.getTransaction(id).let { transactionDao.upsert(it.toEntity()) }
         }
     }
@@ -87,7 +87,7 @@ constructor(
                 .map { it.map { entity -> entity.toModel() } }
                 .collect { trySend(it) }
         }
-        launchSafeApi {
+        launchSafeApi(Dispatchers.IO) {
             templateService
                 .getTemplates()
                 .map { it.toEntity().copy(isTemplate = true) }
