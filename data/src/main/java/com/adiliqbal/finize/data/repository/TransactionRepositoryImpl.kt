@@ -71,7 +71,6 @@ constructor(
             transactionService.updateTransaction(it)
             val entity = it.toEntity()
             transactionDao.upsert(entity)
-            entity.toModel()
         }
     }
 
@@ -107,7 +106,6 @@ constructor(
             templateService.updateTemplate(it)
             val entity = it.toEntity()
             transactionDao.upsert(entity.copy(isTemplate = true))
-            entity.toModel()
         }
     }
 

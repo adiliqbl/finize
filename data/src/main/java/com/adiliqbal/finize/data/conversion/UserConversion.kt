@@ -1,6 +1,6 @@
 package com.adiliqbal.finize.data.conversion
 
-import com.adiliqbal.finize.common.util.CurrencyUtil
+import com.adiliqbal.finize.common.util.Currencies
 import com.adiliqbal.finize.database.model.ProfileEntity
 import com.adiliqbal.finize.database.model.UserWithProfile
 import com.adiliqbal.finize.model.Profile
@@ -18,7 +18,7 @@ internal fun BaseApiUser.toEntity() =
         email ?: "",
         image,
         profile = profile?.toEntity()
-            ?: ProfileEntity(currency = CurrencyUtil.default.currencyCode)
+            ?: ProfileEntity(currency = Currencies.default.currencyCode)
     )
 
 internal fun UserWithProfile.toModel() = User(id, name, email, image, profile = profile.toModel())
@@ -27,4 +27,4 @@ internal fun Profile.toApi() = ApiProfile(currency = currency.currencyCode)
 
 internal fun ApiProfile.toEntity() = ProfileEntity(currency = currency)
 
-internal fun ProfileEntity.toModel() = Profile(currency = CurrencyUtil.of(currency))
+internal fun ProfileEntity.toModel() = Profile(currency = Currencies.of(currency))

@@ -53,7 +53,6 @@ internal class BudgetRepositoryImpl @Inject constructor(
 			budgetService.updateBudget(it)
 			val entity = it.toEntity()
 			budgetDao.upsert(entity)
-			entity.toModel()
 		}
 	}
 

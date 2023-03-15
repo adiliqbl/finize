@@ -53,7 +53,6 @@ internal class AccountRepositoryImpl @Inject constructor(
 			accountService.updateAccount(it)
 			val entity = it.toEntity()
 			accountDao.upsert(entity)
-			entity.toModel()
 		}
 	}
 

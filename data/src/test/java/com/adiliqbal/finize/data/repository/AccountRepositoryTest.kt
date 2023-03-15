@@ -36,17 +36,27 @@ class AccountRepositoryTest {
 				)
 			)
 		)
-		Mockito.`when`(service.getAccounts()).thenReturn(
-			PaginatedList(
-				listOf(
-					FakeModel.account("three").toApi(),
-					FakeModel.account("four").toApi()
-				)
-			)
-		)
+		Mockito.`when`(service.getAccounts()).thenReturn(PaginatedList(emptyList()))
 
 		val accounts = repository.getAccounts().take(1).lastOrNull()
 		assertEquals(2, accounts?.size)
+		Mockito.verify(dao, times(1)).upsert(anyList())
+	}
+
+	@Test
+	fun searchAccounts() = runTest {
+		Mockito.`when`(dao.getAll()).thenReturn(
+			flowOf(
+				listOf(
+					FakeEntity.account("one").copy(name = "Account One"),
+					FakeEntity.account("two").copy(name = "Account Two")
+				)
+			)
+		)
+		Mockito.`when`(service.getAccounts()).thenReturn(PaginatedList(emptyList()))
+
+		val accounts = repository.getAccounts("One").take(1).lastOrNull()
+		assertEquals(1, accounts?.size)
 		Mockito.verify(dao, times(1)).upsert(anyList())
 	}
 

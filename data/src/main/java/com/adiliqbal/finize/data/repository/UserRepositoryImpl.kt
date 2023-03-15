@@ -20,8 +20,8 @@ internal class UserRepositoryImpl
 @Inject
 constructor(
     private val userDao: UserDao,
-    private val preferences: AppPreferences,
-    private val userService: UserService
+    private val userService: UserService,
+    private val preferences: AppPreferences
 ) : UserRepository {
 
     override fun getUser() = channelFlowWithAwait {
@@ -37,7 +37,6 @@ constructor(
             userService.updateUser(it)
             val entity = it.toEntity()
             userDao.upsert(entity)
-            entity.toModel()
         }
     }
 

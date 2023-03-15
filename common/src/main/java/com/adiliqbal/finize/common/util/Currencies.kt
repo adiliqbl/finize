@@ -2,7 +2,7 @@ package com.adiliqbal.finize.common.util
 
 import java.util.*
 
-object CurrencyUtil {
+object Currencies {
 
     val default: Currency
         get() = Currency.getInstance(Locale.getDefault())

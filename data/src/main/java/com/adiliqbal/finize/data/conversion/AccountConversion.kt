@@ -1,6 +1,6 @@
 package com.adiliqbal.finize.data.conversion
 
-import com.adiliqbal.finize.common.util.CurrencyUtil
+import com.adiliqbal.finize.common.util.Currencies
 import com.adiliqbal.finize.database.model.AccountEntity
 import com.adiliqbal.finize.database.model.AccountWithRefs
 import com.adiliqbal.finize.model.Account
@@ -27,7 +27,7 @@ internal fun AccountWithRefs.toModel() =
         name = account.name,
         balance = account.balance,
         type = account.type,
-        currency = CurrencyUtil.of(account.currency),
+        currency = Currencies.of(account.currency),
         budget = budget?.toModel(),
         createdAt = account.createdAt
     )
@@ -38,6 +38,6 @@ internal fun AccountEntity.toModel() =
         name = name,
         balance = balance,
         type = type,
-        currency = CurrencyUtil.of(currency),
+        currency = Currencies.of(currency),
         createdAt = createdAt
     )
