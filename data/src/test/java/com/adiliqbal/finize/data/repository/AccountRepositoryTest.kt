@@ -17,7 +17,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.anyList
-import org.mockito.kotlin.any
 import org.mockito.kotlin.times
 
 class AccountRepositoryTest {
@@ -40,6 +39,7 @@ class AccountRepositoryTest {
 
 		val accounts = repository.getAccounts().take(1).lastOrNull()
 		assertEquals(2, accounts?.size)
+		Mockito.verify(dao, times(1)).clear()
 		Mockito.verify(dao, times(1)).upsert(anyList())
 	}
 
@@ -62,7 +62,7 @@ class AccountRepositoryTest {
 
 	@Test
 	fun getAccount() = runTest {
-		Mockito.`when`(dao.get(any())).thenReturn(
+		Mockito.`when`(dao.get("one")).thenReturn(
 			flowOf(AccountWithRefs(FakeEntity.account("one")))
 		)
 

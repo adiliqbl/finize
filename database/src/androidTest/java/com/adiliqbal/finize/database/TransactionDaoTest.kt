@@ -219,11 +219,65 @@ internal class TransactionDaoTest : BaseDatabaseTest() {
 	}
 
 	@Test
+	fun getTemplates() = runTest {
+		db.transactionDao().upsert(transactions)
+		db.transactionDao().upsert(
+			FakeEntity.transaction(
+				id = "template",
+				accountFrom = "a1",
+				name = "Transaction One",
+				budget = "b1",
+				date = LocalDate(2022, 8, 1).atStartOfDayIn(TimeZone.UTC)
+			).copy(isTemplate = true)
+		)
+
+		assertEquals(1, db.transactionDao().getTemplates().firstOrNull()?.size)
+	}
+
+	@Test
 	fun deleteTransaction() = runTest {
 		db.transactionDao().upsert(transaction)
 		db.transactionDao().delete(transaction)
 
 		assertNull(db.transactionDao().get(transaction.id).firstOrNull())
 		assertTrue(db.transactionDao().getAll().result()?.size == 0)
+	}
+
+	@Test
+	fun clearTransactions() = runTest {
+		db.transactionDao().upsert(transactions)
+		db.transactionDao().upsert(
+			FakeEntity.transaction(
+				id = "template",
+				accountFrom = "a1",
+				name = "Transaction One",
+				budget = "b1",
+				date = LocalDate(2022, 8, 1).atStartOfDayIn(TimeZone.UTC)
+			).copy(isTemplate = true)
+		)
+
+		db.transactionDao().clear()
+
+		assertTrue(db.transactionDao().getAll().result()?.size == 0)
+		assertEquals(1, db.transactionDao().getTemplates().firstOrNull()?.size)
+	}
+
+	@Test
+	fun clearTemplates() = runTest {
+		db.transactionDao().upsert(transactions)
+		db.transactionDao().upsert(
+			FakeEntity.transaction(
+				id = "template",
+				accountFrom = "a1",
+				name = "Transaction One",
+				budget = "b1",
+				date = LocalDate(2022, 8, 1).atStartOfDayIn(TimeZone.UTC)
+			).copy(isTemplate = true)
+		)
+
+		db.transactionDao().clearTemplates()
+
+		assertEquals(transactions.size, db.transactionDao().getAll().result()?.size)
+		assertTrue(db.transactionDao().getTemplates().firstOrNull().isNullOrEmpty())
 	}
 }

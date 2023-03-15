@@ -21,7 +21,7 @@ internal class AccountDaoTest : BaseDatabaseTest() {
         db.accountDao().upsert(account)
 
         val data = db.accountDao().get(account.id).first()
-        assertEquals(account.id, data?.id)
+        assertEquals(account.id, data?.account?.id)
     }
 
     @Test

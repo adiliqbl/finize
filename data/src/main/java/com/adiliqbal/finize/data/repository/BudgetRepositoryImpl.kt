@@ -33,7 +33,12 @@ internal class BudgetRepositoryImpl @Inject constructor(
 		launchSafeApi(Dispatchers.IO) {
 			budgetService.getBudgets().let {
 				it.data?.map { budget -> budget.toEntity() }
-					?.let { budgets -> budgetDao.upsert(budgets) }
+					?.let { budgets ->
+						budgetDao.transaction {
+							budgetDao.clear()
+							budgetDao.upsert(budgets)
+						}
+					}
 			}
 		}
 	}

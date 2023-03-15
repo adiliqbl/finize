@@ -17,8 +17,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 internal class AccountRepositoryImpl @Inject constructor(
-	private val accountDao: AccountDao,
-	private val accountService: AccountService
+	private val accountDao: AccountDao, private val accountService: AccountService
 ) : AccountRepository {
 
 	override fun getAccounts(search: String?) = channelFlowWithAwait {
@@ -32,8 +31,12 @@ internal class AccountRepositoryImpl @Inject constructor(
 		}
 		launchSafeApi(Dispatchers.IO) {
 			accountService.getAccounts().let {
-				it.data?.map { account -> account.toEntity() }
-					?.let { accounts -> accountDao.upsert(accounts) }
+				it.data?.map { account -> account.toEntity() }?.let { accounts ->
+						accountDao.transaction {
+							accountDao.clear()
+							accountDao.upsert(accounts)
+						}
+					}
 			}
 		}
 	}

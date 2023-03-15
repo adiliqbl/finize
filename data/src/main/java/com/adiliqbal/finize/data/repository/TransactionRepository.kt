@@ -21,7 +21,9 @@ interface TransactionRepository {
     /** Templates */
     fun getTemplates(): Flow<List<Transaction>>
 
-    suspend fun createTemplate(template: Transaction)
+    fun getTemplate(id: ID): Flow<Transaction>
+
+    suspend fun createTemplate(template: Transaction): Transaction
 
     suspend fun updateTemplate(template: Transaction)
 
