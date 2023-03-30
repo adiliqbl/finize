@@ -162,7 +162,9 @@ private fun JsonObject.parseNotionFileUrl(key: String): String? {
         val obj = value as JsonObject
         if (obj.containsKey("url")) return obj.getString("url")
         else if (obj.containsKey("type")) {
-            if (obj.getString("type") == "file") return obj["file"]!!.jsonObject.parseNotionFileUrl("URL")
+            if (obj.getString("type") == "file") return obj["file"]!!.jsonObject.parseNotionFileUrl(
+                "URL"
+            )
         }
         null
     } catch (_: Exception) {

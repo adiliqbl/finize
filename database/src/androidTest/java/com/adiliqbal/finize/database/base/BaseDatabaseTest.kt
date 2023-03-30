@@ -21,5 +21,7 @@ internal abstract class BaseDatabaseTest {
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
     }
 
-    @After @Throws(IOException::class) open fun onCloseDB() = db.close()
+    @After
+    @Throws(IOException::class)
+    open fun onCloseDB() = db.close()
 }

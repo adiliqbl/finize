@@ -7,8 +7,9 @@ import com.adiliqbal.finize.model.User
 import com.adiliqbal.finize.network.service.AuthService
 import javax.inject.Inject
 
-internal class AuthRepositoryImpl @Inject constructor(private val authService: AuthService) :
-    AuthRepository {
+internal class AuthRepositoryImpl @Inject constructor(
+    private val authService: AuthService
+) : AuthRepository {
 
     override suspend fun register(user: User) =
         authService.register(user.toApi()).toEntity().toModel()

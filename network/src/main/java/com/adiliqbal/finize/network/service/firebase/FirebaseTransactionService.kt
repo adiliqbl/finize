@@ -20,10 +20,10 @@ import javax.inject.Singleton
 import kotlinx.serialization.json.JsonObject
 
 @Singleton
-internal class FirebaseTransactionService
-@Inject
-constructor(private val preferences: AppPreferences, private val firestore: FirestoreService) :
-    TransactionService {
+internal class FirebaseTransactionService @Inject constructor(
+    private val preferences: AppPreferences,
+    private val firestore: FirestoreService
+) : TransactionService {
 
     private companion object {
         fun transactionDoc(userId: String, id: String) = "${transactionsDB(userId)}/$id"
@@ -56,7 +56,8 @@ constructor(private val preferences: AppPreferences, private val firestore: Fire
     override suspend fun createTransaction(transaction: ApiTransaction): ApiTransaction {
         return firestore
             .create(
-                transactionsDB(preferences.userId()), transaction.toJson().decodeJson<JsonObject>()!!
+                transactionsDB(preferences.userId()),
+                transaction.toJson().decodeJson<JsonObject>()!!
             )
             .let { transaction.copy(id = it) }
     }

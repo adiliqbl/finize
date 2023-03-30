@@ -3,10 +3,10 @@ package com.adiliqbal.finize.data.manager
 import android.content.Context
 import com.adiliqbal.finize.datastore.model.AuthCredentials
 import javax.inject.Inject
+import javax.inject.Singleton
 
-internal class SessionManagerImpl
-@Inject
-constructor(
+@Singleton
+internal class SessionManagerImpl @Inject constructor(
     private val dataCleaner: DataCleaner,
 ) : SessionManager {
 

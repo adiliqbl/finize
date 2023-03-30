@@ -106,11 +106,17 @@ internal object NotionTransactionSerializer : KSerializer<NotionApiTransaction> 
                 },
                 amountFrom =
                 properties.parseNotionString(AMOUNT_FROM_CURRENCY)?.let {
-                    ApiMoney(amount = properties.parseNotionDouble(AMOUNT_FROM_VALUE), currency = it)
+                    ApiMoney(
+                        amount = properties.parseNotionDouble(AMOUNT_FROM_VALUE),
+                        currency = it
+                    )
                 },
                 amountLocal =
                 properties.parseNotionString(AMOUNT_LOCAL_CURRENCY)?.let {
-                    ApiMoney(amount = properties.parseNotionDouble(AMOUNT_LOCAL_VALUE), currency = it)
+                    ApiMoney(
+                        amount = properties.parseNotionDouble(AMOUNT_LOCAL_VALUE),
+                        currency = it
+                    )
                 },
                 note = properties.parseNotionString(NOTE),
                 date = properties.parseNotionDate(DATE) ?: DateUtil.now()

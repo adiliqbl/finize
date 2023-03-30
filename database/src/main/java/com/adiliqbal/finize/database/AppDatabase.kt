@@ -34,10 +34,15 @@ internal abstract class AppDatabase : RoomDatabase() {
 
         private const val DB_NAME = "finize-database"
 
-        @Volatile private var INSTANCE: AppDatabase? = null
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
 
         internal fun getInstance(context: Context): AppDatabase =
-            INSTANCE ?: synchronized(this) { INSTANCE ?: buildDatabase(context).also { INSTANCE = it } }
+            INSTANCE ?: synchronized(this) {
+                INSTANCE ?: buildDatabase(context).also {
+                    INSTANCE = it
+                }
+            }
 
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, DB_NAME)

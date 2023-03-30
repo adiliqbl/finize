@@ -30,12 +30,15 @@ internal interface NotionService {
         @Body body: NotionDatabaseQuery? = null
     ): PaginatedList<NotionApiTransaction>
 
-    @POST(value = "/pages") suspend fun createPage(@Body body: CreateNotionPageRequest): String
+    @POST(value = "/pages")
+    suspend fun createPage(@Body body: CreateNotionPageRequest): String
 
-    @GET(value = "/pages/{id}") suspend fun getPage(@Path("id") id: ID): String
+    @GET(value = "/pages/{id}")
+    suspend fun getPage(@Path("id") id: ID): String
 
     @PATCH(value = "/pages/{id}")
     suspend fun updatePage(@Path("id") id: ID, @Field("properties") body: JsonObject)
 
-    @DELETE(value = "/pages/{id}") suspend fun deletePage(@Path("id") id: ID)
+    @DELETE(value = "/pages/{id}")
+    suspend fun deletePage(@Path("id") id: ID)
 }

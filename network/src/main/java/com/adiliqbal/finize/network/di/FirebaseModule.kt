@@ -26,20 +26,32 @@ internal interface FirebaseModule {
     @InstallIn(SingletonComponent::class)
     object ProviderModule {
 
-        @Provides fun provideFirestore() = Firebase.firestore
+        @Provides
+        fun provideFirestore() = Firebase.firestore
 
-        @Provides fun provideAuth() = Firebase.auth
+        @Provides
+        fun provideAuth() = Firebase.auth
     }
 
-    @Binds @Singleton fun bindFirestoreService(service: FirestoreServiceImpl): FirestoreService
+    @Binds
+    @Singleton
+    fun bindFirestoreService(service: FirestoreServiceImpl): FirestoreService
 
-    @Binds @Singleton fun bindAuthService(service: FirebaseAuthService): AuthService
+    @Binds
+    @Singleton
+    fun bindAuthService(service: FirebaseAuthService): AuthService
 
-    @Binds @Singleton fun bindUserService(service: FirebaseAccountService): FirebaseAccountService
+    @Binds
+    @Singleton
+    fun bindUserService(service: FirebaseAccountService): FirebaseAccountService
 
-    @Binds @Singleton fun bindAccountService(service: FirebaseAccountService): FirebaseAccountService
+    @Binds
+    @Singleton
+    fun bindAccountService(service: FirebaseAccountService): FirebaseAccountService
 
-    @Binds @Singleton fun bindBudgetService(service: FirebaseBudgetService): FirebaseBudgetService
+    @Binds
+    @Singleton
+    fun bindBudgetService(service: FirebaseBudgetService): FirebaseBudgetService
 
     @Binds
     @Singleton

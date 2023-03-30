@@ -21,78 +21,78 @@ import org.mockito.kotlin.times
 
 class AccountRepositoryTest {
 
-	private val dao = Mockito.mock(AccountDao::class.java)
-	private val service = Mockito.mock(AccountService::class.java)
-	private val repository = AccountRepositoryImpl(dao, service)
+    private val dao = Mockito.mock(AccountDao::class.java)
+    private val service = Mockito.mock(AccountService::class.java)
+    private val repository = AccountRepositoryImpl(dao, service)
 
-	@Test
-	fun getAccounts() = runTest {
-		Mockito.`when`(dao.getAll()).thenReturn(
-			flowOf(
-				listOf(
-					FakeEntity.account("one"),
-					FakeEntity.account("two")
-				)
-			)
-		)
-		Mockito.`when`(service.getAccounts()).thenReturn(PaginatedList(emptyList()))
+    @Test
+    fun getAccounts() = runTest {
+        Mockito.`when`(dao.getAll()).thenReturn(
+            flowOf(
+                listOf(
+                    FakeEntity.account("one"),
+                    FakeEntity.account("two")
+                )
+            )
+        )
+        Mockito.`when`(service.getAccounts()).thenReturn(PaginatedList(emptyList()))
 
-		val accounts = repository.getAccounts().take(1).lastOrNull()
-		assertEquals(2, accounts?.size)
-		Mockito.verify(dao, times(1)).clear()
-		Mockito.verify(dao, times(1)).upsert(anyList())
-	}
+        val accounts = repository.getAccounts().take(1).lastOrNull()
+        assertEquals(2, accounts?.size)
+        Mockito.verify(dao, times(1)).clear()
+        Mockito.verify(dao, times(1)).upsert(anyList())
+    }
 
-	@Test
-	fun searchAccounts() = runTest {
-		Mockito.`when`(dao.getAll()).thenReturn(
-			flowOf(
-				listOf(
-					FakeEntity.account("one").copy(name = "Account One"),
-					FakeEntity.account("two").copy(name = "Account Two")
-				)
-			)
-		)
-		Mockito.`when`(service.getAccounts()).thenReturn(PaginatedList(emptyList()))
+    @Test
+    fun searchAccounts() = runTest {
+        Mockito.`when`(dao.getAll()).thenReturn(
+            flowOf(
+                listOf(
+                    FakeEntity.account("one").copy(name = "Account One"),
+                    FakeEntity.account("two").copy(name = "Account Two")
+                )
+            )
+        )
+        Mockito.`when`(service.getAccounts()).thenReturn(PaginatedList(emptyList()))
 
-		val accounts = repository.getAccounts("One").take(1).lastOrNull()
-		assertEquals(1, accounts?.size)
-		Mockito.verify(dao, times(1)).upsert(anyList())
-	}
+        val accounts = repository.getAccounts("One").take(1).lastOrNull()
+        assertEquals(1, accounts?.size)
+        Mockito.verify(dao, times(1)).upsert(anyList())
+    }
 
-	@Test
-	fun getAccount() = runTest {
-		Mockito.`when`(dao.get("one")).thenReturn(
-			flowOf(AccountWithRefs(FakeEntity.account("one")))
-		)
+    @Test
+    fun getAccount() = runTest {
+        Mockito.`when`(dao.get("one")).thenReturn(
+            flowOf(AccountWithRefs(FakeEntity.account("one")))
+        )
 
-		val account = repository.getAccount("one").first()
-		assertEquals("one", account.id)
-	}
+        val account = repository.getAccount("one").first()
+        assertEquals("one", account.id)
+    }
 
-	@Test
-	fun createAccount() = runTest {
-		val api = FakeModel.account("").toApi()
-		Mockito.`when`(service.createAccount(api)).thenReturn(api.copy("id"))
+    @Test
+    fun createAccount() = runTest {
+        val api = FakeModel.account("").toApi()
+        Mockito.`when`(service.createAccount(api)).thenReturn(api.copy("id"))
 
-		val account = repository.createAccount(FakeModel.account(""))
-		assertEquals("id", account.id)
-		Mockito.verify(dao, times(1)).upsert(api.copy("id").toEntity())
-	}
+        val account = repository.createAccount(FakeModel.account(""))
+        assertEquals("id", account.id)
+        Mockito.verify(dao, times(1)).upsert(api.copy("id").toEntity())
+    }
 
-	@Test
-	fun updateAccount() = runTest {
-		val account = FakeModel.account().copy(name = "new name")
+    @Test
+    fun updateAccount() = runTest {
+        val account = FakeModel.account().copy(name = "new name")
 
-		repository.updateAccount(account)
-		Mockito.verify(service, times(1)).updateAccount(account.toApi())
-		Mockito.verify(dao, times(1)).upsert(account.toApi().toEntity())
-	}
+        repository.updateAccount(account)
+        Mockito.verify(service, times(1)).updateAccount(account.toApi())
+        Mockito.verify(dao, times(1)).upsert(account.toApi().toEntity())
+    }
 
-	@Test
-	fun deleteAccount() = runTest {
-		repository.deleteAccount("id")
-		Mockito.verify(service, times(1)).deleteAccount("id")
-		Mockito.verify(dao, times(1)).delete("id")
-	}
+    @Test
+    fun deleteAccount() = runTest {
+        repository.deleteAccount("id")
+        Mockito.verify(service, times(1)).deleteAccount("id")
+        Mockito.verify(dao, times(1)).delete("id")
+    }
 }

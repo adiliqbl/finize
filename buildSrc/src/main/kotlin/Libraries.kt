@@ -35,6 +35,7 @@ object Libraries {
 			"com.google.firebase:firebase-crashlytics-gradle:${Versions.Firebase.Crashlytics}"
 		const val Analytics = "com.google.firebase:firebase-analytics-ktx"
 		const val Auth = "com.google.firebase:firebase-auth-ktx"
+		const val Functions = "com.google.firebase:firebase-functions-ktx"
 		const val Firestore = "com.google.firebase:firebase-firestore-ktx"
 
 		fun DependencyHandler.implementFirebase(type: String = "implementation") {

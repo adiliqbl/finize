@@ -58,9 +58,13 @@ internal object ServiceModule {
     @InstallIn(SingletonComponent::class)
     internal interface BindingModule {
 
-        @Binds @Singleton fun bindAuthService(service: FirebaseAuthService): AuthService
+        @Binds
+        @Singleton
+        fun bindAuthService(service: FirebaseAuthService): AuthService
 
-        @Binds @Singleton fun bindUserService(service: FirebaseUserService): UserService
+        @Binds
+        @Singleton
+        fun bindUserService(service: FirebaseUserService): UserService
 
         @Binds
         @Singleton

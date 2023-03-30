@@ -20,9 +20,7 @@ import javax.inject.Singleton
 import kotlinx.serialization.json.JsonObject
 
 @Singleton
-internal class NotionTransactionService
-@Inject
-constructor(
+internal class NotionTransactionService @Inject constructor(
     private val notionPreferences: NotionPreferences,
     private val notionService: NotionService
 ) : TransactionService {
@@ -31,8 +29,7 @@ constructor(
         notionService.getTransactions(
             notionPreferences.transactionsDB(),
             NotionDatabaseQuery(paging.copy(filter = filter?.toNotionFilter()))
-        )
-            as PaginatedList<BaseApiTransaction>
+        ) as PaginatedList<BaseApiTransaction>
 
     override suspend fun getTransaction(id: ID): BaseApiTransaction {
         return notionService.getPage(id).decodeJson<NotionApiTransaction>()!!

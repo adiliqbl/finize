@@ -15,83 +15,83 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 abstract class TransactionDao : BaseDao<TransactionEntity>("transactions") {
 
-	@Query("SELECT * FROM transactions WHERE id = :id AND isTemplate = 0")
-	abstract fun get(id: ID): Flow<TransactionEntity?>
+    @Query("SELECT * FROM transactions WHERE id = :id AND isTemplate = 0")
+    abstract fun get(id: ID): Flow<TransactionEntity?>
 
-	@Transaction
-	@Query("SELECT * FROM transactions WHERE isTemplate = 0 ORDER BY date DESC")
-	abstract fun getAll(): PagingSource<Int, TransactionEntity>
+    @Transaction
+    @Query("SELECT * FROM transactions WHERE isTemplate = 0 ORDER BY date DESC")
+    abstract fun getAll(): PagingSource<Int, TransactionEntity>
 
-	@RawQuery(observedEntities = [TransactionEntity::class])
-	protected abstract fun pageQuery(query: SupportSQLiteQuery): PagingSource<Int, TransactionEntity>
+    @RawQuery(observedEntities = [TransactionEntity::class])
+    protected abstract fun pageQuery(query: SupportSQLiteQuery): PagingSource<Int, TransactionEntity>
 
-	@Transaction
-	@Query("SELECT * FROM transactions WHERE isTemplate = 1 ORDER BY date DESC")
-	abstract fun getTemplates(): Flow<List<TransactionEntity>>
+    @Transaction
+    @Query("SELECT * FROM transactions WHERE isTemplate = 1 ORDER BY date DESC")
+    abstract fun getTemplates(): Flow<List<TransactionEntity>>
 
-	override suspend fun clear(): Int {
-		clearTransactions()
-		return 1
-	}
+    override suspend fun clear(): Int {
+        clearTransactions()
+        return 1
+    }
 
-	@Transaction
-	@Query("DELETE FROM transactions WHERE isTemplate = 0")
-	protected abstract suspend fun clearTransactions()
+    @Transaction
+    @Query("DELETE FROM transactions WHERE isTemplate = 0")
+    protected abstract suspend fun clearTransactions()
 
-	@Transaction
-	@Query("DELETE FROM transactions WHERE isTemplate = 1")
-	abstract suspend fun clearTemplates()
+    @Transaction
+    @Query("DELETE FROM transactions WHERE isTemplate = 1")
+    abstract suspend fun clearTemplates()
 
-	open fun filter(filter: TransactionsFilter): PagingSource<Int, TransactionEntity> =
-		with(filter) {
-			val filters = mutableListOf<String>()
+    open fun filter(filter: TransactionsFilter): PagingSource<Int, TransactionEntity> =
+        with(filter) {
+            val filters = mutableListOf<String>()
 
-			if (!accountTo.isNullOrEmpty() && accountTo == accountFrom) {
-				filters.add("accountFrom='$accountTo' OR accountTo='$accountTo'")
-			} else if (!accountTo.isNullOrEmpty() && !accountFrom.isNullOrEmpty()) {
-				filters.add("accountFrom='$accountFrom' AND accountTo='$accountTo'")
-			} else if (!accountTo.isNullOrEmpty() && accountFrom.isNullOrEmpty()) {
-				filters.add("accountTo='$accountTo'")
-			} else if (!accountFrom.isNullOrEmpty() && accountTo.isNullOrEmpty()) {
-				filters.add("accountFrom='$accountFrom'")
-			}
+            if (!accountTo.isNullOrEmpty() && accountTo == accountFrom) {
+                filters.add("accountFrom='$accountTo' OR accountTo='$accountTo'")
+            } else if (!accountTo.isNullOrEmpty() && !accountFrom.isNullOrEmpty()) {
+                filters.add("accountFrom='$accountFrom' AND accountTo='$accountTo'")
+            } else if (!accountTo.isNullOrEmpty() && accountFrom.isNullOrEmpty()) {
+                filters.add("accountTo='$accountTo'")
+            } else if (!accountFrom.isNullOrEmpty() && accountTo.isNullOrEmpty()) {
+                filters.add("accountFrom='$accountFrom'")
+            }
 
-			categories?.forEach { category -> filters.add("categories LIKE '%'||'$category'||'%'") }
+            categories?.forEach { category -> filters.add("categories LIKE '%'||'$category'||'%'") }
 
-			if (budget != null) {
-				filters.add("budget LIKE '%'||'$budget'||'%'")
-			}
+            if (budget != null) {
+                filters.add("budget LIKE '%'||'$budget'||'%'")
+            }
 
-			if (dateFrom != null && dateTo != null) {
-				if (dateFrom == dateTo) {
-					filters.add("date=${dateTo!!.toEpochMilliseconds()}")
-				} else {
-					filters.add(
-						"date>=${dateFrom!!.toEpochMilliseconds()} AND date<=${dateTo!!.toEpochMilliseconds()}"
-					)
-				}
-			} else if (dateFrom != null) {
-				filters.add("date>=${dateFrom!!.toEpochMilliseconds()}")
-			} else if (dateTo != null) {
-				filters.add("date<=${dateTo!!.toEpochMilliseconds()}")
-			}
+            if (dateFrom != null && dateTo != null) {
+                if (dateFrom == dateTo) {
+                    filters.add("date=${dateTo!!.toEpochMilliseconds()}")
+                } else {
+                    filters.add(
+                        "date>=${dateFrom!!.toEpochMilliseconds()} AND date<=${dateTo!!.toEpochMilliseconds()}"
+                    )
+                }
+            } else if (dateFrom != null) {
+                filters.add("date>=${dateFrom!!.toEpochMilliseconds()}")
+            } else if (dateTo != null) {
+                filters.add("date<=${dateTo!!.toEpochMilliseconds()}")
+            }
 
-			if (!name.isNullOrEmpty()) {
-				filters.add("name LIKE '%'||'$name'||'%'")
-			}
+            if (!name.isNullOrEmpty()) {
+                filters.add("name LIKE '%'||'$name'||'%'")
+            }
 
-			if (filters.isEmpty()) getAll()
-			else
-				pageQuery(
-					SimpleSQLiteQuery(
-						"""
+            if (filters.isEmpty()) getAll()
+            else
+                pageQuery(
+                    SimpleSQLiteQuery(
+                        """
                         SELECT * FROM transactions
                         WHERE isTemplate = 0
                         AND
                         ${if (filters.size == 1) filters[0] else filters.joinToString("\n AND ")}
                         ORDER BY date DESC
                         """.trimIndent()
-					)
-				)
-		}
+                    )
+                )
+        }
 }

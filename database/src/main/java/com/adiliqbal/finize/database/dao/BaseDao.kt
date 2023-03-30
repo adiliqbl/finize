@@ -13,44 +13,44 @@ import com.adiliqbal.finize.model.extensions.ID
 
 abstract class BaseDao<T : BaseEntity>(private val table: String) {
 
-	@Insert(onConflict = OnConflictStrategy.IGNORE)
-	internal abstract suspend fun insert(item: T): Long
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    internal abstract suspend fun insert(item: T): Long
 
-	@Transaction
-	@Insert(onConflict = OnConflictStrategy.IGNORE)
-	internal abstract suspend fun insert(items: List<T>): List<Long>
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    internal abstract suspend fun insert(items: List<T>): List<Long>
 
-	@Update(onConflict = OnConflictStrategy.REPLACE)
-	abstract suspend fun update(item: T)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun update(item: T)
 
-	@Transaction
-	@Update(onConflict = OnConflictStrategy.REPLACE)
-	abstract suspend fun update(items: List<T>)
+    @Transaction
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun update(items: List<T>)
 
-	open suspend fun upsert(item: T) {
-		if (insert(item) == -1L) update(item)
-	}
+    open suspend fun upsert(item: T) {
+        if (insert(item) == -1L) update(item)
+    }
 
-	@Transaction
-	open suspend fun upsert(items: List<T>) {
-		insert(items)
-			.mapIndexedNotNull { index, rowID -> if (rowID == -1L) items[index] else null }
-			.let { update(it) }
-	}
+    @Transaction
+    open suspend fun upsert(items: List<T>) {
+        insert(items)
+            .mapIndexedNotNull { index, rowID -> if (rowID == -1L) items[index] else null }
+            .let { update(it) }
+    }
 
-	@Delete
-	abstract suspend fun delete(item: T)
+    @Delete
+    abstract suspend fun delete(item: T)
 
-	@Delete
-	abstract suspend fun delete(item: List<T>)
+    @Delete
+    abstract suspend fun delete(item: List<T>)
 
-	open suspend fun delete(id: ID) = query(SimpleSQLiteQuery("DELETE FROM $table WHERE id = $id"))
+    open suspend fun delete(id: ID) = query(SimpleSQLiteQuery("DELETE FROM $table WHERE id = $id"))
 
-	open suspend fun clear() = query(SimpleSQLiteQuery("DELETE FROM $table"))
+    open suspend fun clear() = query(SimpleSQLiteQuery("DELETE FROM $table"))
 
-	@RawQuery
-	protected abstract fun query(query: SupportSQLiteQuery): Int
+    @RawQuery
+    protected abstract fun query(query: SupportSQLiteQuery): Int
 
-	@Transaction
-	open suspend fun transaction(block: suspend () -> Unit) = block()
+    @Transaction
+    open suspend fun transaction(block: suspend () -> Unit) = block()
 }

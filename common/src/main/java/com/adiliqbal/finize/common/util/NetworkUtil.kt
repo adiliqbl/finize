@@ -12,13 +12,15 @@ sealed class ConnectionState {
 
 val Context.connectionState: ConnectionState
     get() {
-        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return connectivityManager.connectivityState()
     }
 
 internal fun ConnectivityManager.connectivityState(): ConnectionState {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val network = activeNetwork // network is currently in a high power state for performing data
+        val network =
+            activeNetwork // network is currently in a high power state for performing data
         // transmission.
         network ?: return ConnectionState.Available
         val actNetwork = getNetworkCapabilities(network) ?: return ConnectionState.Unavailable

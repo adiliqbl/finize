@@ -28,7 +28,10 @@ internal fun String.toNotionRichString() = buildJsonObject {
         "rich_text",
         buildJsonArray {
             addJsonObject {
-                put("text", buildJsonObject { put("content", JsonPrimitive(this@toNotionRichString)) })
+                put(
+                    "text",
+                    buildJsonObject { put("content", JsonPrimitive(this@toNotionRichString)) }
+                )
             }
         }
     )

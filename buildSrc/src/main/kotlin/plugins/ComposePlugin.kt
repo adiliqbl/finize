@@ -2,10 +2,10 @@ package plugins
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.gradle.LibraryExtension
+import modules.configureCompose
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
-import modules.configureCompose
 
 class ComposeApplicationPlugin : Plugin<Project> {
 	override fun apply(target: Project) {

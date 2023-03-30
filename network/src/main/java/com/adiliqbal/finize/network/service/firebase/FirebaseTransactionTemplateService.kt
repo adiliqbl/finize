@@ -15,13 +15,15 @@ import javax.inject.Singleton
 import kotlinx.serialization.json.JsonObject
 
 @Singleton
-internal class FirebaseTransactionTemplateService
-@Inject
-constructor(private val preferences: AppPreferences, private val firestore: FirestoreService) :
+internal class FirebaseTransactionTemplateService @Inject constructor(
+    private val preferences: AppPreferences,
+    private val firestore: FirestoreService
+) :
     TransactionTemplateService {
 
     private companion object {
-        fun transactionTemplateDoc(userId: String, id: String) = "${transactionTemplatesDB(userId)}/$id"
+        fun transactionTemplateDoc(userId: String, id: String) =
+            "${transactionTemplatesDB(userId)}/$id"
     }
 
     override suspend fun getTemplates(): List<BaseApiTransaction> {

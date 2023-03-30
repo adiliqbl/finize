@@ -16,9 +16,7 @@ import javax.inject.Singleton
 import kotlinx.serialization.json.JsonObject
 
 @Singleton
-internal class NotionBudgetService
-@Inject
-constructor(
+internal class NotionBudgetService @Inject constructor(
     private val notionPreferences: NotionPreferences,
     private val notionService: NotionService
 ) : BudgetService {

@@ -13,9 +13,10 @@ import javax.inject.Singleton
 import kotlinx.serialization.json.JsonObject
 
 @Singleton
-internal class FirebaseAuthService
-@Inject
-constructor(private val service: FirestoreService, private val auth: FirebaseAuth) : AuthService {
+internal class FirebaseAuthService @Inject constructor(
+    private val service: FirestoreService,
+    private val auth: FirebaseAuth
+) : AuthService {
 
     override suspend fun getUser() =
         auth.currentUser?.let {

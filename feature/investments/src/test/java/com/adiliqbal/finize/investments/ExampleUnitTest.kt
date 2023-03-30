@@ -1,6 +1,6 @@
 package com.adiliqbal.finize.investments
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**

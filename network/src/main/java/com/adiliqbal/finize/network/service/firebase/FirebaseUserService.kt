@@ -6,15 +6,15 @@ import com.adiliqbal.finize.network.source.FirestoreService
 import com.adiliqbal.finize.network.source.FirestoreService.Companion.usersDB
 import com.adiliqbal.finize.network.util.AppJson.decodeJson
 import com.adiliqbal.finize.network.util.AppJson.toJson
+import kotlinx.serialization.json.JsonObject
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.serialization.json.JsonObject
 
 @Singleton
-internal class FirebaseUserService
-@Inject
-constructor(private val firestore: FirestoreService, private val authService: FirebaseAuthService) :
-    UserService {
+internal class FirebaseUserService @Inject constructor(
+    private val firestore: FirestoreService,
+    private val authService: FirebaseAuthService
+) : UserService {
 
     private companion object {
         fun userDoc(userId: String) = usersDB(userId)

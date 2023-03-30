@@ -20,46 +20,46 @@ import org.mockito.kotlin.times
 
 class UserRepositoryTest {
 
-	private val dao = Mockito.mock(UserDao::class.java)
-	private val service = Mockito.mock(UserService::class.java)
-	private val preferences = Mockito.mock(AppPreferences::class.java)
-	private val repository = UserRepositoryImpl(dao, service, preferences)
+    private val dao = Mockito.mock(UserDao::class.java)
+    private val service = Mockito.mock(UserService::class.java)
+    private val preferences = Mockito.mock(AppPreferences::class.java)
+    private val repository = UserRepositoryImpl(dao, service, preferences)
 
-	@Test
-	fun getUser() = runTest {
-		val entity = FakeEntity.user("id")
-		val api = FakeModel.user("id").toApi()
+    @Test
+    fun getUser() = runTest {
+        val entity = FakeEntity.user("id")
+        val api = FakeModel.user("id").toApi()
 
-		Mockito.`when`(preferences.userId()).thenReturn("id")
-		Mockito.`when`(dao.get("id")).thenReturn(flowOf(entity))
-		Mockito.`when`(service.getUser("id")).thenReturn(api)
+        Mockito.`when`(preferences.userId()).thenReturn("id")
+        Mockito.`when`(dao.get("id")).thenReturn(flowOf(entity))
+        Mockito.`when`(service.getUser("id")).thenReturn(api)
 
-		val user = repository.getUser().take(1).lastOrNull()
-		assertEquals(entity.toModel(), user)
-		Mockito.verify(dao, times(1)).upsert(api.toEntity())
-	}
+        val user = repository.getUser().take(1).lastOrNull()
+        assertEquals(entity.toModel(), user)
+        Mockito.verify(dao, times(1)).upsert(api.toEntity())
+    }
 
-	@Test
-	fun updateUser() = runTest {
-		val user = FakeModel.user("id")
+    @Test
+    fun updateUser() = runTest {
+        val user = FakeModel.user("id")
 
-		repository.updateUser(user)
-		Mockito.verify(service, times(1)).updateUser(user.toApi())
-		Mockito.verify(dao, times(1)).upsert(user.toApi().toEntity())
-	}
+        repository.updateUser(user)
+        Mockito.verify(service, times(1)).updateUser(user.toApi())
+        Mockito.verify(dao, times(1)).upsert(user.toApi().toEntity())
+    }
 
-	@Test
-	fun updateProfile() = runTest {
-		val user = FakeModel.user("id")
-		val profile = user.profile.copy(currency = Currencies.of("USD"))
+    @Test
+    fun updateProfile() = runTest {
+        val user = FakeModel.user("id")
+        val profile = user.profile.copy(currency = Currencies.of("USD"))
 
-		Mockito.`when`(preferences.userId()).thenReturn("id")
-		Mockito.`when`(dao.get("id")).thenReturn(flowOf(user.toApi().toEntity()))
+        Mockito.`when`(preferences.userId()).thenReturn("id")
+        Mockito.`when`(dao.get("id")).thenReturn(flowOf(user.toApi().toEntity()))
 
-		repository.updateProfile(profile)
+        repository.updateProfile(profile)
 
-		val newUser = user.copy(profile = profile)
-		Mockito.verify(service, times(1)).updateUser(newUser.toApi())
-		Mockito.verify(dao, times(1)).upsert(newUser.toApi().toEntity())
-	}
+        val newUser = user.copy(profile = profile)
+        Mockito.verify(service, times(1)).updateUser(newUser.toApi())
+        Mockito.verify(dao, times(1)).upsert(newUser.toApi().toEntity())
+    }
 }

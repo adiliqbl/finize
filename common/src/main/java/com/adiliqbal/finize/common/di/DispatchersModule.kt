@@ -13,7 +13,9 @@ import kotlinx.coroutines.Dispatchers
 @InstallIn(SingletonComponent::class)
 object DispatchersModule {
 
-    @Provides @Dispatcher(Thread.IO) fun providesIODispatcher(): CoroutineDispatcher = Dispatchers.IO
+    @Provides
+    @Dispatcher(Thread.IO)
+    fun providesIODispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     @Provides
     @Dispatcher(Thread.MAIN)

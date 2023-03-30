@@ -173,7 +173,7 @@
 <script type="text/javascript">
     const tabLinks = Array.from(document.querySelectorAll(".tab-link"));
     const tabContents = document.querySelectorAll(".tab-content");
-    
+
     tabLinks.forEach(function(tabLink) {
         tabLink.addEventListener("click", toggleTab);
     });
@@ -217,6 +217,7 @@
       
         event.preventDefault();
     }
+
 </script>
 <script type="text/javascript">
     "use strict";

@@ -29,7 +29,9 @@ internal object NetworkModule {
     fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor) =
         OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
 
-    @Provides @Singleton fun provideJson() = Json { ignoreUnknownKeys = true }
+    @Provides
+    @Singleton
+    fun provideJson() = Json { ignoreUnknownKeys = true }
 
     @Provides
     @Singleton

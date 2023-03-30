@@ -25,30 +25,30 @@ import kotlinx.serialization.json.buildJsonObject
 @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
 internal object NotionDatabaseQuerySerializer : KSerializer<NotionDatabaseQuery> {
 
-	override val descriptor: SerialDescriptor =
-		buildSerialDescriptor("NotionDatabaseQuery", PolymorphicKind.SEALED)
+    override val descriptor: SerialDescriptor =
+        buildSerialDescriptor("NotionDatabaseQuery", PolymorphicKind.SEALED)
 
-	override fun serialize(encoder: Encoder, value: NotionDatabaseQuery) =
-		with(value) {
-			val body = buildJsonObject {
-				sortField?.let {
-					put(
-						SORT,
-						buildJsonArray {
-							addJsonObject {
-								put(SORT_FIELD, JsonPrimitive(sortField))
-								put(SORT_ORDER, JsonPrimitive(sortOrder.value))
-							}
-						}
-					)
-				}
-				filter?.let { put(FILTER, it) }
-				put(PAGE_SIZE, JsonPrimitive(pageSize))
-				cursor?.let { put(CURSOR, JsonPrimitive(it)) }
-			}
+    override fun serialize(encoder: Encoder, value: NotionDatabaseQuery) =
+        with(value) {
+            val body = buildJsonObject {
+                sortField?.let {
+                    put(
+                        SORT,
+                        buildJsonArray {
+                            addJsonObject {
+                                put(SORT_FIELD, JsonPrimitive(sortField))
+                                put(SORT_ORDER, JsonPrimitive(sortOrder.value))
+                            }
+                        }
+                    )
+                }
+                filter?.let { put(FILTER, it) }
+                put(PAGE_SIZE, JsonPrimitive(pageSize))
+                cursor?.let { put(CURSOR, JsonPrimitive(it)) }
+            }
 
-			(encoder as JsonEncoder).encodeJsonElement(body)
-		}
+            (encoder as JsonEncoder).encodeJsonElement(body)
+        }
 
-	override fun deserialize(decoder: Decoder) = NotionDatabaseQuery(PaginationQuery())
+    override fun deserialize(decoder: Decoder) = NotionDatabaseQuery(PaginationQuery())
 }

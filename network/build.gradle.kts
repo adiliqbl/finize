@@ -27,6 +27,7 @@ dependencies {
 	implementFirebase()
 	implementation(Libraries.Firebase.Firestore)
 	implementation(Libraries.Firebase.Auth)
+	implementation(Libraries.Firebase.Functions)
 
 	implementation(Libraries.Network.Retrofit)
 	implementation(Libraries.Network.OkHttpInterceptor)

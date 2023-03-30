@@ -33,7 +33,8 @@ object NetworkManager {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkRequest =
-            NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build()
+            NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .build()
         connectivityManager.registerNetworkCallback(networkRequest, callback)
 
         if (currentState) notify(connectivityManager.connectivityState())

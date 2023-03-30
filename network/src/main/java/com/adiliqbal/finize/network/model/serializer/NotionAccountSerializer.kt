@@ -59,7 +59,8 @@ internal object NotionAccountSerializer : KSerializer<NotionApiAccount> {
                 name = properties.parseNotionString(NAME) ?: "",
                 balance = properties.parseNotionDouble(BALANCE),
                 budget = properties.parseNotionRelation(BUDGET)?.takeIf { it.isNotEmpty() }?.get(0),
-                currency = properties.parseNotionSelect(CURRENCY) ?: Currencies.default.currencyCode,
+                currency = properties.parseNotionSelect(CURRENCY)
+                    ?: Currencies.default.currencyCode,
                 type = properties.parseNotionSelect(TYPE).toAccountType(),
                 createdAt = json.parseNotionDateTime(CREATED_TIME) ?: DateUtil.now()
             )

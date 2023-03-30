@@ -8,7 +8,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-internal fun CoroutineScope.launchSafeApi(dispatcher: CoroutineDispatcher, logger: Logger? = null, block: suspend () -> Unit) =
+internal fun CoroutineScope.launchSafeApi(
+    dispatcher: CoroutineDispatcher,
+    logger: Logger? = null,
+    block: suspend () -> Unit
+) =
     launch(dispatcher) {
         try {
             block()

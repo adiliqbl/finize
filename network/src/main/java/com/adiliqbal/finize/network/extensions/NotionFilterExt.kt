@@ -85,13 +85,23 @@ internal fun TransactionsFilter.toNotionFilter(): JsonElement? {
                 )
             }
         } else if (dateFrom != null) {
-            add(dateFrom!!.toNotionDateFilter(NotionTransactionSerializer.DATE, NotionDateFilter.FROM))
+            add(
+                dateFrom!!.toNotionDateFilter(
+                    NotionTransactionSerializer.DATE,
+                    NotionDateFilter.FROM
+                )
+            )
         } else if (dateTo != null) {
             add(dateTo!!.toNotionDateFilter(NotionTransactionSerializer.DATE, NotionDateFilter.TO))
         }
 
         if (!name.isNullOrEmpty()) {
-            add(name!!.toNotionTextFilter(NotionTransactionSerializer.NAME, NotionTextFilter.CONTAINS))
+            add(
+                name!!.toNotionTextFilter(
+                    NotionTransactionSerializer.NAME,
+                    NotionTextFilter.CONTAINS
+                )
+            )
         }
     }
 
@@ -114,7 +124,10 @@ internal fun ID.toNotionRelationFilter(property: String) = buildJsonObject {
 
 fun String.toNotionSelectFilter(property: String) = buildJsonObject {
     put("property", JsonPrimitive(property))
-    put("multi_select", buildJsonObject { put("contains", JsonPrimitive(this@toNotionSelectFilter)) })
+    put(
+        "multi_select",
+        buildJsonObject { put("contains", JsonPrimitive(this@toNotionSelectFilter)) }
+    )
 }
 
 internal fun List<String>.toNotionMultiselectFilter(property: String) = run {
@@ -137,5 +150,8 @@ internal fun Instant.toNotionDateFilter(
     type: NotionDateFilter = NotionDateFilter.EQUALS
 ) = buildJsonObject {
     put("property", JsonPrimitive(property))
-    put("date", buildJsonObject { put(type.key, JsonPrimitive(this@toNotionDateFilter.toString())) })
+    put(
+        "date",
+        buildJsonObject { put(type.key, JsonPrimitive(this@toNotionDateFilter.toString())) }
+    )
 }

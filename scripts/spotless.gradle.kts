@@ -19,15 +19,16 @@ rootProject {
 			kotlin {
 				target("**/*.kt")
 				targetExclude("**/build/**/*.kt")
-				ktfmt()
-				ktlint(KtLintVersion).userData(mapOf(
-					"android" to "true",
-					"max_line_length" to "120",
-					"disabled_rules" to "no-wildcard-imports",
-					"ktlint_disabled_rules" to "no-wildcard-imports",
-					"trim_trailing_whitespace" to "true",
-					"ktlint_ignore_back_ticked_identifier" to "true",
-				))
+				ktlint(KtLintVersion).userData(
+					mapOf(
+						"android" to "true",
+						"max_line_length" to "120",
+						"disabled_rules" to "no-wildcard-imports",
+						"ktlint_disabled_rules" to "no-wildcard-imports",
+						"trim_trailing_whitespace" to "true",
+						"ktlint_ignore_back_ticked_identifier" to "true",
+					)
+				)
 			}
 			format("kts") {
 				target("**/*.kts")

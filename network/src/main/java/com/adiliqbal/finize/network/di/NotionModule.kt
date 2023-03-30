@@ -23,7 +23,8 @@ internal interface NotionModule {
 
         @Provides
         @Singleton
-        fun provideNotionService(retrofit: Retrofit) = retrofit.notion.create(NotionService::class.java)
+        fun provideNotionService(retrofit: Retrofit) =
+            retrofit.notion.create(NotionService::class.java)
 
         @Provides
         @Singleton
@@ -31,9 +32,13 @@ internal interface NotionModule {
             retrofit.notion.create(NotionUserService::class.java)
     }
 
-    @Binds @Singleton fun bindAccountService(service: NotionAccountService): NotionAccountService
+    @Binds
+    @Singleton
+    fun bindAccountService(service: NotionAccountService): NotionAccountService
 
-    @Binds @Singleton fun bindBudgetService(service: NotionBudgetService): NotionBudgetService
+    @Binds
+    @Singleton
+    fun bindBudgetService(service: NotionBudgetService): NotionBudgetService
 
     @Binds
     @Singleton

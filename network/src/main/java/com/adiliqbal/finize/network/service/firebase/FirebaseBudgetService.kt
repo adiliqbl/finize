@@ -16,9 +16,10 @@ import javax.inject.Singleton
 import kotlinx.serialization.json.JsonObject
 
 @Singleton
-internal class FirebaseBudgetService
-@Inject
-constructor(private val preferences: AppPreferences, private val firestore: FirestoreService) :
+internal class FirebaseBudgetService @Inject constructor(
+    private val preferences: AppPreferences,
+    private val firestore: FirestoreService
+) :
     BudgetService {
 
     private companion object {
@@ -43,5 +44,6 @@ constructor(private val preferences: AppPreferences, private val firestore: Fire
             doc = budget.toJson().decodeJson<JsonObject>()!!
         )
 
-    override suspend fun deleteBudget(id: ID) = firestore.delete(budgetDoc(preferences.userId(), id))
+    override suspend fun deleteBudget(id: ID) =
+        firestore.delete(budgetDoc(preferences.userId(), id))
 }
