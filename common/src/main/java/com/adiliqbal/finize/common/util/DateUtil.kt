@@ -9,25 +9,25 @@ import kotlinx.datetime.toLocalDateTime
 
 object DateUtil {
 
-    fun today() =
-        with(java.time.LocalDate.now()) {
-            LocalDate(year = year, month = month, dayOfMonth = dayOfMonth)
-        }
+	fun today() =
+		with(java.time.LocalDate.now()) {
+			LocalDate(year = year, month = month, dayOfMonth = dayOfMonth)
+		}
 
-    fun now() = Clock.System.now()
+	fun now() = Clock.System.now()
 
-    fun currentTimeMillis() = now().toEpochMilliseconds()
+	fun currentTimeMillis() = now().toEpochMilliseconds()
 
-    fun parseDate(value: String) =
-        try {
-            LocalDate.parse(value).instant
-        } catch (_: Exception) {
-            Instant.parse(value)
-        }
+	fun parseDate(value: String) =
+		try {
+			LocalDate.parse(value).instant
+		} catch (_: Exception) {
+			tryElse { Instant.parse(value) }
+		}
 }
 
 val Instant.date
-    get() = toLocalDateTime(TimeZone.UTC).date
+	get() = toLocalDateTime(TimeZone.UTC).date
 
 val LocalDate.instant
-    get() = atStartOfDayIn(TimeZone.UTC)
+	get() = atStartOfDayIn(TimeZone.UTC)
