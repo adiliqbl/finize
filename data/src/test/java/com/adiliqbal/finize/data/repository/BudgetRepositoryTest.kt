@@ -17,6 +17,7 @@ import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.anyList
 import org.mockito.kotlin.times
+import org.mockito.kotlin.whenever
 
 class BudgetRepositoryTest {
 
@@ -26,7 +27,7 @@ class BudgetRepositoryTest {
 
     @Test
     fun getBudgets() = runTest {
-        Mockito.`when`(dao.getAll()).thenReturn(
+        whenever(dao.getAll()).thenReturn(
             flowOf(
                 listOf(
                     FakeEntity.budget("one"),
@@ -34,7 +35,7 @@ class BudgetRepositoryTest {
                 )
             )
         )
-        Mockito.`when`(service.getBudgets()).thenReturn(
+        whenever(service.getBudgets()).thenReturn(
             PaginatedList(
                 listOf(
                     FakeModel.budget("three").toApi(),
@@ -51,7 +52,7 @@ class BudgetRepositoryTest {
 
     @Test
     fun searchBudgets() = runTest {
-        Mockito.`when`(dao.getAll()).thenReturn(
+        whenever(dao.getAll()).thenReturn(
             flowOf(
                 listOf(
                     FakeEntity.budget("one").copy(name = "Budget One"),
@@ -59,7 +60,7 @@ class BudgetRepositoryTest {
                 )
             )
         )
-        Mockito.`when`(service.getBudgets()).thenReturn(PaginatedList(emptyList()))
+        whenever(service.getBudgets()).thenReturn(PaginatedList(emptyList()))
 
         val budgets = repository.getBudgets("One").take(1).lastOrNull()
         assertEquals(1, budgets?.size)
@@ -68,7 +69,7 @@ class BudgetRepositoryTest {
 
     @Test
     fun getBudget() = runTest {
-        Mockito.`when`(dao.get("one")).thenReturn(
+        whenever(dao.get("one")).thenReturn(
             flowOf(FakeEntity.budget("one"))
         )
 
@@ -79,7 +80,7 @@ class BudgetRepositoryTest {
     @Test
     fun createBudget() = runTest {
         val api = FakeModel.budget("").toApi()
-        Mockito.`when`(service.createBudget(api)).thenReturn(api.copy("id"))
+        whenever(service.createBudget(api)).thenReturn(api.copy("id"))
 
         val budget = repository.createBudget(FakeModel.budget(""))
         assertEquals("id", budget.id)

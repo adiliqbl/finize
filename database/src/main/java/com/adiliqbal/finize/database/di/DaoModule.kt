@@ -26,4 +26,8 @@ internal object DaoModule {
     @Provides
     @Singleton
     fun provideTransactionDao(database: AppDatabase) = database.transactionDao()
+
+    @Provides
+    @Singleton
+    fun provideExchangeRateDao(database: AppDatabase) = database.exchangeRateDao()
 }

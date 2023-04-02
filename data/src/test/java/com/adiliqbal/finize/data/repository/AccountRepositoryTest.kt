@@ -18,6 +18,7 @@ import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.anyList
 import org.mockito.kotlin.times
+import org.mockito.kotlin.whenever
 
 class AccountRepositoryTest {
 
@@ -27,7 +28,7 @@ class AccountRepositoryTest {
 
     @Test
     fun getAccounts() = runTest {
-        Mockito.`when`(dao.getAll()).thenReturn(
+        whenever(dao.getAll()).thenReturn(
             flowOf(
                 listOf(
                     FakeEntity.account("one"),
@@ -35,7 +36,7 @@ class AccountRepositoryTest {
                 )
             )
         )
-        Mockito.`when`(service.getAccounts()).thenReturn(PaginatedList(emptyList()))
+        whenever(service.getAccounts()).thenReturn(PaginatedList(emptyList()))
 
         val accounts = repository.getAccounts().take(1).lastOrNull()
         assertEquals(2, accounts?.size)
@@ -45,7 +46,7 @@ class AccountRepositoryTest {
 
     @Test
     fun searchAccounts() = runTest {
-        Mockito.`when`(dao.getAll()).thenReturn(
+        whenever(dao.getAll()).thenReturn(
             flowOf(
                 listOf(
                     FakeEntity.account("one").copy(name = "Account One"),
@@ -53,7 +54,7 @@ class AccountRepositoryTest {
                 )
             )
         )
-        Mockito.`when`(service.getAccounts()).thenReturn(PaginatedList(emptyList()))
+        whenever(service.getAccounts()).thenReturn(PaginatedList(emptyList()))
 
         val accounts = repository.getAccounts("One").take(1).lastOrNull()
         assertEquals(1, accounts?.size)
@@ -62,7 +63,7 @@ class AccountRepositoryTest {
 
     @Test
     fun getAccount() = runTest {
-        Mockito.`when`(dao.get("one")).thenReturn(
+        whenever(dao.get("one")).thenReturn(
             flowOf(AccountWithRefs(FakeEntity.account("one")))
         )
 
@@ -73,7 +74,7 @@ class AccountRepositoryTest {
     @Test
     fun createAccount() = runTest {
         val api = FakeModel.account("").toApi()
-        Mockito.`when`(service.createAccount(api)).thenReturn(api.copy("id"))
+        whenever(service.createAccount(api)).thenReturn(api.copy("id"))
 
         val account = repository.createAccount(FakeModel.account(""))
         assertEquals("id", account.id)

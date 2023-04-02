@@ -6,6 +6,8 @@ import com.adiliqbal.finize.data.repository.AuthRepository
 import com.adiliqbal.finize.data.repository.AuthRepositoryImpl
 import com.adiliqbal.finize.data.repository.BudgetRepository
 import com.adiliqbal.finize.data.repository.BudgetRepositoryImpl
+import com.adiliqbal.finize.data.repository.ForexRepository
+import com.adiliqbal.finize.data.repository.ForexRepositoryImpl
 import com.adiliqbal.finize.data.repository.TransactionRepository
 import com.adiliqbal.finize.data.repository.TransactionRepositoryImpl
 import com.adiliqbal.finize.data.repository.UserRepository
@@ -33,4 +35,7 @@ internal interface RepositoryModule {
 
     @Binds
     fun bindTransactionRepository(repository: TransactionRepositoryImpl): TransactionRepository
+
+    @Binds
+    fun bindForexRepository(repository: ForexRepositoryImpl): ForexRepository
 }

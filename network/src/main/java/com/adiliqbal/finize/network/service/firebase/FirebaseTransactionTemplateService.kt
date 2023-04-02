@@ -18,8 +18,7 @@ import kotlinx.serialization.json.JsonObject
 internal class FirebaseTransactionTemplateService @Inject constructor(
     private val preferences: AppPreferences,
     private val firestore: FirestoreService
-) :
-    TransactionTemplateService {
+) : TransactionTemplateService {
 
     private companion object {
         fun transactionTemplateDoc(userId: String, id: String) =

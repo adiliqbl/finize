@@ -18,6 +18,7 @@ import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.times
+import org.mockito.kotlin.whenever
 
 class TransactionRepositoryTest {
 
@@ -29,7 +30,7 @@ class TransactionRepositoryTest {
 
     @Test
     fun getTransaction() = runTest {
-        Mockito.`when`(dao.get("one")).thenReturn(flowOf(FakeEntity.transaction("one")))
+        whenever(dao.get("one")).thenReturn(flowOf(FakeEntity.transaction("one")))
 
         val transaction = repository.getTransaction("one").take(1).firstOrNull()
         assertEquals("one", transaction?.id)
@@ -40,7 +41,7 @@ class TransactionRepositoryTest {
         val model = FakeModel.transaction("")
         val api = model.toApi()
 
-        Mockito.`when`(service.createTransaction(api)).thenReturn(api.copy("id"))
+        whenever(service.createTransaction(api)).thenReturn(api.copy("id"))
 
         val transaction = repository.createTransaction(model)
         assertEquals("id", transaction.id)
@@ -65,7 +66,7 @@ class TransactionRepositoryTest {
 
     @Test
     fun getTemplates() = runTest {
-        Mockito.`when`(dao.getTemplates()).thenReturn(
+        whenever(dao.getTemplates()).thenReturn(
             flowOf(
                 listOf(
                     FakeEntity.transaction("one").copy(isTemplate = true),
@@ -80,7 +81,7 @@ class TransactionRepositoryTest {
             FakeModel.transaction("five").toApi(),
             FakeModel.transaction("six").toApi(),
         )
-        Mockito.`when`(templateService.getTemplates()).thenReturn(apiList)
+        whenever(templateService.getTemplates()).thenReturn(apiList)
 
         val templates = repository.getTemplates().take(1).lastOrNull()
         assertEquals(2, templates?.size)
@@ -90,7 +91,7 @@ class TransactionRepositoryTest {
 
     @Test
     fun getTemplate() = runTest {
-        Mockito.`when`(dao.get("one"))
+        whenever(dao.get("one"))
             .thenReturn(flowOf(FakeEntity.transaction("one").copy(isTemplate = true)))
 
         val transaction = repository.getTemplate("one").take(1).lastOrNull()
@@ -102,7 +103,7 @@ class TransactionRepositoryTest {
         val model = FakeModel.transaction("")
         val api = FakeModel.transaction("").toApi()
 
-        Mockito.`when`(templateService.createTemplate(any())).thenReturn(api.copy("id"))
+        whenever(templateService.createTemplate(any())).thenReturn(api.copy("id"))
 
         val transaction = repository.createTemplate(model)
         assertEquals("id", transaction.id)

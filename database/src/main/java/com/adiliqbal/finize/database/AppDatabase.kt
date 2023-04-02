@@ -9,10 +9,12 @@ import com.adiliqbal.finize.database.converters.DateConverters
 import com.adiliqbal.finize.database.converters.ListConverters
 import com.adiliqbal.finize.database.dao.AccountDao
 import com.adiliqbal.finize.database.dao.BudgetDao
+import com.adiliqbal.finize.database.dao.ExchangeRateDao
 import com.adiliqbal.finize.database.dao.TransactionDao
 import com.adiliqbal.finize.database.dao.UserDao
 import com.adiliqbal.finize.database.model.AccountEntity
 import com.adiliqbal.finize.database.model.BudgetEntity
+import com.adiliqbal.finize.database.model.ExchangeRateEntity
 import com.adiliqbal.finize.database.model.TransactionEntity
 import com.adiliqbal.finize.database.model.UserWithProfile
 
@@ -22,7 +24,8 @@ import com.adiliqbal.finize.database.model.UserWithProfile
         UserWithProfile::class,
         AccountEntity::class,
         BudgetEntity::class,
-        TransactionEntity::class
+        TransactionEntity::class,
+        ExchangeRateEntity::class
     ],
     version = 1,
     autoMigrations = []
@@ -57,4 +60,6 @@ internal abstract class AppDatabase : RoomDatabase() {
     abstract fun budgetDao(): BudgetDao
 
     abstract fun transactionDao(): TransactionDao
+
+    abstract fun exchangeRateDao(): ExchangeRateDao
 }

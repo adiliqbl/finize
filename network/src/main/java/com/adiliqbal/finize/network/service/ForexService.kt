@@ -1,8 +1,8 @@
 package com.adiliqbal.finize.network.service
 
-import com.adiliqbal.finize.model.ExchangeRate
+import com.adiliqbal.finize.network.model.ApiExchangeRate
 
 interface ForexService {
 
-    suspend fun getExchangeRate(isoFrom: String, isoTo: String): ExchangeRate
+    suspend fun getExchangeRate(from: String, to: String, refresh: Boolean = false): ApiExchangeRate
 }

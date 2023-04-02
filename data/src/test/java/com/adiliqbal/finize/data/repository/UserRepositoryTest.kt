@@ -17,6 +17,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.kotlin.times
+import org.mockito.kotlin.whenever
 
 class UserRepositoryTest {
 
@@ -30,9 +31,9 @@ class UserRepositoryTest {
         val entity = FakeEntity.user("id")
         val api = FakeModel.user("id").toApi()
 
-        Mockito.`when`(preferences.userId()).thenReturn("id")
-        Mockito.`when`(dao.get("id")).thenReturn(flowOf(entity))
-        Mockito.`when`(service.getUser("id")).thenReturn(api)
+        whenever(preferences.userId()).thenReturn("id")
+        whenever(dao.get("id")).thenReturn(flowOf(entity))
+        whenever(service.getUser("id")).thenReturn(api)
 
         val user = repository.getUser().take(1).lastOrNull()
         assertEquals(entity.toModel(), user)
@@ -53,8 +54,8 @@ class UserRepositoryTest {
         val user = FakeModel.user("id")
         val profile = user.profile.copy(currency = Currencies.of("USD"))
 
-        Mockito.`when`(preferences.userId()).thenReturn("id")
-        Mockito.`when`(dao.get("id")).thenReturn(flowOf(user.toApi().toEntity()))
+        whenever(preferences.userId()).thenReturn("id")
+        whenever(dao.get("id")).thenReturn(flowOf(user.toApi().toEntity()))
 
         repository.updateProfile(profile)
 

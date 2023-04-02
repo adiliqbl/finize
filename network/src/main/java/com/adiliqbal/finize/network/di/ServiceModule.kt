@@ -30,6 +30,29 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 internal object ServiceModule {
 
+    @Module
+    @InstallIn(SingletonComponent::class)
+    internal interface BindingModule {
+
+        @Binds
+        @Singleton
+        fun bindAuthService(service: FirebaseAuthService): AuthService
+
+        @Binds
+        @Singleton
+        fun bindUserService(service: FirebaseUserService): UserService
+
+        @Binds
+        @Singleton
+        fun bindTransactionTemplateService(
+            service: FirebaseTransactionTemplateService
+        ): TransactionTemplateService
+
+        @Binds
+        @Singleton
+        fun bindPaymentCategoryService(service: FirebasePaymentCategoryService): PaymentCategoryService
+    }
+
     @Provides
     @Singleton
     suspend fun provideAccountService(
@@ -53,27 +76,4 @@ internal object ServiceModule {
         notion: NotionTransactionService,
         firebase: FirebaseTransactionService,
     ): TransactionService = if (preferences.provider() == DataProvider.NOTION) notion else firebase
-
-    @Module
-    @InstallIn(SingletonComponent::class)
-    internal interface BindingModule {
-
-        @Binds
-        @Singleton
-        fun bindAuthService(service: FirebaseAuthService): AuthService
-
-        @Binds
-        @Singleton
-        fun bindUserService(service: FirebaseUserService): UserService
-
-        @Binds
-        @Singleton
-        fun bindTransactionTemplateService(
-            service: FirebaseTransactionTemplateService
-        ): TransactionTemplateService
-
-        @Binds
-        @Singleton
-        fun bindPaymentCategoryService(service: FirebasePaymentCategoryService): PaymentCategoryService
-    }
 }
