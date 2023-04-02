@@ -1,0 +1,65 @@
+name: Distribute
+
+on:
+  push:
+    paths:
+      - 'release/**'
+      branches: [ main ]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6'
+
+      # Cache
+      - name: Cache Ruby - Bundler
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: Cache Gradle
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches/
+          key: cache-clean-gradle-${{ matrix.os }}-${{ matrix.jdk }}
+      - name: Cache Gradle Wrapper
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/wrapper/
+          key: cache-clean-wrapper-${{ matrix.os }}-${{ matrix.jdk }}
+
+      # Setup
+      - name: Grant Permission to Execute
+          run: chmod +x gradlew
+      - name: Install bundle
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      # Secrets
+      - name: Create .properties file
+        run: |
+          echo "$PROD_PROPERTIES_JSON" > production.properties.b64
+          base64 -d -i production.properties.b64 > production.properties
+        env:
+          PROD_PROPERTIES_JSON: ${{ secrets.PROD_PROPERTIES_JSON }}
+      - name: Create Google Play Config file
+        run: |
+          echo "$PLAY_CONFIG_JSON" > play_config.json.b64
+          base64 -d -i play_config.json.b64 > play_config.json
+        env:
+          PLAY_CONFIG_JSON: ${{ secrets.PLAY_CONFIG_JSON }}
+
+      # Action — Github Releases
+      - name: GitHub Semantic Releases
+        run: bundle exec fastlane android release
+
+      # Action — Release on PlayStore
+      - name: Deploy app on Play Store
+        run: bundle exec fastlane android production
