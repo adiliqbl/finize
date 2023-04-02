@@ -1,11 +1,18 @@
 name: Distribute
 
+# TODO: Fix for develop
+#on:
+#  push:
+#    branches:
+#      #      - '*'
+#      #      - '**'
+#      #      - '*/*'
+
 on:
   push:
-    branches:
-      - '*'
-      - '**'
-      - '*/*'
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   test:
@@ -37,7 +44,7 @@ jobs:
 
       # Setup
       - name: Grant Permission to Execute
-          run: chmod +x gradlew
+        run: chmod +x gradlew
       - name: Install bundle
         run: |
           bundle config path vendor/bundle
@@ -53,4 +60,4 @@ jobs:
 
       # Actions
       - name: Unit tests
-          run: bundle exec fastlane test
+        run: bundle exec fastlane test

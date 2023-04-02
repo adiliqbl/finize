@@ -2,9 +2,9 @@ name: Distribute
 
 on:
   push:
-    paths:
-      - 'release/**'
-      branches: [ main ]
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   release:
@@ -36,7 +36,7 @@ jobs:
 
       # Setup
       - name: Grant Permission to Execute
-          run: chmod +x gradlew
+        run: chmod +x gradlew
       - name: Install bundle
         run: |
           bundle config path vendor/bundle
