@@ -12,6 +12,7 @@ import com.adiliqbal.finize.network.service.UserService
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -21,13 +22,15 @@ import org.mockito.kotlin.whenever
 
 class UserRepositoryTest {
 
+    private val dispatcher = StandardTestDispatcher()
+
     private val dao = Mockito.mock(UserDao::class.java)
     private val service = Mockito.mock(UserService::class.java)
     private val preferences = Mockito.mock(AppPreferences::class.java)
-    private val repository = UserRepositoryImpl(dao, service, preferences)
+    private val repository = UserRepositoryImpl(dao, service, preferences, dispatcher)
 
     @Test
-    fun getUser() = runTest {
+    fun getUser() = runTest(dispatcher) {
         val entity = FakeEntity.user("id")
         val api = FakeModel.user("id").toApi()
 
@@ -41,7 +44,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    fun updateUser() = runTest {
+    fun updateUser() = runTest(dispatcher) {
         val user = FakeModel.user("id")
 
         repository.updateUser(user)
@@ -50,7 +53,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    fun updateProfile() = runTest {
+    fun updateProfile() = runTest(dispatcher) {
         val user = FakeModel.user("id")
         val profile = user.profile.copy(currency = Currencies.of("USD"))
 

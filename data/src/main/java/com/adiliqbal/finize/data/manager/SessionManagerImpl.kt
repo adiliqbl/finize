@@ -1,7 +1,7 @@
 package com.adiliqbal.finize.data.manager
 
 import android.content.Context
-import com.adiliqbal.finize.datastore.model.AuthCredentials
+import com.adiliqbal.finize.model.AuthCredentials
 import javax.inject.Inject
 import javax.inject.Singleton
 

@@ -11,22 +11,27 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.anyList
+import org.mockito.kotlin.any
 import org.mockito.kotlin.times
 import org.mockito.kotlin.whenever
 
 class BudgetRepositoryTest {
 
+    private val dispatcher = StandardTestDispatcher()
+
     private val dao = Mockito.mock(BudgetDao::class.java)
     private val service = Mockito.mock(BudgetService::class.java)
-    private val repository = BudgetRepositoryImpl(dao, service)
+    private val repository = BudgetRepositoryImpl(dao, service, dispatcher)
 
     @Test
-    fun getBudgets() = runTest {
+    fun getBudgets() = runTest(dispatcher) {
         whenever(dao.getAll()).thenReturn(
             flowOf(
                 listOf(
@@ -43,6 +48,10 @@ class BudgetRepositoryTest {
                 )
             )
         )
+        whenever(dao.transaction(any())).thenAnswer { invocation ->
+            val lambda = invocation.getArgument<suspend () -> Unit>(0)
+            runBlocking { lambda.invoke() }
+        }
 
         val budgets = repository.getBudgets().take(1).lastOrNull()
         assertEquals(2, budgets?.size)
@@ -51,7 +60,7 @@ class BudgetRepositoryTest {
     }
 
     @Test
-    fun searchBudgets() = runTest {
+    fun searchBudgets() = runTest(dispatcher) {
         whenever(dao.getAll()).thenReturn(
             flowOf(
                 listOf(
@@ -61,6 +70,10 @@ class BudgetRepositoryTest {
             )
         )
         whenever(service.getBudgets()).thenReturn(PaginatedList(emptyList()))
+        whenever(dao.transaction(any())).thenAnswer { invocation ->
+            val lambda = invocation.getArgument<suspend () -> Unit>(0)
+            runBlocking { lambda.invoke() }
+        }
 
         val budgets = repository.getBudgets("One").take(1).lastOrNull()
         assertEquals(1, budgets?.size)
@@ -68,7 +81,7 @@ class BudgetRepositoryTest {
     }
 
     @Test
-    fun getBudget() = runTest {
+    fun getBudget() = runTest(dispatcher) {
         whenever(dao.get("one")).thenReturn(
             flowOf(FakeEntity.budget("one"))
         )
@@ -78,7 +91,7 @@ class BudgetRepositoryTest {
     }
 
     @Test
-    fun createBudget() = runTest {
+    fun createBudget() = runTest(dispatcher) {
         val api = FakeModel.budget("").toApi()
         whenever(service.createBudget(api)).thenReturn(api.copy("id"))
 
@@ -88,7 +101,7 @@ class BudgetRepositoryTest {
     }
 
     @Test
-    fun updateBudget() = runTest {
+    fun updateBudget() = runTest(dispatcher) {
         val budget = FakeModel.budget().copy(name = "new name")
 
         repository.updateBudget(budget)
@@ -97,7 +110,7 @@ class BudgetRepositoryTest {
     }
 
     @Test
-    fun deleteBudget() = runTest {
+    fun deleteBudget() = runTest(dispatcher) {
         repository.deleteBudget("id")
         Mockito.verify(service, times(1)).deleteBudget("id")
         Mockito.verify(dao, times(1)).delete("id")

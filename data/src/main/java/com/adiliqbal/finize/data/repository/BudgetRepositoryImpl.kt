@@ -2,6 +2,8 @@ package com.adiliqbal.finize.data.repository
 
 import com.adiliqbal.finize.common.extensions.channelFlowWithAwait
 import com.adiliqbal.finize.common.extensions.withScope
+import com.adiliqbal.finize.common.network.Dispatcher
+import com.adiliqbal.finize.common.network.Thread
 import com.adiliqbal.finize.data.conversion.toApi
 import com.adiliqbal.finize.data.conversion.toEntity
 import com.adiliqbal.finize.data.conversion.toModel
@@ -11,18 +13,19 @@ import com.adiliqbal.finize.database.dao.BudgetDao
 import com.adiliqbal.finize.model.Budget
 import com.adiliqbal.finize.model.extensions.ID
 import com.adiliqbal.finize.network.service.BudgetService
-import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 internal class BudgetRepositoryImpl @Inject constructor(
     private val budgetDao: BudgetDao,
-    private val budgetService: BudgetService
+    private val budgetService: BudgetService,
+    @Dispatcher(Thread.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BudgetRepository {
 
     override fun getBudgets(search: String?) = channelFlowWithAwait {
-        withScope(Dispatchers.Unconfined) {
+        withScope(ioDispatcher) {
             budgetDao.getAll().map {
                 it.mapNotNull { entity ->
                     if (search.isNullOrEmpty() || entity.name.contains(search)) entity.toModel()
@@ -30,7 +33,7 @@ internal class BudgetRepositoryImpl @Inject constructor(
                 }
             }.collect { trySend(it) }
         }
-        launchSafeApi(Dispatchers.IO) {
+        launchSafeApi(ioDispatcher) {
             budgetService.getBudgets().let {
                 it.data?.map { budget -> budget.toEntity() }
                     ?.let { budgets ->

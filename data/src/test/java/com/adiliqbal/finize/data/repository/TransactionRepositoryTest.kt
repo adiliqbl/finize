@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -22,107 +23,114 @@ import org.mockito.kotlin.whenever
 
 class TransactionRepositoryTest {
 
-    private val dao = Mockito.mock(TransactionDao::class.java)
-    private val service = Mockito.mock(TransactionService::class.java)
-    private val templateService = Mockito.mock(TransactionTemplateService::class.java)
-    private val repository =
-        TransactionRepositoryImpl(dao, service, templateService, Mockito.mock(Logger::class.java))
+	private val dispatcher = StandardTestDispatcher()
 
-    @Test
-    fun getTransaction() = runTest {
-        whenever(dao.get("one")).thenReturn(flowOf(FakeEntity.transaction("one")))
+	private val dao = Mockito.mock(TransactionDao::class.java)
+	private val service = Mockito.mock(TransactionService::class.java)
+	private val templateService = Mockito.mock(TransactionTemplateService::class.java)
+	private val repository =
+		TransactionRepositoryImpl(
+			dao,
+			service,
+			templateService,
+			Mockito.mock(Logger::class.java),
+			dispatcher
+		)
 
-        val transaction = repository.getTransaction("one").take(1).firstOrNull()
-        assertEquals("one", transaction?.id)
-    }
+	@Test
+	fun getTransaction() = runTest(dispatcher) {
+		whenever(dao.get("one")).thenReturn(flowOf(FakeEntity.transaction("one")))
 
-    @Test
-    fun createTransaction() = runTest {
-        val model = FakeModel.transaction("")
-        val api = model.toApi()
+		val transaction = repository.getTransaction("one").take(1).firstOrNull()
+		assertEquals("one", transaction?.id)
+	}
 
-        whenever(service.createTransaction(api)).thenReturn(api.copy("id"))
+	@Test
+	fun createTransaction() = runTest(dispatcher) {
+		val model = FakeModel.transaction("")
+		val api = model.toApi()
 
-        val transaction = repository.createTransaction(model)
-        assertEquals("id", transaction.id)
-        Mockito.verify(dao, times(1)).upsert(api.copy("id").toEntity())
-    }
+		whenever(service.createTransaction(api)).thenReturn(api.copy("id"))
 
-    @Test
-    fun updateTransaction() = runTest {
-        val transaction = FakeModel.transaction().copy(name = "new name")
+		val transaction = repository.createTransaction(model)
+		assertEquals("id", transaction.id)
+		Mockito.verify(dao, times(1)).upsert(api.copy("id").toEntity())
+	}
 
-        repository.updateTransaction(transaction)
-        Mockito.verify(service, times(1)).updateTransaction(transaction.toApi())
-        Mockito.verify(dao, times(1)).upsert(transaction.toApi().toEntity())
-    }
+	@Test
+	fun updateTransaction() = runTest(dispatcher) {
+		val transaction = FakeModel.transaction().copy(name = "new name")
 
-    @Test
-    fun deleteTransaction() = runTest {
-        repository.deleteTransaction("id")
-        Mockito.verify(service, times(1)).deleteTransaction("id")
-        Mockito.verify(dao, times(1)).delete("id")
-    }
+		repository.updateTransaction(transaction)
+		Mockito.verify(service, times(1)).updateTransaction(transaction.toApi())
+		Mockito.verify(dao, times(1)).upsert(transaction.toApi().toEntity())
+	}
 
-    @Test
-    fun getTemplates() = runTest {
-        whenever(dao.getTemplates()).thenReturn(
-            flowOf(
-                listOf(
-                    FakeEntity.transaction("one").copy(isTemplate = true),
-                    FakeEntity.transaction("two").copy(isTemplate = true),
-                    FakeEntity.transaction("three"),
-                    FakeEntity.transaction("four")
-                )
-            )
-        )
+	@Test
+	fun deleteTransaction() = runTest(dispatcher) {
+		repository.deleteTransaction("id")
+		Mockito.verify(service, times(1)).deleteTransaction("id")
+		Mockito.verify(dao, times(1)).delete("id")
+	}
 
-        val apiList = listOf(
-            FakeModel.transaction("five").toApi(),
-            FakeModel.transaction("six").toApi(),
-        )
-        whenever(templateService.getTemplates()).thenReturn(apiList)
+	@Test
+	fun getTemplates() = runTest(dispatcher) {
+		whenever(dao.getTemplates()).thenReturn(
+			flowOf(
+				listOf(
+					FakeEntity.transaction("one").copy(isTemplate = true),
+					FakeEntity.transaction("two").copy(isTemplate = true),
+					FakeEntity.transaction("three"),
+					FakeEntity.transaction("four")
+				)
+			)
+		)
 
-        val templates = repository.getTemplates().take(1).lastOrNull()
-        assertEquals(2, templates?.size)
-        Mockito.verify(dao, times(1)).clearTemplates()
-        Mockito.verify(dao, times(1)).upsert(apiList.map { it.toEntity() })
-    }
+		val apiList = listOf(
+			FakeModel.transaction("five").toApi(),
+			FakeModel.transaction("six").toApi(),
+		)
+		whenever(templateService.getTemplates()).thenReturn(apiList)
 
-    @Test
-    fun getTemplate() = runTest {
-        whenever(dao.get("one"))
-            .thenReturn(flowOf(FakeEntity.transaction("one").copy(isTemplate = true)))
+		repository.getTemplates().take(1).lastOrNull()
+		Mockito.verify(dao, times(1)).clearTemplates()
+		Mockito.verify(dao, times(1)).upsert(apiList.map { it.toEntity().copy(isTemplate = true) })
+	}
 
-        val transaction = repository.getTemplate("one").take(1).lastOrNull()
-        assertEquals("one", transaction?.id)
-    }
+	@Test
+	fun getTemplate() = runTest(dispatcher) {
+		whenever(dao.get("one"))
+			.thenReturn(flowOf(FakeEntity.transaction("one").copy(isTemplate = true)))
 
-    @Test
-    fun createTemplate() = runTest {
-        val model = FakeModel.transaction("")
-        val api = FakeModel.transaction("").toApi()
+		val transaction = repository.getTemplate("one").take(1).lastOrNull()
+		assertEquals("one", transaction?.id)
+	}
 
-        whenever(templateService.createTemplate(any())).thenReturn(api.copy("id"))
+	@Test
+	fun createTemplate() = runTest(dispatcher) {
+		val model = FakeModel.transaction("")
+		val api = FakeModel.transaction("").toApi()
 
-        val transaction = repository.createTemplate(model)
-        assertEquals("id", transaction.id)
-        Mockito.verify(dao, times(1)).upsert(api.copy("id").toEntity().copy(isTemplate = true))
-    }
+		whenever(templateService.createTemplate(any())).thenReturn(api.copy("id"))
 
-    @Test
-    fun updateTemplate() = runTest {
-        val transaction = FakeModel.transaction().copy(name = "new name")
+		val transaction = repository.createTemplate(model)
+		assertEquals("id", transaction.id)
+		Mockito.verify(dao, times(1)).upsert(api.copy("id").toEntity().copy(isTemplate = true))
+	}
 
-        repository.updateTemplate(transaction)
-        Mockito.verify(templateService, times(1)).updateTemplate(transaction.toApi())
-        Mockito.verify(dao, times(1)).upsert(transaction.toApi().toEntity().copy(isTemplate = true))
-    }
+	@Test
+	fun updateTemplate() = runTest(dispatcher) {
+		val transaction = FakeModel.transaction().copy(name = "new name")
 
-    @Test
-    fun deleteTemplate() = runTest {
-        repository.deleteTemplate("id")
-        Mockito.verify(templateService, times(1)).deleteTemplate("id")
-        Mockito.verify(dao, times(1)).delete("id")
-    }
+		repository.updateTemplate(transaction)
+		Mockito.verify(templateService, times(1)).updateTemplate(transaction.toApi())
+		Mockito.verify(dao, times(1)).upsert(transaction.toApi().toEntity().copy(isTemplate = true))
+	}
+
+	@Test
+	fun deleteTemplate() = runTest(dispatcher) {
+		repository.deleteTemplate("id")
+		Mockito.verify(templateService, times(1)).deleteTemplate("id")
+		Mockito.verify(dao, times(1)).delete("id")
+	}
 }

@@ -7,6 +7,8 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.adiliqbal.finize.common.extensions.channelFlowWithAwait
 import com.adiliqbal.finize.common.extensions.withScope
+import com.adiliqbal.finize.common.network.Dispatcher
+import com.adiliqbal.finize.common.network.Thread
 import com.adiliqbal.finize.common.system.Logger
 import com.adiliqbal.finize.data.conversion.toApi
 import com.adiliqbal.finize.data.conversion.toEntity
@@ -20,101 +22,102 @@ import com.adiliqbal.finize.model.extensions.ID
 import com.adiliqbal.finize.model.filter.TransactionsFilter
 import com.adiliqbal.finize.network.service.TransactionService
 import com.adiliqbal.finize.network.service.TransactionTemplateService
-import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 internal class TransactionRepositoryImpl @Inject constructor(
-    private val transactionDao: TransactionDao,
-    private val transactionService: TransactionService,
-    private val templateService: TransactionTemplateService,
-    private val logger: Logger
+	private val transactionDao: TransactionDao,
+	private val transactionService: TransactionService,
+	private val templateService: TransactionTemplateService,
+	private val logger: Logger,
+	@Dispatcher(Thread.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : TransactionRepository {
 
-    companion object {
-        private const val PAGE_SIZE = 30
-    }
+	companion object {
+		private const val PAGE_SIZE = 30
+	}
 
-    @OptIn(ExperimentalPagingApi::class)
-    override fun getTransactions(filter: TransactionsFilter?): Flow<PagingData<Transaction>> {
-        return Pager(
-            config = PagingConfig(pageSize = PAGE_SIZE, prefetchDistance = 0),
-            remoteMediator =
-            TransactionsRemoteMediator(transactionDao, transactionService, filter, logger),
-            pagingSourceFactory = { transactionDao.getAll() }
-        )
-            .flow
-            .map { data -> data.map { it.toModel() } }
-    }
+	@OptIn(ExperimentalPagingApi::class)
+	override fun getTransactions(filter: TransactionsFilter?): Flow<PagingData<Transaction>> {
+		return Pager(
+			config = PagingConfig(pageSize = PAGE_SIZE, prefetchDistance = 0),
+			remoteMediator =
+			TransactionsRemoteMediator(transactionDao, transactionService, filter, logger),
+			pagingSourceFactory = { transactionDao.getAll() }
+		)
+			.flow
+			.map { data -> data.map { it.toModel() } }
+	}
 
-    override fun getTransaction(id: ID) = channelFlowWithAwait {
-        withScope(Dispatchers.Unconfined) {
-            transactionDao.get(id).withExceptions().collect { trySend(it.toModel()) }
-        }
-        launchSafeApi(Dispatchers.IO) {
-            transactionService.getTransaction(id).let { transactionDao.upsert(it.toEntity()) }
-        }
-    }
+	override fun getTransaction(id: ID) = channelFlowWithAwait {
+		withScope(ioDispatcher) {
+			transactionDao.get(id).withExceptions().collect { trySend(it.toModel()) }
+		}
+		launchSafeApi(ioDispatcher) {
+			transactionService.getTransaction(id).let { transactionDao.upsert(it.toEntity()) }
+		}
+	}
 
-    override suspend fun createTransaction(transaction: Transaction): Transaction {
-        return transactionService.createTransaction(transaction.toApi()).toEntity().let {
-            transactionDao.upsert(it)
-            it.toModel()
-        }
-    }
+	override suspend fun createTransaction(transaction: Transaction): Transaction {
+		return transactionService.createTransaction(transaction.toApi()).toEntity().let {
+			transactionDao.upsert(it)
+			it.toModel()
+		}
+	}
 
-    override suspend fun updateTransaction(transaction: Transaction) {
-        return transaction.toApi().let {
-            transactionService.updateTransaction(it)
-            val entity = it.toEntity()
-            transactionDao.upsert(entity)
-        }
-    }
+	override suspend fun updateTransaction(transaction: Transaction) {
+		return transaction.toApi().let {
+			transactionService.updateTransaction(it)
+			val entity = it.toEntity()
+			transactionDao.upsert(entity)
+		}
+	}
 
-    override suspend fun deleteTransaction(id: ID) {
-        transactionService.deleteTransaction(id)
-        transactionDao.delete(id)
-    }
+	override suspend fun deleteTransaction(id: ID) {
+		transactionService.deleteTransaction(id)
+		transactionDao.delete(id)
+	}
 
-    override fun getTemplates() = channelFlowWithAwait {
-        withScope(Dispatchers.Unconfined) {
-            transactionDao
-                .getTemplates()
-                .map { it.map { entity -> entity.toModel() } }
-                .collect { trySend(it) }
-        }
-        launchSafeApi(Dispatchers.IO) {
-            templateService
-                .getTemplates()
-                .map { it.toEntity().copy(isTemplate = true) }
-                .let {
-                    transactionDao.clearTemplates()
-                    transactionDao.upsert(it)
-                }
-        }
-    }
+	override fun getTemplates() = channelFlowWithAwait {
+		withScope(ioDispatcher) {
+			transactionDao
+				.getTemplates()
+				.map { it.map { entity -> entity.toModel() } }
+				.collect { trySend(it) }
+		}
+		launchSafeApi(ioDispatcher) {
+			templateService
+				.getTemplates()
+				.map { it.toEntity().copy(isTemplate = true) }
+				.let {
+					transactionDao.clearTemplates()
+					transactionDao.upsert(it)
+				}
+		}
+	}
 
-    override fun getTemplate(id: ID) = getTransaction(id)
+	override fun getTemplate(id: ID) = getTransaction(id)
 
-    override suspend fun createTemplate(template: Transaction): Transaction {
-        return templateService.createTemplate(template.toApi()).let {
-            val entity = it.toEntity().copy(isTemplate = true)
-            transactionDao.upsert(entity)
-            entity.toModel()
-        }
-    }
+	override suspend fun createTemplate(template: Transaction): Transaction {
+		return templateService.createTemplate(template.toApi()).let {
+			val entity = it.toEntity().copy(isTemplate = true)
+			transactionDao.upsert(entity)
+			entity.toModel()
+		}
+	}
 
-    override suspend fun updateTemplate(template: Transaction) {
-        return template.toApi().let {
-            templateService.updateTemplate(it)
-            val entity = it.toEntity()
-            transactionDao.upsert(entity.copy(isTemplate = true))
-        }
-    }
+	override suspend fun updateTemplate(template: Transaction) {
+		return template.toApi().let {
+			templateService.updateTemplate(it)
+			val entity = it.toEntity()
+			transactionDao.upsert(entity.copy(isTemplate = true))
+		}
+	}
 
-    override suspend fun deleteTemplate(id: ID) {
-        templateService.deleteTemplate(id)
-        transactionDao.delete(id)
-    }
+	override suspend fun deleteTemplate(id: ID) {
+		templateService.deleteTemplate(id)
+		transactionDao.delete(id)
+	}
 }

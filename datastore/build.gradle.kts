@@ -10,6 +10,7 @@ android {
 
 dependencies {
 	implementation(project(":model"))
+	implementation(project(":common"))
 
 	implementation(Libraries.Data.Datastore)
 }

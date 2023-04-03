@@ -2,6 +2,8 @@ package com.adiliqbal.finize.data.repository
 
 import com.adiliqbal.finize.common.extensions.channelFlowWithAwait
 import com.adiliqbal.finize.common.extensions.withScope
+import com.adiliqbal.finize.common.network.Dispatcher
+import com.adiliqbal.finize.common.network.Thread
 import com.adiliqbal.finize.data.conversion.toApi
 import com.adiliqbal.finize.data.conversion.toEntity
 import com.adiliqbal.finize.data.conversion.toModel
@@ -11,18 +13,19 @@ import com.adiliqbal.finize.database.dao.AccountDao
 import com.adiliqbal.finize.model.Account
 import com.adiliqbal.finize.model.extensions.ID
 import com.adiliqbal.finize.network.service.AccountService
-import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 internal class AccountRepositoryImpl @Inject constructor(
     private val accountDao: AccountDao,
-    private val accountService: AccountService
+    private val accountService: AccountService,
+    @Dispatcher(Thread.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : AccountRepository {
 
     override fun getAccounts(search: String?) = channelFlowWithAwait {
-        withScope(Dispatchers.Unconfined) {
+        withScope(ioDispatcher) {
             accountDao.getAll().map {
                 it.mapNotNull { entity ->
                     if (search.isNullOrEmpty() || entity.name.contains(search)) entity.toModel()
@@ -30,7 +33,7 @@ internal class AccountRepositoryImpl @Inject constructor(
                 }
             }.collect { trySend(it) }
         }
-        launchSafeApi(Dispatchers.IO) {
+        launchSafeApi(ioDispatcher) {
             accountService.getAccounts().let {
                 it.data?.map { account -> account.toEntity() }?.let { accounts ->
                     accountDao.transaction {
