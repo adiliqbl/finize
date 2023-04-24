@@ -24,11 +24,17 @@ dependencies {
 	implementation(project(":model"))
 	implementation(project(":navigation"))
 	implementation(project(":network"))
-	implementation(project(":sync"))
 	implementation(project(":ui"))
 
+	implementation(project(":feature:accounts"))
+	implementation(project(":feature:analytics"))
 	implementation(project(":feature:auth"))
+	implementation(project(":feature:budgets"))
 	implementation(project(":feature:home"))
+	implementation(project(":feature:investments"))
+	implementation(project(":feature:profile"))
+	implementation(project(":feature:templates"))
+	implementation(project(":feature:transactions"))
 
 	implementation(Libraries.Kotlin.Core)
 	implementation(Libraries.UI.Splashscreen)
