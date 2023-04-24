@@ -132,6 +132,7 @@ fun AppTheme(
 		MaterialTheme(
 			colorScheme = colors,
 			typography = Typography,
+			shapes = Shape.Default,
 			content = content
 		)
 	}

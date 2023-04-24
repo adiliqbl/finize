@@ -1,6 +1,7 @@
 package plugins
 
 import com.android.build.api.dsl.LibraryExtension
+import config.configureBuildTypes
 import modules.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -22,6 +23,7 @@ class ModulePlugin : Plugin<Project> {
 				}
 
 				configureKotlinAndroid(this)
+				configureBuildTypes()
 			}
 		}
 	}

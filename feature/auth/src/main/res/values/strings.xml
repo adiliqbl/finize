@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Finize</string>
+    <string name="app_tagline">Manage Money Easily</string>
+
+    <string name="login_google_button">Sign in with Google</string>
+</resources>

@@ -1,8 +1,9 @@
 package com.adiliqbal.finize.ui
 
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 
-@Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
-@Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
-@Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
+@Preview(name = "Phone", device = Devices.PIXEL_4_XL, showSystemUi = true)
+//@Preview(name = "Foldable", device = Devices.FOLDABLE, showSystemUi = false)
+//@Preview(name = "Tablet", device = Devices.TABLET, showSystemUi = false)
 annotation class DevicePreviews

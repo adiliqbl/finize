@@ -2,6 +2,7 @@ package com.adiliqbal.finize.auth.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.navigation.NavGraphBuilder
+import com.adiliqbal.finize.auth.ui.AuthRoute
 import com.adiliqbal.finize.navigation.NavDestination
 import com.adiliqbal.finize.navigation.extensions.composable
 
@@ -11,10 +12,8 @@ object AuthDestination : NavDestination() {
 }
 
 @ExperimentalAnimationApi
-fun NavGraphBuilder.authGraph(
-	onLogin: (String?) -> Unit
-) {
+fun NavGraphBuilder.authGraph(onLogin: () -> Unit) {
 	composable(AuthDestination) {
-		LoginRoute(onLogin = onLogin)
+		AuthRoute(onLogin = onLogin)
 	}
 }

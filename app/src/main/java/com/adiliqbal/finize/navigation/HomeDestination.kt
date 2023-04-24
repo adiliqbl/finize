@@ -4,9 +4,6 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.navigation.*
 import com.adiliqbal.finize.navigation.extensions.composable
 import com.adiliqbal.finize.navigation.util.FadeNavAnimation
-import com.zero.android.navigation.extensions.composable
-import com.zero.android.navigation.util.FadeNavAnimation
-import com.zero.android.ui.home.HomeRoute
 
 object HomeDestination : NavDestination() {
 	override val route = "home_route"

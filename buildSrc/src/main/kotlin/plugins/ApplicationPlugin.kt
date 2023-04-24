@@ -3,7 +3,6 @@ package plugins
 import AppConfig
 import com.android.build.api.dsl.ApplicationExtension
 import config.configureBuildType
-import config.configureFlavors
 import modules.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -32,7 +31,6 @@ class ApplicationPlugin : Plugin<Project> {
 
 				configureKotlinAndroid(this)
 				configureBuildType(this)
-				configureFlavors(this)
 			}
 		}
 	}
