@@ -1,16 +1,21 @@
 package com.adiliqbal.finize.auth.ui
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.adiliqbal.finize.auth.conversions.toUser
 import com.adiliqbal.finize.data.manager.SessionManager
 import com.adiliqbal.finize.data.repository.AuthRepository
 import com.adiliqbal.finize.model.AuthCredentials
 import com.adiliqbal.finize.navigation.util.NavigationState
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,23 +30,33 @@ constructor(
 	val navState = _navState.asStateFlow()
 
 	val loading = MutableStateFlow(false)
-	val error = MutableStateFlow<String?>(null)
+	private val error = MutableStateFlow<String?>(null)
 
-	fun loginWithGoogle(context: Context) {
+	fun loginWithGoogle(account: GoogleSignInAccount) {
 		viewModelScope.launch {
 			loading.emit(true)
 			runAuthApi {
+				val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
+				val firebaseUser = Firebase.auth.signInWithCredential(credential).await().user
+				firebaseUser?.toUser()?.let { user ->
+					var newUser = false
+					val credentials = if (user.email.let { authRepository.exists(it) }) {
+						authRepository.loginWithGoogle(user.id)
+					} else {
+						newUser = true
+						authRepository.register(user)
+					}
 
+					onAuth(credentials, newUser)
+				}
 			}
 		}
 	}
 
-	private fun onAuth(credentials: AuthCredentials) {
-		viewModelScope.launch {
-			sessionManager.login(credentials)
-			_navState.emit(NavigationState.Navigate(true))
-			loading.emit(false)
-		}
+	private fun onAuth(credentials: AuthCredentials, isNew: Boolean) = viewModelScope.launch {
+		sessionManager.login(credentials)
+		_navState.emit(NavigationState.Navigate(isNew))
+		loading.emit(false)
 	}
 
 	private suspend fun runAuthApi(run: suspend () -> Unit) {
